@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base Application Theme -->
+    <style name="Theme.Usmentz" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/purple_primary</item>
+        <item name="colorPrimaryVariant">@color/purple_dark</item>
+        <item name="colorOnPrimary">@color/dark_background</item>
+
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/purple_secondary</item>
+        <item name="colorSecondaryVariant">@color/purple_dark</item>
+        <item name="colorOnSecondary">@color/text_primary</item>
+
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/dark_background</item>
+        <item name="colorSurface">@color/dark_surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurfaceVariant">@color/dark_elevated</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+
+        <!-- Error colors -->
+        <item name="colorError">@color/accent_red</item>
+        <item name="colorOnError">@color/dark_background</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/dark_background</item>
+        <item name="android:navigationBarColor">@color/dark_background</item>
+
+        <!-- Text appearance -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_hint</item>
+
+        <!-- ✅ Global fade transition for ALL activities -->
+        <item name="android:windowAnimationStyle">@style/FadeAnimation</item>
+    </style>
+
+    <style name="ThemeOverlay.Material3.Button.IconButton" parent="">
+        <!-- Empty style to resolve theme error -->
+    </style>
+
+    <style name="ThemeOverlay.Material3.Button.TextButton" parent="">
+        <!-- Empty style to resolve theme error -->
+    </style>
+    <!-- ======================================== -->
+
+    <!-- Fade animation style — replaces the default slide -->
+    <style name="FadeAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <!-- Calendar day header -->
+    <style name="CalDayHeader">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#5A4E7A</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Splash Theme -->
+    <style name="Theme.Usmentz.Splash" parent="Theme.Usmentz">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:statusBarColor">@color/dark_background</item>
+        <item name="android:navigationBarColor">@color/dark_background</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+</resources>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#0C0C1E">
+
+    <!-- Rating Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:cardBackgroundColor="#13132A"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RATING"
+                android:textColor="#5A4E7A"
+                android:textSize="10sp"
+                android:letterSpacing="0.12"
+                android:layout_marginBottom="14dp" />
+
+            <RatingBar
+                android:id="@+id/ratingBarReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:numStars="5"
+                android:rating="0"
+                android:stepSize="0.5" />
+
+            <TextView
+                android:id="@+id/tvRatingLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tap to rate"
+                android:textColor="#3D3660"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Photo Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:cardBackgroundColor="#13132A"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PHOTO"
+                android:textColor="#5A4E7A"
+                android:textSize="10sp"
+                android:letterSpacing="0.12"
+                android:layout_marginBottom="14dp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="#1C1C38"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeColor="#9B5CFF"
+                app:strokeWidth="2dp">
+
+                <ImageView
+                    android:id="@+id/ivPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- FIXED ID -->
+            <LinearLayout
+                android:id="@+id/noPhotoPlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#1C1C38"
+                android:layout_marginBottom="12dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📷"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No photo added"
+                    android:textColor="#3D3660"
+                    android:textSize="12sp"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSelectPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Change Photo"
+                android:textColor="#2DD4C8"
+                android:textSize="14sp"
+                android:backgroundTint="#0D3B38"
+                android:stateListAnimator="@null" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Review Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:cardBackgroundColor="#13132A"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="YOUR REVIEW"
+                android:textColor="#5A4E7A"
+                android:textSize="10sp"
+                android:letterSpacing="0.12"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etReview"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:hint="Write your thoughts about this moment…"
+                android:textColor="#F0E6FF"
+                android:textColorHint="#3D3660"
+                android:textSize="14sp"
+                android:background="@drawable/bg_input"
+                android:padding="16dp"
+                android:gravity="top|start"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/btnSaveReview"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Save Review"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:backgroundTint="#9B5CFF"
+                android:stateListAnimator="@null"
+                android:layout_marginTop="14dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

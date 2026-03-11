@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#0C0C1E">
+
+    <!-- Total Spent Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="#13132A"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total spent:"
+                android:textColor="#7A6A9A"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvTotalSpent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₱0.00"
+                android:textColor="#FFB020"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Add Expense FAB -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_add"
+        android:contentDescription="Add Expense"
+        app:backgroundTint="#FFB020"
+        app:tint="#FFFFFF"
+        app:fabSize="normal" />
+
+    <!-- Expenses List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvExpenses"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:nestedScrollingEnabled="false" />
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/tvNoExpenses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No expenses added yet"
+        android:textColor="#3D3660"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:padding="20dp"
+        android:visibility="gone" />
+
+</LinearLayout>

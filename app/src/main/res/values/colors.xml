@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ═══════════════════════════════════════
+         BACKGROUNDS — deep midnight navy
+         ═══════════════════════════════════════ -->
+    <color name="dark_background">#0C0C1E</color>
+    <color name="dark_surface">#13132A</color>
+    <color name="dark_card">#1A1A30</color>
+    <color name="dark_elevated">#1C1C38</color>
+    <color name="dark_border">#252548</color>
+
+    <!-- Legacy aliases kept for backward compat -->
+    <color name="black_card">#1A1A30</color>
+    <color name="black_light">#1C1C38</color>
+
+    <color name="md_theme_dark_background">#0C0C1E</color>
+    <color name="md_theme_dark_surface">#13132A</color>
+    <color name="md_theme_dark_primary">#9B5CFF</color>
+    <color name="md_theme_dark_secondary">#2DD4C8</color>
+    <color name="md_theme_dark_tertiary">#FFB020</color>
+    <color name="md_theme_dark_onPrimary">#FFFFFF</color>
+    <color name="md_theme_dark_onSecondary">#000000</color>
+    <color name="md_theme_dark_onSurface">#F0E6FF</color>
+    <color name="md_theme_dark_onSurfaceVariant">#3D3660</color>
+    <color name="md_theme_dark_outline">#16163A</color>
+
+    <!-- ═══════════════════════════════════════
+         PURPLE — primary brand
+         ═══════════════════════════════════════ -->
+    <color name="purple_primary">#9B5CFF</color>
+    <color name="purple_secondary">#6B35CC</color>
+    <color name="purple_primary_variant">#6B35CC</color>
+    <color name="purple_light">#C49FFF</color>
+    <color name="purple_dark">#3D1FA8</color>
+    <color name="purple_dim">#3D2566</color>
+    <color name="purple_glow">#6B35CC</color>
+
+    <!-- ═══════════════════════════════════════
+         TEAL — complementary #1
+         add buttons, success, active tags
+         ═══════════════════════════════════════ -->
+    <color name="teal_accent">#2DD4C8</color>
+    <color name="teal_dim">#0D3B38</color>
+    <color name="teal_text">#7EEEE8</color>
+
+    <!-- ═══════════════════════════════════════
+         ROSE — complementary #2
+         delete, favorites, ratings
+         ═══════════════════════════════════════ -->
+    <color name="rose_accent">#FF5F8A</color>
+    <color name="rose_dim">#3D1225</color>
+    <color name="rose_text">#FF9AB5</color>
+
+    <!-- ═══════════════════════════════════════
+         AMBER — complementary #3
+         expenses, money, warnings
+         ═══════════════════════════════════════ -->
+    <color name="amber_accent">#FFB020</color>
+    <color name="amber_dim">#2E2000</color>
+    <color name="amber_text">#FFD580</color>
+
+    <!-- Legacy accent aliases -->
+    <color name="accent_green">#1DB954</color>
+    <color name="accent_red">#FF4444</color>
+    <color name="accent_yellow">#FFD966</color>
+
+    <!-- ═══════════════════════════════════════
+         TEXT
+         ═══════════════════════════════════════ -->
+    <color name="text_primary">#F0E6FF</color>
+    <color name="text_secondary">#7066A0</color>
+    <color name="text_hint">#3D3660</color>
+    <color name="text_disabled">#2E2B50</color>
+    <color name="white_dim">#7066A0</color>
+
+    <!-- ═══════════════════════════════════════
+         BASICS
+         ═══════════════════════════════════════ -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+</resources>

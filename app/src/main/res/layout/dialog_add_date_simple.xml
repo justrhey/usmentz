@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#13132A">
+
+    <!-- ── Header ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="20dp"
+        android:background="#0F0F22">
+
+        <View
+            android:layout_width="3dp"
+            android:layout_height="32dp"
+            android:background="#2DD4C8"
+            android:layout_marginEnd="14dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Moment"
+                android:textColor="#F0E6FF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.01" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Capture a place or memory"
+                android:textColor="#5A4E7A"
+                android:textSize="11sp"
+                android:letterSpacing="0.04" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ── Divider ── -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#1C1C38" />
+
+    <!-- ── Form ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="8dp">
+
+        <!-- Name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NAME"
+            android:textColor="#5A4E7A"
+            android:textSize="10sp"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="What did you call this moment?"
+            android:textColor="#F0E6FF"
+            android:textColorHint="#3D3660"
+            android:textSize="15sp"
+            android:background="@drawable/bg_input"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="18dp"
+            android:inputType="textCapSentences"
+            android:singleLine="true" />
+
+        <!-- Address -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ADDRESS"
+            android:textColor="#5A4E7A"
+            android:textSize="10sp"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Where was this?"
+            android:textColor="#F0E6FF"
+            android:textColorHint="#3D3660"
+            android:textSize="15sp"
+            android:background="@drawable/bg_input"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="18dp"
+            android:inputType="textCapSentences"
+            android:singleLine="true" />
+
+        <!-- Description -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DESCRIPTION"
+            android:textColor="#5A4E7A"
+            android:textSize="10sp"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/etDescription"
+            android:layout_width="match_parent"
+            android:layout_height="88dp"
+            android:hint="Any notes or feelings about it…"
+            android:textColor="#F0E6FF"
+            android:textColorHint="#3D3660"
+            android:textSize="15sp"
+            android:background="@drawable/bg_input"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_marginBottom="18dp"
+            android:gravity="top"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="3" />
+
+        <!-- Date -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DATE"
+            android:textColor="#5A4E7A"
+            android:textSize="10sp"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="6dp" />
+
+        <!-- Date row: display + pick button side by side -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_input"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:id="@+id/tvSelectedDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="No date selected"
+                android:textColor="#C49FFF"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnSelectDate"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:text="Pick"
+                android:textColor="#2DD4C8"
+                android:textSize="12sp"
+                android:backgroundTint="#0D3B38"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:stateListAnimator="@null" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ── Divider ── -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#1C1C38" />
+
+    <!-- ── Action row ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="20dp">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="#7066A0"
+            android:textSize="14sp"
+            android:backgroundTint="#1C1C38"
+            android:layout_marginEnd="10dp"
+            android:stateListAnimator="@null" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Save"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:backgroundTint="#9B5CFF"
+            android:stateListAnimator="@null" />
+
+    </LinearLayout>
+
+</LinearLayout>

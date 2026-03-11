@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#13132A"
+    android:paddingStart="0dp"
+    android:paddingEnd="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp">
+
+    <!-- ── Header band with purple left border ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="20dp"
+        android:background="#0F0F22">
+
+        <View
+            android:layout_width="3dp"
+            android:layout_height="32dp"
+            android:background="#9B5CFF"
+            android:layout_marginEnd="14dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Category"
+                android:textColor="#F0E6FF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.01" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Organise your moments"
+                android:textColor="#5A4E7A"
+                android:textSize="11sp"
+                android:letterSpacing="0.04" />
+
+        </LinearLayout>
+
+        <!-- Icon preview pill in header -->
+        <ImageView
+            android:id="@+id/ivIconPreview"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/folder"
+            android:scaleType="centerInside"
+            android:background="@drawable/bg_icon_preview"
+            android:padding="10dp" />
+
+    </LinearLayout>
+
+    <!-- ── Divider ── -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#1C1C38" />
+
+    <!-- ── Form body ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="8dp">
+
+        <!-- Name label + field -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CATEGORY NAME"
+            android:textColor="#5A4E7A"
+            android:textSize="10sp"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/etCategoryName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="e.g. Travel, Food, Music…"
+            android:textColor="#F0E6FF"
+            android:textColorHint="#3D3660"
+            android:textSize="15sp"
+            android:background="@drawable/bg_input"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="20dp"
+            android:inputType="textCapSentences"
+            android:singleLine="true" />
+
+        <!-- Icon label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ICON"
+            android:textColor="#5A4E7A"
+            android:textSize="10sp"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Icon cycle button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_input"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:id="@+id/tvIconPreview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Folder"
+                android:textColor="#C49FFF"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnIconDropdown"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:text="Change"
+                android:textColor="#9B5CFF"
+                android:textSize="12sp"
+                android:backgroundTint="#2A1A50"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tap Change to cycle through icons"
+            android:textColor="#3D3660"
+            android:textSize="11sp"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Color label + spinner -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="COLOR"
+            android:textColor="#5A4E7A"
+            android:textSize="10sp"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="6dp" />
+
+        <Spinner
+            android:id="@+id/spinnerColor"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_input"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginBottom="24dp" />
+
+    </LinearLayout>
+
+    <!-- ── Divider ── -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#1C1C38" />
+
+    <!-- ── Action row ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="20dp">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="#7066A0"
+            android:textSize="14sp"
+            android:backgroundTint="#1C1C38"
+            android:layout_marginEnd="10dp"
+            android:stateListAnimator="@null" />
+
+        <Button
+            android:id="@+id/btnCreate"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Create"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:backgroundTint="#9B5CFF"
+            android:stateListAnimator="@null" />
+
+    </LinearLayout>
+
+</LinearLayout>
