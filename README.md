@@ -2,10 +2,10 @@
 
 A mobile application for organizing and tracking your special moments and experiences. Built with native **Android (Java)** using modern architecture patterns.
 
-![Android](https://img.shields.io/badge/Android-7.0%2B-green?style=for-the-badge&logo=android)
-![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)
-![Room](https://img.shields.io/badge/Room-2.6.1-blue?style=for-the-badge)
-![Material](https://img.shields.io/badge/Material%20Design-3-red?style=for-the-badge&logo=materialdesign)
+![Android](https://img.shields.io/badge/-Android-3DDC84?logo=android&logoColor=white&style=for-the-badge)
+![Java](https://img.shields.io/badge/-Java-007396?logo=java&logoColor=white&style=for-the-badge)
+![Room](https://img.shields.io/badge/-Room-2.6.1-007396?logo=room&logoColor=white&style=for-the-badge)
+![Material](https://img.shields.io/badge/-Material%20Design-757575?logo=material-design&logoColor=white&style=for-the-badge)
 
 ---
 
@@ -71,30 +71,6 @@ flowchart TD
 
 ---
 
-## Project Structure
-
-```
-usmentz/
-├── app/src/main/java/com/example/usmentz/
-│   ├── Activities/
-│   │   ├── MainActivity.java
-│   │   ├── DetailActivity.java
-│   │   ├── CalendarActivity.java
-│   │   ├── FavoritesActivity.java
-│   │   └── ReviewsActivity.java
-│   ├── adapter/          # RecyclerView Adapters
-│   ├── category/         # Category models & dialogs
-│   ├── date/            # DateLocation model
-│   ├── fina/            # Expense model
-│   ├── database/       # Room database & converters
-│   ├── dao/            # Data Access Objects
-│   ├── repo/           # Repository pattern
-│   └── viewmodel/      # MVVM ViewModels
-└── app/src/main/res/   # Resources & layouts
-```
-
----
-
 ## Database Schema
 
 ### Tables
@@ -131,7 +107,7 @@ usmentz/
 
 ---
 
-## Setup
+## Getting Started
 
 ### Prerequisites
 
@@ -139,24 +115,45 @@ usmentz/
 * JDK 17 or later
 * Android SDK 34
 
-### Build Steps
+### Build
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/justrhey/usmentz.git
 
 # Open in Android Studio
 # Wait for Gradle sync to complete
 
-# Build the project
-./gradlew build
-
-# Run on device or emulator
+# Build and run
 ```
 
-### Dependencies
+---
 
-The following libraries are used (defined in build.gradle):
+## Project Structure
+
+```
+usmentz/
+├── app/src/main/java/com/example/usmentz/
+│   ├── Activities/
+│   │   ├── MainActivity.java
+│   │   ├── DetailActivity.java
+│   │   ├── CalendarActivity.java
+│   │   ├── FavoritesActivity.java
+│   │   └── ReviewsActivity.java
+│   ├── adapter/          # RecyclerView Adapters
+│   ├── category/         # Category models & dialogs
+│   ├── date/            # DateLocation model
+│   ├── fina/            # Expense model
+│   ├── database/       # Room database & converters
+│   ├── dao/            # Data Access Objects
+│   ├── repo/           # Repository pattern
+│   └── viewmodel/      # MVVM ViewModels
+└── app/src/main/res/   # Resources & layouts
+```
+
+---
+
+## Dependencies
 
 * AndroidX AppCompat 1.6.1
 * Material Components 1.11.0
@@ -167,52 +164,6 @@ The following libraries are used (defined in build.gradle):
 * Room 2.6.1
 * Lifecycle ViewModel 2.7.0
 * Lifecycle LiveData 2.7.0
-
----
-
-## API Reference
-
-| Method | Description |
-|--------|-------------|
-| CategoryViewModel | Manages category CRUD operations |
-| DateViewModel | Handles moment/moment data operations |
-| ExpenseViewModel | Controls expense tracking |
-
-### Data Flow
-
-```java
-// Adding a new moment
-Category category = new Category("First Dates", "heart", 0xFF9B5CFF);
-categoryViewModel.insert(category);
-
-DateLocation moment = new DateLocation("Restaurant Name", "123 Main St", "Great dinner", new Date());
-moment.setCategoryId(category.getId());
-dateViewModel.insert(moment);
-
-// Adding expense
-Expense expense = new Expense("Dinner", 150.00, moment.getId());
-expenseViewModel.insert(expense);
-```
-
----
-
-## Navigation Flow
-
-```
-MainActivity (Categories)
-    |
-    +-- Click Category --> Moments List
-    |       +-- Click Moment --> DetailActivity
-    |           +-- Tab 1: Details
-    |           +-- Tab 2: Expenses
-    |           +-- Tab 3: Review
-    |
-    +-- Bottom Nav
-        +-- Categories (Main)
-        +-- Favorites (4+ stars)
-        +-- Calendar (by date)
-        +-- Reviews (all reviews)
-```
 
 ---
 
@@ -228,5 +179,7 @@ MainActivity (Categories)
 <div align="center">
 
 **Usmentz** - Track Your Special Moments
+
+[Repository](https://github.com/justrhey/usmentz) | [Back to Profile](https://github.com/justrhey)
 
 </div>
