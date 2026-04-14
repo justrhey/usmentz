@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/dark_background"
+    android:background="#0C0C1E"
     android:padding="32dp">
 
     <ImageView
@@ -12,8 +12,8 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:src="@drawable/nocat2"
-        android:alpha="0.7"
-        android:contentDescription="Empty state illustration" />
+        android:alpha="0.5"
+        android:contentDescription="Empty"/>
 
     <TextView
         android:id="@+id/emptyStateText"
@@ -22,8 +22,8 @@
         android:text="No moments yet"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:layout_marginTop="28dp" />
+        android:textColor="#F0E6FF"
+        android:layout_marginTop="28dp"/>
 
     <TextView
         android:id="@+id/emptyStateSubtext"
@@ -31,10 +31,8 @@
         android:layout_height="wrap_content"
         android:text="Tap + to add your first moment"
         android:textSize="14sp"
-        android:textColor="@color/text_secondary"
+        android:textColor="#3D3660"
         android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:lineSpacingMultiplier="1.4"
-        android:maxWidth="260dp" />
+        android:gravity="center"/>
 
 </LinearLayout>

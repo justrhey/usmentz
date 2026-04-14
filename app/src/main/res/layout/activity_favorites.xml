@@ -87,24 +87,17 @@
         android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
+    <!-- Standard Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="66dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:backgroundTint="#0E0E20"
-        app:elevation="24dp">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigation"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            app:itemTextColor="@color/bottom_nav_colors"
-            app:itemIconTint="@color/bottom_nav_colors"
-            app:menu="@menu/bottom_nav_menu"
-            app:labelVisibilityMode="labeled" />
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
+        android:background="#121212"
+        app:elevation="8dp"
+        app:itemTextColor="#B3B3B3"
+        app:itemIconTint="#B3B3B3"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

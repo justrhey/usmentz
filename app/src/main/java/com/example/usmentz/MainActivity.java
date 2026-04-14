@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvToolbarTitle;
 
     private BottomNavigationView bottomNavigation;
-    private View bottomAppBar;
     private static final int VIEW_CATEGORIES = 0;
     private int currentView = VIEW_CATEGORIES;
 
@@ -89,17 +89,31 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Disable transitions to prevent issues on some devices
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(Window.FEATURE_NO_TITLE, Window.FEATURE_NO_TITLE);
+        
         super.onCreate(savedInstanceState);
+        
+        // Set content view FIRST
+        setContentView(R.layout.activity_main_categories);
+        
+        // Apply solid background
+        getWindow().setBackgroundDrawableResource(android.R.color.black);
+        
         try {
-            setContentView(R.layout.activity_main_categories);
-
             sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
             calendar = Calendar.getInstance();
             selectedDate = calendar.getTime();
             dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
 
+            // Initialize views with null safety
             initViews();
-            setupToolbar();
+            
+            if (toolbar != null) {
+                setupToolbar();
+            }
+            
             setupViewModels();
             setupRecyclerViews();
             setupClickListeners();
@@ -130,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        // Get views with null safety
         toolbar               = findViewById(R.id.toolbar);
         categoriesRecyclerView= findViewById(R.id.categoriesRecyclerView);
         momentsRecyclerView   = findViewById(R.id.momentsRecyclerView);
@@ -137,19 +152,24 @@ public class MainActivity extends AppCompatActivity {
         emptyStateLayout      = findViewById(R.id.emptyStateLayout);
         btnAddCategory        = findViewById(R.id.btnAddCategory);
         bottomNavigation      = findViewById(R.id.bottomNavigation);
-        bottomAppBar          = findViewById(R.id.bottomAppBar);
+        
+        // Debug: Log any missing views
+        if (toolbar == null) Log.w(TAG, "toolbar is null!");
+        if (categoriesRecyclerView == null) Log.w(TAG, "categoriesRecyclerView is null!");
+        if (bottomNavigation == null) Log.w(TAG, "bottomNavigation is null!");
+        
+        // Get custom title from toolbar
+        if (toolbar != null) {
+            tvToolbarTitle = toolbar.findViewById(R.id.tvToolbarTitle);
+        }
 
-        // The custom title TextView inside the toolbar layout — used when in moments mode
-        // Add android:id="@+id/tvToolbarTitle" to the title TextView in your XML if not present
-        tvToolbarTitle = toolbar.findViewById(R.id.tvToolbarTitle);
-
-        categoriesRecyclerView.setVisibility(View.VISIBLE);
-        momentsRecyclerView.setVisibility(View.GONE);
-        emptyStateLayout.setVisibility(View.GONE);
-        fabAdd.setVisibility(View.GONE);
-        btnAddCategory.setVisibility(View.VISIBLE);
-        bottomAppBar.setVisibility(View.VISIBLE);
-        bottomNavigation.setVisibility(View.VISIBLE);
+        // Set visibility with null checks
+        if (categoriesRecyclerView != null) categoriesRecyclerView.setVisibility(View.VISIBLE);
+        if (momentsRecyclerView != null) momentsRecyclerView.setVisibility(View.GONE);
+        if (emptyStateLayout != null) emptyStateLayout.setVisibility(View.GONE);
+        if (fabAdd != null) fabAdd.setVisibility(View.GONE);
+        if (btnAddCategory != null) btnAddCategory.setVisibility(View.VISIBLE);
+        if (bottomNavigation != null) bottomNavigation.setVisibility(View.VISIBLE);
     }
 
     private void setupToolbar() {
@@ -170,11 +190,19 @@ public class MainActivity extends AppCompatActivity {
     private void setupRecyclerViews() {
         categoriesRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         categoriesRecyclerView.setHasFixedSize(true);
+        
+        // Disable ALL animations on RecyclerView
+        categoriesRecyclerView.setItemAnimator(null);
+        
         categoryAdapter = new CategoryAdapter();
         categoriesRecyclerView.setAdapter(categoryAdapter);
 
         momentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         momentsRecyclerView.setHasFixedSize(true);
+        
+        // Disable ALL animations on RecyclerView
+        momentsRecyclerView.setItemAnimator(null);
+        
         dateAdapter = new DateAdapter();
         momentsRecyclerView.setAdapter(dateAdapter);
 
@@ -263,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
 
         categoriesRecyclerView.setVisibility(View.GONE);
         btnAddCategory.setVisibility(View.GONE);
-        bottomAppBar.setVisibility(View.GONE);
+        bottomNavigation.setVisibility(View.GONE);
         hideEmptyState();
 
         dateViewModel.setCurrentCategory(currentCategoryId);
@@ -283,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
         momentsRecyclerView.setVisibility(View.GONE);
         categoriesRecyclerView.setVisibility(View.VISIBLE);
         btnAddCategory.setVisibility(View.VISIBLE);
-        bottomAppBar.setVisibility(View.VISIBLE);
+        bottomNavigation.setVisibility(View.VISIBLE);
         fabAdd.setVisibility(View.GONE);
         toolbar.setNavigationIcon(null);
 
@@ -317,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
         momentsRecyclerView.setVisibility(View.GONE);
         categoriesRecyclerView.setVisibility(View.VISIBLE);
         btnAddCategory.setVisibility(View.VISIBLE);
-        bottomAppBar.setVisibility(View.VISIBLE);
+        bottomNavigation.setVisibility(View.VISIBLE);
         fabAdd.setVisibility(View.GONE);
         isInMomentsMode= false;
         currentView    = VIEW_CATEGORIES;
@@ -448,7 +476,7 @@ public class MainActivity extends AppCompatActivity {
 
             categoriesRecyclerView.setVisibility(View.GONE);
             btnAddCategory.setVisibility(View.GONE);
-            bottomAppBar.setVisibility(View.GONE);
+            bottomNavigation.setVisibility(View.GONE);
             fabAdd.setVisibility(View.VISIBLE);
 
             // Update custom title — NOT toolbar.setTitle()

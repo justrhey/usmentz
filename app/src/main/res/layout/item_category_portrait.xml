@@ -6,11 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    app:cardBackgroundColor="#1E1E1E"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
     app:strokeWidth="1dp"
     app:strokeColor="#33FFFFFF"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +22,7 @@
         android:padding="16dp"
         android:gravity="center">
 
-        <!-- Category Icon (PNG) -->
+        <!-- Category Icon -->
         <ImageView
             android:id="@+id/ivCategoryIcon"
             android:layout_width="64dp"
@@ -27,7 +30,8 @@
             android:layout_marginBottom="12dp"
             android:src="@drawable/folder"
             android:scaleType="centerCrop"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            app:tint="#9B5CFF"/>
 
         <TextView
             android:id="@+id/tvCategoryName"
@@ -36,7 +40,7 @@
             android:text="Category"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/text_primary"
+            android:textColor="#FFFFFF"
             android:maxLines="1"
             android:ellipsize="end" />
 
@@ -46,10 +50,10 @@
             android:layout_height="wrap_content"
             android:text="0 moments"
             android:textSize="14sp"
-            android:textColor="@color/text_secondary"
+            android:textColor="#808080"
             android:layout_marginTop="4dp" />
 
-        <!-- Menu button for edit/delete -->
+        <!-- Menu button -->
         <ImageView
             android:id="@+id/btnCategoryMenu"
             android:layout_width="32dp"
@@ -58,6 +62,7 @@
             android:layout_marginTop="8dp"
             android:padding="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="#808080"
             android:visibility="visible" />
 
     </LinearLayout>

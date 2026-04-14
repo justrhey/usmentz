@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#0C0C1E">
 
+    <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -20,9 +21,7 @@
             android:background="#0C0C1E"
             android:paddingStart="20dp"
             android:paddingEnd="12dp"
-            app:elevation="0dp"
-            app:contentInsetStart="0dp"
-            app:contentInsetStartWithNavigation="0dp">
+            app:elevation="0dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -34,7 +33,7 @@
                     android:layout_width="3dp"
                     android:layout_height="26dp"
                     android:background="#9B5CFF"
-                    android:layout_marginEnd="12dp" />
+                    android:layout_marginEnd="12dp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -48,16 +47,14 @@
                         android:text="Usmentz"
                         android:textColor="#F0E6FF"
                         android:textSize="21sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.01" />
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="your moments"
                         android:textColor="#3D3660"
-                        android:textSize="10sp"
-                        android:letterSpacing="0.08" />
+                        android:textSize="10sp"/>
 
                 </LinearLayout>
 
@@ -68,22 +65,20 @@
                 style="@style/Widget.Material3.Button.IconButton"
                 android:layout_width="44dp"
                 android:layout_height="44dp"
-                android:layout_gravity="end|center_vertical"
+                android:layout_gravity="end"
                 android:layout_marginEnd="4dp"
-                android:backgroundTint="#0D3B38"
+                android:backgroundTint="#1A1A30"
                 app:cornerRadius="22dp"
                 app:icon="@drawable/ic_add"
                 app:iconSize="20dp"
-                app:iconTint="#2DD4C8"
-                app:strokeColor="#1A5550"
-                app:strokeWidth="1dp" />
+                app:iconTint="#2DD4C8"/>
 
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#16163A" />
+            android:background="#16163A"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -92,20 +87,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="14dp"
-        android:paddingBottom="100dp"
+        android:paddingBottom="80dp"
         android:clipToPadding="false"
         android:visibility="visible"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/momentsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="14dp"
-        android:paddingBottom="100dp"
+        android:paddingBottom="80dp"
         android:clipToPadding="false"
         android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <include
         android:id="@+id/emptyStateLayout"
@@ -113,45 +108,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="66dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:backgroundTint="#0E0E20"
-        app:fabAlignmentMode="center"
-        app:fabCradleMargin="10dp"
-        app:fabCradleRoundedCornerRadius="22dp"
-        app:fabCradleVerticalOffset="12dp"
-        app:hideOnScroll="true"
-        app:elevation="24dp">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigation"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            app:itemTextColor="@color/bottom_nav_colors"
-            app:itemIconTint="@color/bottom_nav_colors"
-            app:menu="@menu/bottom_nav_menu"
-            app:labelVisibilityMode="labeled" />
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
+        android:background="#0E0E20"
+        app:elevation="0dp"
+        app:itemTextColor="#3D3660"
+        app:itemIconTint="#3D3660"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add"
-        android:contentDescription="Add Moment"
+        android:contentDescription="Add"
         app:backgroundTint="#9B5CFF"
-        app:tint="@color/white"
+        app:tint="#FFFFFF"
         app:fabSize="normal"
-        app:elevation="16dp"
+        app:elevation="4dp"
         android:visibility="gone"
-        app:layout_anchor="@id/bottomAppBar"
-        app:layout_anchorGravity="center" />
+        app:layout_anchor="@id/bottomNavigation"
+        app:layout_anchorGravity="center|top"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

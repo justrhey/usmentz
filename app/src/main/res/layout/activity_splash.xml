@@ -3,24 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     android:keepScreenOn="true">
 
-    <!-- Your Full-Screen Image -->
+    <!-- Gradient Background -->
     <ImageView
         android:id="@+id/ivSplashImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/splash_background"
- />
+        android:scaleType="centerCrop"
+        android:src="@drawable/splash_background"/>
 
-    <!-- Dark Overlay (optional - if you want text to be readable) -->
+    <!-- Dark Overlay -->
     <View
         android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#4D000000" />  <!-- 30% black overlay -->
+        android:background="#80000000"/>
 
-    <!-- Content on top of image -->
+    <!-- Content -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,54 +29,59 @@
         android:gravity="center"
         android:padding="32dp">
 
-        <!-- App Logo/Icon -->
+        <!-- App Logo with Glassmorphism -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/logoCard"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cardCornerRadius="50dp"
-            app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/purple_primary"
-            android:visibility="gone">  <!-- Hide if you don't want logo -->
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#1E1E1E"
+            app:strokeWidth="2dp"
+            app:strokeColor="#9B5CFF">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="U"
-                android:textColor="@color/white"
-                android:textSize="48sp"
-                android:textStyle="bold" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- Purple Glow -->
+                <View
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/icon_glow_background"
+                    android:alpha="0.5"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="U"
+                    android:textColor="#9B5CFF"
+                    android:textSize="56sp"
+                    android:textStyle="bold"/>
+
+            </FrameLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- App Name -->
-
-        <!-- Tagline -->
-
         <!-- Loading Indicator -->
-
-        <!-- Loading Text -->
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginTop="64dp"
-            android:indeterminateTint="@color/white" />
+            android:indeterminateTint="#9B5CFF"/>
 
+        <!-- Loading Text -->
         <TextView
             android:id="@+id/tvLoading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:shadowColor="#80000000"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"
             android:text="Loading your moments..."
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
+            android:textColor="#B3B3B3"
+            android:textSize="14sp"/>
 
     </LinearLayout>
 
