@@ -1,11 +1,28 @@
 # Usmentz - Personal Moments Tracker
 
+<img src="https://github.com/justrhey/usmentz/blob/main/assets/usmentz-banner.png" width="100%">
+
 A mobile application for organizing and tracking your special moments and experiences. Built with native **Android (Java)** using modern architecture patterns.
 
-![Android](https://img.shields.io/badge/-Android-3DDC84?logo=android&logoColor=white&style=for-the-badge)
+---
+
+### Technologies Used
+
+#### Languages
 ![Java](https://img.shields.io/badge/-Java-007396?logo=java&logoColor=white&style=for-the-badge)
+
+#### Mobile Development
+![Android](https://img.shields.io/badge/-Android-3DDC84?logo=android&logoColor=white&style=for-the-badge)
 ![Room](https://img.shields.io/badge/-Room-2.6.1-007396?logo=room&logoColor=white&style=for-the-badge)
+![Glide](https://img.shields.io/badge/-Glide-000000?logo=glide&logoColor=white&style=for-the-badge)
+
+#### UI/Design
 ![Material](https://img.shields.io/badge/-Material%20Design-757575?logo=material-design&logoColor=white&style=for-the-badge)
+![XML](https://img.shields.io/badge/-XML-FF6600?logo=xml&logoColor=white&style=for-the-badge)
+
+#### Tools
+![Android Studio](https://img.shields.io/badge/-Android%20Studio-3DDC84?logo=android-studio&logoColor=white&style=for-the-badge)
+![Gradle](https://img.shields.io/badge/-Gradle-02303A?logo=gradle&logoColor=white&style=for-the-badge)
 
 ---
 
