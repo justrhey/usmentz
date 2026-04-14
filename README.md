@@ -1,28 +1,6 @@
 # Usmentz - Personal Moments Tracker
 
-<img src="https://github.com/justrhey/usmentz/blob/main/assets/usmentz-banner.png" width="100%">
-
-A mobile application for organizing and tracking your special moments and experiences. Built with native **Android (Java)** using modern architecture patterns.
-
----
-
-### Technologies Used
-
-#### Languages
-![Java](https://img.shields.io/badge/-Java-007396?logo=java&logoColor=white&style=for-the-badge)
-
-#### Mobile Development
-![Android](https://img.shields.io/badge/-Android-3DDC84?logo=android&logoColor=white&style=for-the-badge)
-![Room](https://img.shields.io/badge/-Room-2.6.1-007396?logo=room&logoColor=white&style=for-the-badge)
-![Glide](https://img.shields.io/badge/-Glide-000000?logo=glide&logoColor=white&style=for-the-badge)
-
-#### UI/Design
-![Material](https://img.shields.io/badge/-Material%20Design-757575?logo=material-design&logoColor=white&style=for-the-badge)
-![XML](https://img.shields.io/badge/-XML-FF6600?logo=xml&logoColor=white&style=for-the-badge)
-
-#### Tools
-![Android Studio](https://img.shields.io/badge/-Android%20Studio-3DDC84?logo=android-studio&logoColor=white&style=for-the-badge)
-![Gradle](https://img.shields.io/badge/-Gradle-02303A?logo=gradle&logoColor=white&style=for-the-badge)
+A mobile application for organizing and tracking your special moments and experiences. Built with native Android using Java and modern architecture patterns.
 
 ---
 
@@ -34,16 +12,16 @@ Usmentz is a personal moments management application that helps users organize t
 
 ## Features
 
-* Category management with custom icons and colors
-* Moment/date location tracking with address and descriptions
-* Expense tracking per moment with total calculations
-* 5-star rating system with text reviews
-* Photo attachments for moments
-* Automatic favorites collection (4+ stars)
-* Calendar-based moment viewing
-* Swipe-to-delete with undo functionality
-* Drag-and-drop moment reordering
-* Bottom navigation with 4 main sections
+- Category management with custom icons and colors
+- Moment/date location tracking with address and descriptions
+- Expense tracking per moment with total calculations
+- 5-star rating system with text reviews
+- Photo attachments for moments
+- Automatic favorites collection (4+ stars)
+- Calendar-based moment viewing
+- Swipe-to-delete with undo functionality
+- Drag-and-drop moment reordering
+- Bottom navigation with 4 main sections
 
 ---
 
@@ -128,9 +106,9 @@ flowchart TD
 
 ### Prerequisites
 
-* Android Studio Arctic Fox or later
-* JDK 17 or later
-* Android SDK 34
+- Android Studio Arctic Fox or later
+- JDK 17 or later
+- Android SDK 34
 
 ### Build
 
@@ -172,31 +150,18 @@ usmentz/
 
 ## Dependencies
 
-* AndroidX AppCompat 1.6.1
-* Material Components 1.11.0
-* ConstraintLayout 2.1.4
-* RecyclerView 1.3.2
-* CardView 1.0.0
-* Glide 4.16.0
-* Room 2.6.1
-* Lifecycle ViewModel 2.7.0
-* Lifecycle LiveData 2.7.0
+- AndroidX AppCompat 1.6.1
+- Material Components 1.11.0
+- ConstraintLayout 2.1.4
+- RecyclerView 1.3.2
+- CardView 1.0.0
+- Glide 4.16.0
+- Room 2.6.1
+- Lifecycle ViewModel 2.7.0
+- Lifecycle LiveData 2.7.0
 
 ---
 
-## Acknowledgments
+## License
 
-* Android Developers documentation
-* Room Persistence Library
-* Material Design Components
-* Glide Image Library
-
----
-
-<div align="center">
-
-**Usmentz** - Track Your Special Moments
-
-[Repository](https://github.com/justrhey/usmentz) | [Back to Profile](https://github.com/justrhey)
-
-</div>
+This project is for personal use.
