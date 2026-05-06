@@ -29,7 +29,7 @@ public class CategoryDialog {
 
             EditText etName = dialogView.findViewById(R.id.etCategoryName);
             Button btnIconDropdown = dialogView.findViewById(R.id.btnIconDropdown);
-            ImageView ivIconPreview = dialogView.findViewById(R.id.ivIconPreview);
+            ImageView ivIconPreview = (ImageView) dialogView.findViewById(R.id.ivIconPreview);
             TextView tvIconPreview = dialogView.findViewById(R.id.tvIconPreview);
             Spinner spinnerColor = dialogView.findViewById(R.id.spinnerColor);
             Button btnCancel = dialogView.findViewById(R.id.btnCancel);

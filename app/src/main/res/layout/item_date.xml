@@ -58,7 +58,7 @@
                 android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_on_purple"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:maxLines="1"

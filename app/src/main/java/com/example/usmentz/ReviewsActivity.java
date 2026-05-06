@@ -3,6 +3,7 @@ package com.example.usmentz;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +16,6 @@ import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.model.Review;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +31,9 @@ public class ReviewsActivity extends AppCompatActivity {
     private TextView tvEmptyTitle, tvEmptySubtitle;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy", Locale.getDefault());
+
+    // Floating navbar clickable areas
+    private LinearLayout navHome, navCalendar, navReviews, navFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,29 +67,14 @@ public class ReviewsActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Bottom nav
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
-        bottomNav.setSelectedItemId(R.id.navigation_reviews);
-        bottomNav.setOnNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.navigation_categories) {
-                startActivity(new Intent(this, MainActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
-                return true;
-            } else if (id == R.id.navigation_calendar) {
-                startActivity(new Intent(this, CalendarActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.navigation_favorites) {
-                startActivity(new Intent(this, FavoritesActivity.class));
-                finish();
-                return true;
-            } else if (id == R.id.navigation_reviews) {
-                return true;
-            }
-            return false;
-        });
+        // Floating navbar clickable areas
+        navHome       = findViewById(R.id.navHome);
+        navCalendar   = findViewById(R.id.navCalendar);
+        navReviews   = findViewById(R.id.navReviews);
+        navFavorites = findViewById(R.id.navFavorites);
+
+        // Setup click listeners for navbar
+        setupFloatingNavbar();
 
         // Observe and convert moments to reviews
         dateViewModel.getAllMoments().observe(this, moments -> {
@@ -124,5 +112,39 @@ public class ReviewsActivity extends AppCompatActivity {
                 emptyState.setVisibility(View.GONE);
             }
         });
+    }
+
+    // ── Floating navbar click listeners ───────────────────────────────────
+    private void setupFloatingNavbar() {
+        // Home - navigate to MainActivity
+        if (navHome != null) {
+            navHome.setOnClickListener(v -> {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            });
+        }
+
+        // Calendar - navigate to CalendarActivity
+        if (navCalendar != null) {
+            navCalendar.setOnClickListener(v -> {
+                startActivity(new Intent(this, CalendarActivity.class));
+                finish();
+            });
+        }
+
+        // Reviews - stay on current activity
+        if (navReviews != null) {
+            navReviews.setOnClickListener(v -> {
+                // Already on ReviewsActivity
+            });
+        }
+
+        // Favorites - navigate to FavoritesActivity
+        if (navFavorites != null) {
+            navFavorites.setOnClickListener(v -> {
+                startActivity(new Intent(this, FavoritesActivity.class));
+                finish();
+            });
+        }
     }
 }

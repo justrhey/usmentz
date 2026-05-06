@@ -5,14 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#0C0C1E">
+    android:background="@color/purple_background">
 
     <!-- Moment Name Card -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="#13132A"
+        app:cardBackgroundColor="@color/purple_card"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp">
 
@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Moment Name"
-                android:textColor="#F0E6FF"
+                android:textColor="@color/text_on_purple"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Date"
-                android:textColor="#7A6A9A"
+                android:textColor="@color/text_on_purple_hint"
                 android:textSize="14sp"
                 android:drawableStart="@drawable/ic_calendar"
                 android:drawablePadding="6dp" />
@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="#13132A"
+        app:cardBackgroundColor="@color/purple_card"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp">
 
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📍 LOCATION"
-                android:textColor="#9B5CFF"
+                android:textColor="@color/purple_primary"
                 android:textSize="11sp"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="8dp" />
@@ -74,7 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Address"
-                android:textColor="#F0E6FF"
+                android:textColor="@color/text_on_purple"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -85,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="#13132A"
+        app:cardBackgroundColor="@color/purple_card"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp">
 
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="📝 DESCRIPTION"
-                android:textColor="#9B5CFF"
+                android:textColor="@color/purple_primary"
                 android:textSize="11sp"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="8dp" />
@@ -109,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="No description"
-                android:textColor="#F0E6FF"
+                android:textColor="@color/text_on_purple"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -120,7 +120,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="#13132A"
+        app:cardBackgroundColor="@color/purple_card"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp">
 
@@ -134,7 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="⭐ RATING"
-                android:textColor="#9B5CFF"
+                android:textColor="@color/purple_primary"
                 android:textSize="11sp"
                 android:letterSpacing="0.1"
                 android:layout_marginBottom="8dp" />
@@ -147,8 +147,8 @@
                 android:stepSize="0.5"
                 android:rating="0"
                 android:isIndicator="true"
-                android:progressTint="#9B5CFF"
-                android:secondaryProgressTint="#2A1A50" />
+                android:progressTint="@color/purple_primary"
+                android:secondaryProgressTint="@color/purple_surface" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

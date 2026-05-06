@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="#13132A"
+    app:cardBackgroundColor="@color/purple_card"
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp">
 
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Moment Name"
-                android:textColor="#F0E6FF"
+                android:textColor="@color/text_on_purple"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mar 10, 2026"
-                android:textColor="#7A6A9A"
+                android:textColor="@color/text_on_purple_hint"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -51,8 +51,8 @@
             android:stepSize="0.5"
             android:rating="4.5"
             android:isIndicator="true"
-            android:progressTint="#9B5CFF"
-            android:secondaryProgressTint="#2A1A50"
+            android:progressTint="@color/purple_primary"
+            android:secondaryProgressTint="@color/purple_surface"
             android:layout_marginBottom="12dp" />
 
         <!-- Photo (optional) -->
@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="This was an amazing moment! The food was great and the atmosphere was perfect."
-            android:textColor="#F0E6FF"
+            android:textColor="@color/text_on_purple"
             android:textSize="14sp"
             android:lineSpacingMultiplier="1.4"
             android:maxLines="3"

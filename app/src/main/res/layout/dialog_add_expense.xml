@@ -4,83 +4,111 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:background="@color/dark_surface">
+    android:background="#FFFFFF"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="28dp"
+    android:paddingBottom="24dp">
 
+    <!-- Title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Expense"
-        android:textColor="@color/text_primary"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="20dp" />
+        android:textColor="#212121"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Track your spending"
+        android:textColor="#9E9E9E"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="24dp" />
 
     <!-- What did you spend on -->
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="What did you spend on?"
-        android:textColor="@color/text_secondary"
-        android:textSize="12sp"
-        android:layout_marginBottom="4dp" />
+        android:hint="What did you spend on?"
+        app:hintTextColor="#9E9E9E"
+        app:boxStrokeColor="#9B5CFF"
+        app:boxStrokeWidth="1dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginBottom="16dp">
 
-    <EditText
-        android:id="@+id/etExpenseName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="e.g. Food, Transport, Tickets..."
-        android:textColor="@color/text_primary"
-        android:textColorHint="@color/text_hint"
-        android:background="@drawable/bg_input"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"
-        android:inputType="text" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etExpenseName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:inputType="textCapSentences"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Amount -->
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Amount"
-        android:textColor="@color/text_secondary"
-        android:textSize="12sp"
-        android:layout_marginBottom="4dp" />
+        android:hint="Amount"
+        app:hintTextColor="#9E9E9E"
+        app:boxStrokeColor="#9B5CFF"
+        app:boxStrokeWidth="1dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginBottom="24dp">
 
-    <EditText
-        android:id="@+id/etExpenseAmount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="0.00"
-        android:textColor="@color/text_primary"
-        android:textColorHint="@color/text_hint"
-        android:background="@drawable/bg_input"
-        android:padding="12dp"
-        android:layout_marginBottom="24dp"
-        android:inputType="numberDecimal" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etExpenseAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:inputType="numberDecimal"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnCancelExpense"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
             android:text="Cancel"
-            android:textColor="@color/text_secondary"
-            android:backgroundTint="@android:color/transparent"
-            android:layout_marginEnd="8dp" />
+            android:textColor="#757575"
+            android:textSize="14sp"
+            android:backgroundTint="#F5F5F5"
+            android:layout_marginEnd="8dp"
+            app:cornerRadius="12dp" />
 
         <Button
             android:id="@+id/btnSaveExpense"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
             android:text="Add"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/purple_primary" />
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:backgroundTint="#9B5CFF"
+            app:cornerRadius="12dp" />
 
     </LinearLayout>
 

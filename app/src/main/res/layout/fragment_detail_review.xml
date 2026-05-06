@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#0C0C1E">
+    android:background="@color/purple_background">
 
     <!-- Rating Card -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="#13132A"
+        app:cardBackgroundColor="@color/purple_card"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp">
 
@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="RATING"
-                android:textColor="#5A4E7A"
+                android:textColor="@color/text_on_purple_hint"
                 android:textSize="10sp"
                 android:letterSpacing="0.12"
                 android:layout_marginBottom="14dp" />
@@ -38,14 +38,16 @@
                 android:layout_marginBottom="8dp"
                 android:numStars="5"
                 android:rating="0"
-                android:stepSize="0.5" />
+                android:stepSize="0.5"
+                android:progressTint="@color/purple_primary"
+                android:secondaryProgressTint="@color/purple_surface" />
 
             <TextView
                 android:id="@+id/tvRatingLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tap to rate"
-                android:textColor="#3D3660"
+                android:textColor="@color/text_on_purple_hint"
                 android:textSize="12sp" />
 
         </LinearLayout>
@@ -56,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="#13132A"
+        app:cardBackgroundColor="@color/purple_card"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp">
 
@@ -70,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="PHOTO"
-                android:textColor="#5A4E7A"
+                android:textColor="@color/text_on_purple_hint"
                 android:textSize="10sp"
                 android:letterSpacing="0.12"
                 android:layout_marginBottom="14dp" />
@@ -81,10 +83,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 android:visibility="gone"
-                app:cardBackgroundColor="#1C1C38"
+                app:cardBackgroundColor="@color/purple_surface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#9B5CFF"
+                app:strokeColor="@color/purple_primary"
                 app:strokeWidth="2dp">
 
                 <ImageView
@@ -94,14 +96,13 @@
                     android:scaleType="centerCrop" />
             </androidx.cardview.widget.CardView>
 
-            <!-- FIXED ID -->
             <LinearLayout
                 android:id="@+id/noPhotoPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="#1C1C38"
+                android:background="@color/purple_surface"
                 android:layout_marginBottom="12dp"
                 android:visibility="visible">
 
@@ -115,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="No photo added"
-                    android:textColor="#3D3660"
+                    android:textColor="@color/text_on_purple_hint"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp" />
 
@@ -126,9 +127,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:text="Change Photo"
-                android:textColor="#2DD4C8"
+                android:textColor="@color/teal_accent"
                 android:textSize="14sp"
-                android:backgroundTint="#0D3B38"
+                android:backgroundTint="@color/purple_surface"
                 android:stateListAnimator="@null" />
 
         </LinearLayout>
@@ -139,7 +140,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="#13132A"
+        app:cardBackgroundColor="@color/purple_card"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp">
 
@@ -153,7 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="YOUR REVIEW"
-                android:textColor="#5A4E7A"
+                android:textColor="@color/text_on_purple_hint"
                 android:textSize="10sp"
                 android:letterSpacing="0.12"
                 android:layout_marginBottom="12dp" />
@@ -163,8 +164,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:hint="Write your thoughts about this moment…"
-                android:textColor="#F0E6FF"
-                android:textColorHint="#3D3660"
+                android:textColor="@color/text_on_purple"
+                android:textColorHint="@color/text_on_purple_hint"
                 android:textSize="14sp"
                 android:background="@drawable/bg_input"
                 android:padding="16dp"
@@ -179,7 +180,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:backgroundTint="#9B5CFF"
+                android:backgroundTint="@color/purple_primary"
                 android:stateListAnimator="@null"
                 android:layout_marginTop="14dp" />
 

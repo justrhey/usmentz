@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.material.appbar.AppBarLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,13 +37,11 @@ import com.example.usmentz.viewmodel.CategoryViewModel;
 import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -67,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private Category currentCategory = null;
     private FloatingActionButton fabAdd;
     private MaterialToolbar toolbar;
+    private AppBarLayout appBarLayout;
     private Button btnAddCategory;
     private boolean isInMomentsMode = false;
     private boolean isInSpecialView = false;
@@ -74,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
     // Category name TextView inside the toolbar custom layout
     private TextView tvToolbarTitle;
 
-    private BottomNavigationView bottomNavigation;
+    // Floating navbar clickable areas
+    private LinearLayout navHome, navCalendar, navReviews, navFavorites;
     private static final int VIEW_CATEGORIES = 0;
     private int currentView = VIEW_CATEGORIES;
 
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_LAST_CATEGORY_ICON = "last_category_icon";
     private static final String KEY_LAST_CATEGORY_COLOR = "last_category_color";
 
-    private final int[] emptyStateDrawables = { R.drawable.nocat2 };
+    private final int[] emptyStateDrawables = { R.drawable.nocat22};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
         // Set content view FIRST
         setContentView(R.layout.activity_main_categories);
         
-        // Apply solid background
-        getWindow().setBackgroundDrawableResource(android.R.color.black);
+        // Apply white background
+        getWindow().setBackgroundDrawableResource(android.R.color.white);
         
         try {
             sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -146,18 +147,23 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
         // Get views with null safety
         toolbar               = findViewById(R.id.toolbar);
+        appBarLayout           = findViewById(R.id.appBarLayout);
         categoriesRecyclerView= findViewById(R.id.categoriesRecyclerView);
         momentsRecyclerView   = findViewById(R.id.momentsRecyclerView);
         fabAdd                = findViewById(R.id.fabAdd);
         emptyStateLayout      = findViewById(R.id.emptyStateLayout);
         btnAddCategory        = findViewById(R.id.btnAddCategory);
-        bottomNavigation      = findViewById(R.id.bottomNavigation);
-        
+
+        // Floating navbar clickable areas
+        navHome       = findViewById(R.id.navHome);
+        navCalendar   = findViewById(R.id.navCalendar);
+        navReviews   = findViewById(R.id.navReviews);
+        navFavorites = findViewById(R.id.navFavorites);
+
         // Debug: Log any missing views
         if (toolbar == null) Log.w(TAG, "toolbar is null!");
         if (categoriesRecyclerView == null) Log.w(TAG, "categoriesRecyclerView is null!");
-        if (bottomNavigation == null) Log.w(TAG, "bottomNavigation is null!");
-        
+
         // Get custom title from toolbar
         if (toolbar != null) {
             tvToolbarTitle = toolbar.findViewById(R.id.tvToolbarTitle);
@@ -167,9 +173,8 @@ public class MainActivity extends AppCompatActivity {
         if (categoriesRecyclerView != null) categoriesRecyclerView.setVisibility(View.VISIBLE);
         if (momentsRecyclerView != null) momentsRecyclerView.setVisibility(View.GONE);
         if (emptyStateLayout != null) emptyStateLayout.setVisibility(View.GONE);
-        if (fabAdd != null) fabAdd.setVisibility(View.GONE);
+        if (fabAdd != null) fabAdd.setVisibility(View.VISIBLE);
         if (btnAddCategory != null) btnAddCategory.setVisibility(View.VISIBLE);
-        if (bottomNavigation != null) bottomNavigation.setVisibility(View.VISIBLE);
     }
 
     private void setupToolbar() {
@@ -262,24 +267,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupBottomNavigation() {
-        bottomNavigation.setOnNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.navigation_categories) {
-                switchToCategoriesView();
-                return true;
-            } else if (id == R.id.navigation_favorites) {
-                navigateTo(FavoritesActivity.class);
-                return true;
-            } else if (id == R.id.navigation_calendar) {
-                navigateTo(CalendarActivity.class);
-                return true;
-            } else if (id == R.id.navigation_reviews) {
-                navigateTo(ReviewsActivity.class);
-                return true;
-            }
-            return false;
-        });
-        bottomNavigation.setSelectedItemId(R.id.navigation_categories);
+        // Home - stay on current activity
+        if (navHome != null) {
+            navHome.setOnClickListener(v -> {
+                // Already on MainActivity - do nothing, just refresh
+            });
+        }
+
+        // Calendar - navigate to CalendarActivity
+        if (navCalendar != null) {
+            navCalendar.setOnClickListener(v -> navigateTo(CalendarActivity.class));
+        }
+
+        // Reviews - navigate to ReviewsActivity
+        if (navReviews != null) {
+            navReviews.setOnClickListener(v -> navigateTo(ReviewsActivity.class));
+        }
+
+        // Favorites - navigate to FavoritesActivity
+        if (navFavorites != null) {
+            navFavorites.setOnClickListener(v -> navigateTo(FavoritesActivity.class));
+        }
     }
 
     private void enterMomentsMode(Category category) {
@@ -289,9 +297,11 @@ public class MainActivity extends AppCompatActivity {
         isInSpecialView  = false;
         saveCurrentCategory();
 
+        // Hide header, show moments list
+        if (appBarLayout != null) appBarLayout.setVisibility(View.GONE);
         categoriesRecyclerView.setVisibility(View.GONE);
         btnAddCategory.setVisibility(View.GONE);
-        bottomNavigation.setVisibility(View.GONE);
+        fabAdd.setVisibility(View.VISIBLE);
         hideEmptyState();
 
         dateViewModel.setCurrentCategory(currentCategoryId);
@@ -311,8 +321,7 @@ public class MainActivity extends AppCompatActivity {
         momentsRecyclerView.setVisibility(View.GONE);
         categoriesRecyclerView.setVisibility(View.VISIBLE);
         btnAddCategory.setVisibility(View.VISIBLE);
-        bottomNavigation.setVisibility(View.VISIBLE);
-        fabAdd.setVisibility(View.GONE);
+        fabAdd.setVisibility(View.VISIBLE);
         toolbar.setNavigationIcon(null);
 
         // Restore custom title to "Usmentz"
@@ -342,11 +351,12 @@ public class MainActivity extends AppCompatActivity {
     private void exitMomentsMode() {
         sharedPreferences.edit().clear().apply();
 
+        // Show header back
+        if (appBarLayout != null) appBarLayout.setVisibility(View.VISIBLE);
         momentsRecyclerView.setVisibility(View.GONE);
         categoriesRecyclerView.setVisibility(View.VISIBLE);
         btnAddCategory.setVisibility(View.VISIBLE);
-        bottomNavigation.setVisibility(View.VISIBLE);
-        fabAdd.setVisibility(View.GONE);
+        fabAdd.setVisibility(View.VISIBLE);
         isInMomentsMode= false;
         currentView    = VIEW_CATEGORIES;
 
@@ -376,8 +386,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (fabAdd != null)
             fabAdd.setOnClickListener(v -> {
+                Log.d(TAG, "FAB clicked! currentCategoryId=" + currentCategoryId + ", currentCategory=" + currentCategory);
                 if (currentCategoryId == -1 || currentCategory == null) {
-                    Toast.makeText(this, "Please select a category first", Toast.LENGTH_SHORT).show();
+                    // No category selected - show dialog to add new category first
+                    showAddCategoryDialog();
                 } else {
                     showAddDialog();
                 }
@@ -476,7 +488,6 @@ public class MainActivity extends AppCompatActivity {
 
             categoriesRecyclerView.setVisibility(View.GONE);
             btnAddCategory.setVisibility(View.GONE);
-            bottomNavigation.setVisibility(View.GONE);
             fabAdd.setVisibility(View.VISIBLE);
 
             // Update custom title — NOT toolbar.setTitle()
@@ -506,14 +517,18 @@ public class MainActivity extends AppCompatActivity {
             final int[] idx = {0};
 
             btnIconDropdown.setText(imageDisplay[0]);
-            ivIconPreview.setImageResource(imageResources[0]);
-            tvIconPreview.setText("Selected: " + imageDisplay[0]);
+            tvIconPreview.setText(imageDisplay[0]);
+            if (ivIconPreview != null) {
+                ivIconPreview.setImageResource(imageResources[0]);
+            }
 
             btnIconDropdown.setOnClickListener(v -> {
                 idx[0] = (idx[0] + 1) % imageResources.length;
                 btnIconDropdown.setText(imageDisplay[idx[0]]);
-                ivIconPreview.setImageResource(imageResources[idx[0]]);
-                tvIconPreview.setText("Selected: " + imageDisplay[idx[0]]);
+                tvIconPreview.setText(imageDisplay[idx[0]]);
+                if (ivIconPreview != null) {
+                    ivIconPreview.setImageResource(imageResources[idx[0]]);
+                }
             });
 
             String[] colors    = {"Purple","Red","Blue","Green","Orange","Pink"};

@@ -3,6 +3,7 @@ package com.example.usmentz;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -22,7 +23,6 @@ import com.example.usmentz.model.CalendarDay;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.example.usmentz.viewmodel.ExpenseViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +59,9 @@ public class CalendarActivity extends AppCompatActivity {
     private Map<Integer, List<Expense>> expensesCache = new HashMap<>();
     private boolean dataLoaded = false;
 
+    // Floating navbar clickable areas
+    private LinearLayout navHome, navCalendar, navReviews, navFavorites;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,35 +78,18 @@ public class CalendarActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        toolbar.setNavigationOnClickListener(v -> finish());
+toolbar.setNavigationOnClickListener(v -> finish());
+        // ── Floating navbar clickable areas ──────────────────────
+        navHome       = findViewById(R.id.navHome);
+        navCalendar   = findViewById(R.id.navCalendar);
+        navReviews   = findViewById(R.id.navReviews);
+        navFavorites = findViewById(R.id.navFavorites);
 
-        // ── Bottom nav — highlight Calendar tab ───────────────────
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
-        bottomNav.setSelectedItemId(R.id.navigation_calendar);
-        bottomNav.setOnNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.navigation_categories) {
-                startActivity(new Intent(this, MainActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
-                return true;
-            } else if (id == R.id.navigation_favorites) {
-                startActivity(new Intent(this, FavoritesActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
-                return true;
-            } else if (id == R.id.navigation_reviews) {
-                startActivity(new Intent(this, ReviewsActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
-                return true;
-            } else if (id == R.id.navigation_calendar) {
-                return true;
-            }
-            return false;
-        });
+        // Setup click listeners for navbar
+        setupFloatingNavbar();
 
         // ── Views ─────────────────────────────────────────────────
+        tvMonth        = findViewById(R.id.tvMonth);
         tvMonth        = findViewById(R.id.tvMonth);
         tvYear         = findViewById(R.id.tvYear);
         tvSelectedDate = findViewById(R.id.tvSelectedDate);
@@ -344,5 +330,39 @@ public class CalendarActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    // ── Floating navbar click listeners ───────────────────────────────────
+    private void setupFloatingNavbar() {
+        // Home - navigate to MainActivity
+        if (navHome != null) {
+            navHome.setOnClickListener(v -> {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            });
+        }
+
+        // Calendar - stay on current activity
+        if (navCalendar != null) {
+            navCalendar.setOnClickListener(v -> {
+                // Already on CalendarActivity
+            });
+        }
+
+        // Reviews - navigate to ReviewsActivity
+        if (navReviews != null) {
+            navReviews.setOnClickListener(v -> {
+                startActivity(new Intent(this, ReviewsActivity.class));
+                finish();
+            });
+        }
+
+        // Favorites - navigate to FavoritesActivity
+        if (navFavorites != null) {
+            navFavorites.setOnClickListener(v -> {
+                startActivity(new Intent(this, FavoritesActivity.class));
+                finish();
+            });
+        }
     }
 }

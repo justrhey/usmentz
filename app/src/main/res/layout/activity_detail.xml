@@ -4,27 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#0C0C1E">
+    android:background="@color/white_pure">
 
     <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#0C0C1E"
+        android:background="@color/white_pure"
         app:navigationIcon="@drawable/ic_back"
-        app:navigationIconTint="#9B5CFF"
-        app:titleTextColor="#F0E6FF" />
+        app:navigationIconTint="@color/purple_primary"
+        app:titleTextColor="@color/dark_primary" />
 
     <!-- Tab Layout -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="#0C0C1E"
-        app:tabTextColor="#3D3660"
-        app:tabSelectedTextColor="#9B5CFF"
-        app:tabIndicatorColor="#9B5CFF"
+        android:background="@color/white_pure"
+        app:tabTextColor="@color/dark_tertiary"
+        app:tabSelectedTextColor="@color/purple_primary"
+        app:tabIndicatorColor="@color/purple_primary"
         app:tabIndicatorHeight="3dp" />
 
     <!-- ViewPager2 for fragments -->
@@ -34,7 +34,136 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- Edit FAB (only visible on first tab) -->
+    <!-- Floating Pill Navbar -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/floatingNavbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="@color/navbar_surface_translucent"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="12dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/navbar_border">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="4dp">
+
+            <!-- Home -->
+            <LinearLayout
+                android:id="@+id/navHome"
+                android:layout_width="52dp"
+                android:layout_height="44dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_home"
+                    app:tint="@color/navbar_icon_inactive"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textSize="9sp"
+                    android:textColor="@color/navbar_icon_inactive"/>
+            </LinearLayout>
+
+            <!-- Calendar -->
+            <LinearLayout
+                android:id="@+id/navCalendar"
+                android:layout_width="52dp"
+                android:layout_height="44dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="@color/navbar_icon_inactive"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"
+                    android:textSize="9sp"
+                    android:textColor="@color/navbar_icon_inactive"/>
+            </LinearLayout>
+
+            <!-- Moments -->
+            <LinearLayout
+                android:id="@+id/navMoments"
+                android:layout_width="52dp"
+                android:layout_height="44dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_moments"
+                    app:tint="@color/navbar_icon_inactive"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Moments"
+                    android:textSize="9sp"
+                    android:textColor="@color/navbar_icon_inactive"/>
+            </LinearLayout>
+
+            <!-- Reviews -->
+            <LinearLayout
+                android:id="@+id/navReviews"
+                android:layout_width="52dp"
+                android:layout_height="44dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_star"
+                    app:tint="@color/navbar_icon_inactive"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reviews"
+                    android:textSize="9sp"
+                    android:textColor="@color/navbar_icon_inactive"/>
+            </LinearLayout>
+
+            <!-- Favorites -->
+            <LinearLayout
+                android:id="@+id/navFavorites"
+                android:layout_width="52dp"
+                android:layout_height="44dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_favorite"
+                    app:tint="@color/navbar_icon_inactive"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Favorites"
+                    android:textSize="9sp"
+                    android:textColor="@color/navbar_icon_inactive"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Edit FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabEdit"
         android:layout_width="wrap_content"
@@ -43,9 +172,11 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_edit"
         android:contentDescription="Edit"
-        app:backgroundTint="#9B5CFF"
-        app:tint="#FFFFFF"
+        app:backgroundTint="@color/purple_primary"
+        app:tint="@color/white_pure"
         app:fabSize="normal"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_anchor="@id/floatingNavbar"
+        app:layout_anchorGravity="end"/>
 
 </LinearLayout>

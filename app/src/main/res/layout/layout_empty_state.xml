@@ -4,14 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#0C0C1E"
+    android:background="@color/white_pure"
     android:padding="32dp">
 
     <ImageView
         android:id="@+id/emptyStateImage"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@drawable/nocat2"
+        android:src="@drawable/nocat22"
         android:alpha="0.5"
         android:contentDescription="Empty"/>
 
@@ -22,7 +22,7 @@
         android:text="No moments yet"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="#F0E6FF"
+        android:textColor="@color/dark_primary"
         android:layout_marginTop="28dp"/>
 
     <TextView
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="Tap + to add your first moment"
         android:textSize="14sp"
-        android:textColor="#3D3660"
+        android:textColor="@color/dark_tertiary"
         android:layout_marginTop="10dp"
         android:gravity="center"/>
 

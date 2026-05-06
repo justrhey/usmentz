@@ -1,72 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- ═══════════════════════════════════════
-         SPOTIFY-STYLE DARK THEME
-         ═══════════════════════════════════════ -->
+    <!-- Light Theme - White background, White cards, Purple accents -->
+    
+    <!-- Backgrounds -->
+    <color name="white_pure">#FFFFFF</color>
+    <color name="off_white">#F5F5F5</color>
+    <color name="light_gray">#EEEEEE</color>
+    <color name="soft_gray">#E0E0E0</color>
+    <color name="medium_gray">#BDBDBD</color>
+    
+    <!-- Dark text -->
+    <color name="dark_primary">#212121</color>
+    <color name="dark_secondary">#616161</color>
+    <color name="dark_tertiary">#9E9E9E</color>
+    
+    <!-- Purple Accent -->
+    <color name="purple_primary">#9B5CFF</color>
+    <color name="purple_secondary">#7C4DFF</color>
+    <color name="purple_light">#B388FF</color>
+    <color name="purple_primary_light">#B388FF</color>
+    <color name="purple_dark">#6A4DCC</color>
+    <color name="purple_surface">#F3E5F5</color>
+    <color name="purple_card">#FFFFFF</color>
+    <color name="purple_background">#FFFFFF</color>
+    <color name="purple_border">#E0E0E0</color>
+    
+    <!-- Teal Accent -->
+    <color name="teal_accent">#00BFA5</color>
+    <color name="teal_dim">#E0F7F3</color>
+    <color name="teal_dark">#00897B</color>
+    
+    <!-- Other Accents -->
+    <color name="rose_accent">#FF5F8A</color>
+    <color name="amber_accent">#FFB020</color>
+    
+    <!-- Floating Navbar -->
+    <color name="navbar_surface">#FFFFFF</color>
+    <color name="navbar_surface_translucent">#F2FFFFFF</color>
+    <color name="navbar_icon_active">#9B5CFF</color>
+    <color name="navbar_icon_inactive">#9E9E9E</color>
+    <color name="navbar_border">#E0E0E0</color>
+    <color name="navbar_shadow">#1A000000</color>
+    
+    <!-- Legacy -->
     <color name="black_pure">#000000</color>
-    <color name="dark_surface">#121212</color>
-    <color name="dark_card">#1E1E1E</color>
-    <color name="dark_elevated">#282828</color>
-    <color name="dark_border">#333333</color>
+    <color name="dark_surface">#FFFFFF</color>
+    <color name="dark_card">#FFFFFF</color>
+    <color name="dark_elevated">#FFFFFF</color>
+    <color name="dark_border">#E0E0E0</color>
+    <color name="dark_background">#FFFFFF</color>
+    <color name="black_card">#FFFFFF</color>
+    <color name="black_light">#F5F5F5</color>
 
-    <!-- Legacy dark colors -->
-    <color name="dark_background">#0C0C1E</color>
-    <color name="black_card">#1A1A30</color>
-    <color name="black_light">#1C1C38</color>
-
-    <!-- Material Dark Theme -->
-    <color name="md_theme_dark_background">#000000</color>
-    <color name="md_theme_dark_surface">#121212</color>
+    <!-- Material Theme -->
+    <color name="md_theme_dark_background">#FFFFFF</color>
+    <color name="md_theme_dark_surface">#FFFFFF</color>
     <color name="md_theme_dark_primary">#9B5CFF</color>
-    <color name="md_theme_dark_secondary">#2DD4C8</color>
+    <color name="md_theme_dark_secondary">#00BFA5</color>
     <color name="md_theme_dark_tertiary">#FFB020</color>
     <color name="md_theme_dark_onPrimary">#FFFFFF</color>
-    <color name="md_theme_dark_onSecondary">#000000</color>
-    <color name="md_theme_dark_onSurface">#FFFFFF</color>
-    <color name="md_theme_dark_onSurfaceVariant">#B3B3B3</color>
-    <color name="md_theme_dark_outline">#333333</color>
+    <color name="md_theme_dark_onSecondary">#FFFFFF</color>
+    <color name="md_theme_dark_onSurface">#212121</color>
+    <color name="md_theme_dark_onSurfaceVariant">#616161</color>
+    <color name="md_theme_dark_outline">#BDBDBD</color>
 
-    <!-- PURPLE — primary brand -->
-    <color name="purple_primary">#9B5CFF</color>
-    <color name="purple_secondary">#6B35CC</color>
-    <color name="purple_primary_variant">#6B35CC</color>
-    <color name="purple_light">#C49FFF</color>
-    <color name="purple_dark">#3D1FA8</color>
-    <color name="purple_dim">#3D2566</color>
-    <color name="purple_glow">#6B35CC</color>
-    <color name="purple_glass">#CC9B5CFF</color>
-
-    <!-- TEAL -->
-    <color name="teal_accent">#2DD4C8</color>
-    <color name="teal_dim">#0D3B38</color>
-    <color name="teal_text">#7EEEE8</color>
-
-    <!-- ROSE -->
-    <color name="rose_accent">#FF5F8A</color>
-    <color name="rose_dim">#3D1225</color>
-    <color name="rose_text">#FF9AB5</color>
-
-    <!-- AMBER -->
-    <color name="amber_accent">#FFB020</color>
-    <color name="amber_dim">#2E2000</color>
-    <color name="amber_text">#FFD580</color>
-
-    <!-- Legacy accent aliases -->
-    <color name="accent_green">#1DB954</color>
-    <color name="accent_red">#FF4444</color>
+    <!-- Accent aliases -->
+    <color name="purple_accent">#9B5CFF</color>
+    <color name="accent_green">#9B5CFF</color>
+    <color name="accent_red">#FF5252</color>
     <color name="accent_yellow">#FFD966</color>
 
-    <!-- TEXT - Updated for Spotify style -->
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#B3B3B3</color>
-    <color name="text_hint">#808080</color>
-    <color name="text_disabled">#4D4D4D</color>
-    <color name="white_dim">#B3B3B3</color>
+    <!-- TEXT -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#616161</color>
+    <color name="text_hint">#9E9E9E</color>
+    <color name="text_disabled">#BDBDBD</color>
+    <color name="white_dim">#9E9E9E</color>
+    <color name="text_on_purple">#212121</color>
+    <color name="text_on_purple_secondary">#616161</color>
+    <color name="text_on_purple_hint">#9E9E9E</color>
 
     <!-- BASICS -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
-
 </resources>

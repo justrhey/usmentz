@@ -4,53 +4,225 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_background">
+    android:background="#FFFFFF">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dark_surface"
-        android:elevation="0dp">
+        android:background="#FFFFFF"
+        app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="70dp"
+            android:background="#FFFFFF"
+            android:paddingStart="8dp"
             app:navigationIcon="@drawable/ic_back"
-            android:background="@color/dark_surface" />
+            app:navigationIconTint="#9B5CFF"
+            app:elevation="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="26dp"
+                    android:background="#9B5CFF"
+                    android:layout_marginEnd="12dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvToolbarTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Home"
+                        android:textColor="#212121"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="recent moments"
+                        android:textColor="#9E9E9E"
+                        android:textSize="10sp"
+                        android:letterSpacing="0.06" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/rvMoments"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:padding="14dp"
+        android:paddingBottom="100dp"
         android:clipToPadding="false"
-        android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <include
+    <!-- Empty State -->
+    <LinearLayout
         android:id="@+id/emptyStateLayout"
-        layout="@layout/layout_empty_state"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#FFFFFF"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <ImageView android:layout_width="120dp" android:layout_height="120dp" android:src="@drawable/nocat22" android:alpha="0.5"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No moments yet" android:textSize="22sp" android:textStyle="bold" android:textColor="#212121" android:layout_marginTop="28dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tap + to add your first moment" android:textSize="14sp" android:textColor="#9E9E9E" android:layout_marginTop="10dp"/>
+
+    </LinearLayout>
+
+    <!-- Floating Pill Navbar -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/floatingNavbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginStart="48dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="#F2FFFFFF"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="12dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="#E0E0E0">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
+
+            <!-- Home -->
+            <LinearLayout
+                android:id="@+id/navHome"
+                android:layout_width="64dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_home"
+                    app:tint="#9B5CFF"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textSize="11sp"
+                    android:textColor="#9B5CFF"/>
+            </LinearLayout>
+
+            <!-- Calendar -->
+            <LinearLayout
+                android:id="@+id/navCalendar"
+                android:layout_width="64dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"
+                    android:textSize="11sp"
+                    android:textColor="#9E9E9E"/>
+            </LinearLayout>
+
+            <!-- Reviews -->
+            <LinearLayout
+                android:id="@+id/navReviews"
+                android:layout_width="64dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_star"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reviews"
+                    android:textSize="11sp"
+                    android:textColor="#9E9E9E"/>
+            </LinearLayout>
+
+            <!-- Favorites -->
+            <LinearLayout
+                android:id="@+id/navFavorites"
+                android:layout_width="64dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_favorite"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Favorites"
+                    android:textSize="11sp"
+                    android:textColor="#9E9E9E"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
         android:src="@drawable/ic_add"
         android:contentDescription="Add Moment"
-        android:backgroundTint="@color/purple_primary"
-        app:backgroundTint="@color/purple_primary"
-        app:tint="@color/white"
+        app:backgroundTint="#9B5CFF"
+        app:tint="#FFFFFF"
         app:fabSize="normal"
-        app:elevation="4dp"
-        android:visibility="gone" />
+        app:elevation="16dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

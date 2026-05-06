@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#0C0C1E">
+    android:background="@color/purple_background">
 
     <!-- Total Spent Card -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#13132A"
+        app:cardBackgroundColor="@color/purple_card"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp">
 
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Total spent:"
-                android:textColor="#7A6A9A"
+                android:textColor="@color/text_on_purple_hint"
                 android:textSize="16sp" />
 
             <TextView
@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="₱0.00"
-                android:textColor="#FFB020"
+                android:textColor="@color/amber_accent"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_add"
         android:contentDescription="Add Expense"
-        app:backgroundTint="#FFB020"
+        app:backgroundTint="@color/amber_accent"
         app:tint="#FFFFFF"
         app:fabSize="normal" />
 
@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="No expenses added yet"
-        android:textColor="#3D3660"
+        android:textColor="@color/text_on_purple_hint"
         android:textSize="14sp"
         android:gravity="center"
         android:padding="20dp"
