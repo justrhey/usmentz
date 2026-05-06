@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
+    <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -20,9 +22,7 @@
             android:paddingStart="8dp"
             app:navigationIcon="@drawable/ic_back"
             app:navigationIconTint="#9B5CFF"
-            app:elevation="0dp"
-            app:contentInsetStart="0dp"
-            app:contentInsetStartWithNavigation="0dp">
+            app:elevation="0dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -51,12 +51,12 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="recent moments"
                         android:textColor="#9E9E9E"
-                        android:textSize="10sp"
-                        android:letterSpacing="0.06" />
+                        android:textSize="10sp" />
 
                 </LinearLayout>
 
@@ -64,12 +64,14 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#EEEEEE" />
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Nav buttons (hidden) -->
+    <LinearLayout android:id="@+id/navCalendar" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+    <LinearLayout android:id="@+id/navReviews" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+    <LinearLayout android:id="@+id/navFavorites" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMoments"
@@ -78,132 +80,114 @@
         android:padding="14dp"
         android:paddingBottom="100dp"
         android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <!-- Empty State -->
-    <LinearLayout
-        android:id="@+id/emptyStateLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="#FFFFFF"
-        android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
+    <LinearLayout android:id="@+id/emptyStateLayout" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:visibility="gone">
         <ImageView android:layout_width="120dp" android:layout_height="120dp" android:src="@drawable/nocat22" android:alpha="0.5"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No moments yet" android:textSize="22sp" android:textStyle="bold" android:textColor="#212121" android:layout_marginTop="28dp"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tap + to add your first moment" android:textSize="14sp" android:textColor="#9E9E9E" android:layout_marginTop="10dp"/>
-
+        <TextView android:id="@+id/emptyStateText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No moments yet" android:textSize="22sp" android:textStyle="bold" android:textColor="#212121" android:layout_marginTop="28dp"/>
+        <TextView android:id="@+id/emptyStateSubtext" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tap + to add your first moment" android:textSize="14sp" android:textColor="#9E9E9E" android:layout_marginTop="10dp"/>
     </LinearLayout>
 
-    <!-- Floating Pill Navbar -->
+    <!-- Floating Pill Navbar - Full Horizontal on Home -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/floatingNavbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginStart="48dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         app:cardBackgroundColor="#F2FFFFFF"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="12dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="#E0E0E0">
+        app:cardCornerRadius="32dp"
+        app:cardElevation="8dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="80dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
+            android:padding="8dp">
 
-            <!-- Home -->
             <LinearLayout
                 android:id="@+id/navHome"
-                android:layout_width="64dp"
+                android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true">
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:src="@drawable/ic_home"
                     app:tint="#9B5CFF"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Home"
-                    android:textSize="11sp"
+                    android:textSize="9sp"
                     android:textColor="#9B5CFF"/>
             </LinearLayout>
 
-            <!-- Calendar -->
-            <LinearLayout
-                android:id="@+id/navCalendar"
-                android:layout_width="64dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/ic_calendar"
-                    app:tint="#9E9E9E"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calendar"
-                    android:textSize="11sp"
-                    android:textColor="#9E9E9E"/>
-            </LinearLayout>
-
-            <!-- Reviews -->
             <LinearLayout
                 android:id="@+id/navReviews"
-                android:layout_width="64dp"
+                android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true">
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:src="@drawable/ic_star"
                     app:tint="#9E9E9E"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reviews"
-                    android:textSize="11sp"
+                    android:textSize="9sp"
                     android:textColor="#9E9E9E"/>
             </LinearLayout>
 
-            <!-- Favorites -->
             <LinearLayout
                 android:id="@+id/navFavorites"
-                android:layout_width="64dp"
+                android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true">
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:src="@drawable/ic_favorite"
                     app:tint="#9E9E9E"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Favorites"
-                    android:textSize="11sp"
+                    android:textSize="9sp"
+                    android:textColor="#9E9E9E"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/navCalendar"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"
+                    android:textSize="9sp"
                     android:textColor="#9E9E9E"/>
             </LinearLayout>
 
@@ -219,10 +203,12 @@
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:src="@drawable/ic_add"
-        android:contentDescription="Add Moment"
+        android:contentDescription="Add"
         app:backgroundTint="#9B5CFF"
         app:tint="#FFFFFF"
         app:fabSize="normal"
-        app:elevation="16dp"/>
+        app:elevation="6dp"/>
+
+    <com.google.android.material.button.MaterialButton android:id="@+id/btnAddCategory" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
+    <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -40,14 +42,16 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvToolbarTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Reviews"
                         android:textColor="#212121"
-                        android:textSize="21sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvSubtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="moments with notes"
@@ -71,142 +75,39 @@
         android:padding="14dp"
         android:paddingBottom="100dp"
         android:clipToPadding="false"
-        android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <!-- Empty State - default visible to prevent flash -->
-    <include
-        android:id="@+id/emptyStateLayout"
-        layout="@layout/layout_empty_state"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
+    <include android:id="@+id/emptyStateLayout" layout="@layout/layout_empty_state" android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone"/>
 
-    <!-- Floating Pill Navbar -->
+    <!-- Floating Nav - Home only -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/floatingNavbarContainer"
+        android:id="@+id/floatingNavbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="48dp"
         android:layout_marginBottom="16dp"
         app:cardBackgroundColor="#F2FFFFFF"
         app:cardCornerRadius="32dp"
         app:cardElevation="8dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="#E0E0E0">
+        android:visibility="gone">
 
-        <LinearLayout
-            android:layout_width="242dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
-
-            <LinearLayout
-                android:id="@+id/navHome"
-                android:layout_width="56dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_home"
-                    app:tint="#9E9E9E" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Home"
-                    android:textColor="#9E9E9E"
-                    android:textSize="10sp" />
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="80dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="16dp" android:paddingEnd="16dp">
+            <LinearLayout android:id="@+id/navHome" android:layout_width="wrap_content" android:layout_height="56dp" android:orientation="vertical" android:gravity="center" android:background="?attr/selectableItemBackgroundBorderless" android:clickable="true" android:paddingStart="24dp" android:paddingEnd="24dp">
+                <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_home" app:tint="#9B5CFF"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Home" android:textSize="11sp" android:textColor="#9B5CFF"/>
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/navReviews"
-                android:layout_width="56dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_star"
-                    app:tint="#9B5CFF" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Reviews"
-                    android:textColor="#9B5CFF"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/navFavorites"
-                android:layout_width="56dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_favorite"
-                    app:tint="#9E9E9E" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Favorites"
-                    android:textColor="#9E9E9E"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/navCalendar"
-                android:layout_width="56dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_calendar"
-                    app:tint="#9E9E9E" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calendar"
-                    android:textColor="#9E9E9E"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- FAB - at far right -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="24dp"
         android:src="@drawable/ic_add"
         android:contentDescription="Add"
         app:backgroundTint="#9B5CFF"
@@ -214,11 +115,50 @@
         app:fabSize="normal"
         app:elevation="6dp"/>
 
-    <!-- Hidden button for Java compatibility -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAddCategory"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"/>
+    <!-- Floating Pill Navbar - Home only, Horizontal -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/floatingNavbarContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="#F2FFFFFF"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="8dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:id="@+id/navHome"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_home"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textSize="9sp"
+                    android:textColor="#9E9E9E"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton android:id="@+id/btnAddCategory" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

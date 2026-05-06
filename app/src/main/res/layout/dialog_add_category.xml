@@ -41,7 +41,7 @@
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusBottomEnd="12dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etCategoryName"
@@ -102,30 +102,87 @@
         android:text="Tap Change to cycle through icons"
         android:textColor="#9E9E9E"
         android:textSize="12sp"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="20dp" />
 
-    <!-- Color spinner -->
+    <!-- Color picker - beautiful gradient circles -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="COLOR"
+        android:textColor="#9E9E9E"
+        android:textSize="12sp"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Color circles row with gradients -->
     <LinearLayout
+        android:id="@+id/colorPickerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:layout_marginBottom="24dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Color"
-            android:textColor="#9E9E9E"
-            android:textSize="12sp" />
+        <!-- Purple -->
+        <View
+            android:id="@+id/colorPurple"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_gradient_purple"
+            android:tag="#9B5CFF"/>
 
-        <Spinner
-            android:id="@+id/spinnerColor"
-            android:layout_width="180dp"
-            android:layout_height="44dp" />
+        <!-- Red -->
+        <View
+            android:id="@+id/colorRed"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_gradient_red"
+            android:tag="#FF5252"/>
+
+        <!-- Blue -->
+        <View
+            android:id="@+id/colorBlue"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_gradient_blue"
+            android:tag="#2196F3"/>
+
+        <!-- Green -->
+        <View
+            android:id="@+id/colorGreen"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_gradient_green"
+            android:tag="#4CAF50"/>
+
+        <!-- Orange -->
+        <View
+            android:id="@+id/colorOrange"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_gradient_orange"
+            android:tag="#FF9800"/>
+
+        <!-- Pink -->
+        <View
+            android:id="@+id/colorPink"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_gradient_pink"
+            android:tag="#E91E63"/>
 
     </LinearLayout>
+
+    <!-- Hidden spinner still for Java compatibility -->
+    <Spinner
+        android:id="@+id/spinnerColor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
 
     <!-- Buttons -->
     <LinearLayout

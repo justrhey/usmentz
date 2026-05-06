@@ -516,6 +516,22 @@ public class MainActivity extends AppCompatActivity {
             final String[] imageDisplay  = { "Folder","Heart","Star","Food","Travel","Movie","Music","Book","Gift" };
             final int[] idx = {0};
 
+            // Color values matching gradient circles
+            final int[] colorValues = {
+                0xFF9B5CFF,  // Purple
+                0xFFFF5252,  // Red
+                0xFF2196F3,  // Blue
+                0xFF4CAF50,  // Green
+                0xFFFF9800,  // Orange
+                0xFFE91E63   // Pink
+            };
+            final int[] selectedColor = {0}; // Default to first color (purple)
+
+            // Update selected color hint
+            if (tvIconPreview != null) {
+                tvIconPreview.setTextColor(colorValues[0]);
+            }
+
             btnIconDropdown.setText(imageDisplay[0]);
             tvIconPreview.setText(imageDisplay[0]);
             if (ivIconPreview != null) {
@@ -531,12 +547,34 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            String[] colors    = {"Purple","Red","Blue","Green","Orange","Pink"};
-            int[] colorValues  = {0xFF9B5CFF,0xFFFF5F8A,0xFF2196F3,0xFF4CAF50,0xFFFFB020,0xFFE91E63};
+            // Color circle click listeners
+            View colorPurple = dialogView.findViewById(R.id.colorPurple);
+            View colorRed = dialogView.findViewById(R.id.colorRed);
+            View colorBlue = dialogView.findViewById(R.id.colorBlue);
+            View colorGreen = dialogView.findViewById(R.id.colorGreen);
+            View colorOrange = dialogView.findViewById(R.id.colorOrange);
+            View colorPink = dialogView.findViewById(R.id.colorPink);
 
-            ArrayAdapter<String> colorAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, colors);
-            colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerColor.setAdapter(colorAdapter);
+            View.OnClickListener colorListener = v -> {
+                if (v == colorPurple) selectedColor[0] = colorValues[0];
+                else if (v == colorRed) selectedColor[0] = colorValues[1];
+                else if (v == colorBlue) selectedColor[0] = colorValues[2];
+                else if (v == colorGreen) selectedColor[0] = colorValues[3];
+                else if (v == colorOrange) selectedColor[0] = colorValues[4];
+                else if (v == colorPink) selectedColor[0] = colorValues[5];
+                
+                // Update preview with selected color
+                if (tvIconPreview != null) {
+                    tvIconPreview.setTextColor(selectedColor[0]);
+                }
+            };
+
+            if (colorPurple != null) colorPurple.setOnClickListener(colorListener);
+            if (colorRed != null) colorRed.setOnClickListener(colorListener);
+            if (colorBlue != null) colorBlue.setOnClickListener(colorListener);
+            if (colorGreen != null) colorGreen.setOnClickListener(colorListener);
+            if (colorOrange != null) colorOrange.setOnClickListener(colorListener);
+            if (colorPink != null) colorPink.setOnClickListener(colorListener);
 
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -545,7 +583,7 @@ public class MainActivity extends AppCompatActivity {
             btnCreate.setOnClickListener(v -> {
                 String name = etName.getText().toString().trim();
                 if (name.isEmpty()) { etName.setError("Category name required"); return; }
-                categoryViewModel.insert(new Category(name, imageNames[idx[0]], colorValues[spinnerColor.getSelectedItemPosition()]));
+                categoryViewModel.insert(new Category(name, imageNames[idx[0]], selectedColor[0]));
                 Toast.makeText(this, "Category created: " + name, Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             });

@@ -86,13 +86,13 @@
 
     </LinearLayout>
 
-    <!-- Floating Pill Navbar -->
+    <!-- Floating Pill Navbar - Full Horizontal on Home -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/floatingNavbarContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         app:cardBackgroundColor="#F2FFFFFF"
         app:cardCornerRadius="32dp"
@@ -103,27 +103,95 @@
             android:layout_height="80dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
 
-            <LinearLayout android:id="@+id/navHome" android:layout_width="64dp" android:layout_height="56dp" android:orientation="vertical" android:gravity="center" android:background="?attr/selectableItemBackgroundBorderless" android:clickable="true">
-                <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_home" app:tint="#9B5CFF"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Home" android:textSize="11sp" android:textColor="#9B5CFF"/>
+            <!-- Home - Active -->
+            <LinearLayout
+                android:id="@+id/navHome"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_home"
+                    app:tint="#9B5CFF"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textSize="9sp"
+                    android:textColor="#9B5CFF"/>
             </LinearLayout>
 
-            <LinearLayout android:id="@+id/navReviews" android:layout_width="64dp" android:layout_height="56dp" android:orientation="vertical" android:gravity="center" android:background="?attr/selectableItemBackgroundBorderless" android:clickable="true">
-                <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_star" app:tint="#9E9E9E"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Reviews" android:textSize="11sp" android:textColor="#9E9E9E"/>
+            <!-- Reviews -->
+            <LinearLayout
+                android:id="@+id/navReviews"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_star"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reviews"
+                    android:textSize="9sp"
+                    android:textColor="#9E9E9E"/>
             </LinearLayout>
 
-            <LinearLayout android:id="@+id/navFavorites" android:layout_width="64dp" android:layout_height="56dp" android:orientation="vertical" android:gravity="center" android:background="?attr/selectableItemBackgroundBorderless" android:clickable="true">
-                <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_favorite" app:tint="#9E9E9E"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Favorites" android:textSize="11sp" android:textColor="#9E9E9E"/>
+            <!-- Favorites -->
+            <LinearLayout
+                android:id="@+id/navFavorites"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_favorite"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Favorites"
+                    android:textSize="9sp"
+                    android:textColor="#9E9E9E"/>
             </LinearLayout>
 
-            <LinearLayout android:id="@+id/navCalendar" android:layout_width="64dp" android:layout_height="56dp" android:orientation="vertical" android:gravity="center" android:background="?attr/selectableItemBackgroundBorderless" android:clickable="true">
-                <ImageView android:layout_width="28dp" android:layout_height="28dp" android:src="@drawable/ic_calendar" app:tint="#9E9E9E"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Calendar" android:textSize="11sp" android:textColor="#9E9E9E"/>
+            <!-- Calendar -->
+            <LinearLayout
+                android:id="@+id/navCalendar"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"
+                    android:textSize="9sp"
+                    android:textColor="#9E9E9E"/>
             </LinearLayout>
 
         </LinearLayout>

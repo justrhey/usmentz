@@ -1,71 +1,87 @@
-11111111<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/white_pure"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
-    app:strokeWidth="1dp"
-    app:strokeColor="@color/light_gray"
+    android:layout_margin="6dp"
+    app:cardBackgroundColor="#FAFAFA"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="4dp"
     android:foreground="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:gravity="center">
+        android:layout_height="wrap_content">
 
-        <!-- Category Icon - SHOW ACTUAL IMAGE -->
-        <ImageView
-            android:id="@+id/ivCategoryIcon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginBottom="12dp"
-            android:src="@drawable/folder"
-            android:scaleType="centerInside"
-            android:adjustViewBounds="true"/>
-
-        <!-- No tint - show original icon -->
-
-        <TextView
-            android:id="@+id/tvCategoryName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/dark_primary"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
-        <TextView
-            android:id="@+id/tvMomentCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0 moments"
-            android:textSize="14sp"
-            android:textColor="@color/dark_secondary"
-            android:layout_marginTop="4dp" />
-
-        <!-- Menu button -->
+        <!-- Menu button - top right -->
         <ImageView
             android:id="@+id/btnCategoryMenu"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="12dp"
             android:src="@drawable/ic_menu"
-            android:layout_marginTop="8dp"
-            android:padding="4dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@color/dark_tertiary"
+            android:padding="6dp"
+            android:background="@drawable/bg_circle_light"
+            app:tint="#757575"
             android:visibility="visible" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center">
+
+            <!-- Category Icon with colored circle background -->
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="16dp">
+
+                <!-- Gradient colored circle -->
+                <View
+                    android:id="@+id/categoryColorBg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_gradient_purple"/>
+
+                <ImageView
+                    android:id="@+id/ivCategoryIcon"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/folder"
+                    android:scaleType="centerInside"/>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvCategoryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A1A"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvMomentCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 moments"
+                android:textSize="13sp"
+                android:textColor="#9E9E9E"
+                android:layout_marginTop="6dp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </com.google.android.material.card.MaterialCardView>

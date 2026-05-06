@@ -73,9 +73,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         int iconResId = getIconResource(category.getIconName());
         holder.ivIcon.setImageResource(iconResId);
 
-        // Set card background color with transparency
-        int colorWithAlpha = (category.getColor() & 0x00FFFFFF) | 0x4D000000;
-        holder.cardView.setCardBackgroundColor(colorWithAlpha);
+        // Set gradient background based on category color
+        int gradientRes = getGradientDrawable(category.getColor());
+        if (holder.categoryColorBg != null) {
+            holder.categoryColorBg.setBackgroundResource(gradientRes);
+        }
 
         // Card click - view category moments
         holder.cardView.setOnClickListener(v -> {
@@ -105,6 +107,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             case "gift": return R.drawable.gift;
             default: return R.drawable.folder;
         }
+    }
+
+    private int getGradientDrawable(int color) {
+        // Match color to gradient drawable
+        if (color == 0xFF9B5CFF) return R.drawable.bg_gradient_purple;
+        else if (color == 0xFFFF5252) return R.drawable.bg_gradient_red;
+        else if (color == 0xFF2196F3) return R.drawable.bg_gradient_blue;
+        else if (color == 0xFF4CAF50) return R.drawable.bg_gradient_green;
+        else if (color == 0xFFFF9800) return R.drawable.bg_gradient_orange;
+        else if (color == 0xFFE91E63) return R.drawable.bg_gradient_pink;
+        else return R.drawable.bg_gradient_purple; // default
     }
 
     private void showCategoryMenu(android.content.Context context, Category category) {
@@ -148,6 +161,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         private TextView tvCount;
         private ImageView ivIcon;
         private ImageView btnMenu;
+        private View categoryColorBg;
         private MaterialCardView cardView;
 
         public CategoryViewHolder(@NonNull View itemView) {
@@ -156,6 +170,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             tvCount = itemView.findViewById(R.id.tvMomentCount);
             ivIcon = itemView.findViewById(R.id.ivCategoryIcon);
             btnMenu = itemView.findViewById(R.id.btnCategoryMenu);
+            categoryColorBg = itemView.findViewById(R.id.categoryColorBg);
             cardView = (MaterialCardView) itemView;
         }
     }
