@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,9 +74,18 @@ public class MainActivity extends AppCompatActivity {
 
     // Category name TextView inside the toolbar custom layout
     private TextView tvToolbarTitle;
+    private View momentsHeader;
+    private TextView tvCategoryTitle;
+    
+    // Header views from layout
+    private TextView tvTime;
+    private TextView tvDate;
+    private TextView tvGreeting;
 
     // Floating navbar clickable areas
     private LinearLayout navHome, navCalendar, navReviews, navFavorites;
+    private LinearLayout navDates, navExpenses;
+    private View floatingNavbarContainer;
     private static final int VIEW_CATEGORIES = 0;
     private int currentView = VIEW_CATEGORIES;
 
@@ -159,6 +169,16 @@ public class MainActivity extends AppCompatActivity {
         navCalendar   = findViewById(R.id.navCalendar);
         navReviews   = findViewById(R.id.navReviews);
         navFavorites = findViewById(R.id.navFavorites);
+        navDates = findViewById(R.id.navDates);
+        navExpenses = findViewById(R.id.navExpenses);
+        floatingNavbarContainer = findViewById(R.id.floatingNavbarContainer);
+        
+        // Header views
+        tvTime = findViewById(R.id.tvTime);
+        tvDate = findViewById(R.id.tvDate);
+        tvGreeting = findViewById(R.id.tvGreeting);
+        momentsHeader = findViewById(R.id.momentsHeader);
+        tvCategoryTitle = findViewById(R.id.tvCategoryTitle);
 
         // Debug: Log any missing views
         if (toolbar == null) Log.w(TAG, "toolbar is null!");
@@ -288,6 +308,20 @@ public class MainActivity extends AppCompatActivity {
         if (navFavorites != null) {
             navFavorites.setOnClickListener(v -> navigateTo(FavoritesActivity.class));
         }
+
+        // Dates - navigate to MomentsActivity
+        if (navDates != null) {
+            navDates.setOnClickListener(v -> {
+                // Already viewing moments, do nothing
+            });
+        }
+
+        // Expenses - could navigate to expenses view
+        if (navExpenses != null) {
+            navExpenses.setOnClickListener(v -> {
+                // Could add expenses activity navigation
+            });
+        }
     }
 
     private void enterMomentsMode(Category category) {
@@ -297,12 +331,35 @@ public class MainActivity extends AppCompatActivity {
         isInSpecialView  = false;
         saveCurrentCategory();
 
-        // Hide header, show moments list
+        // Hide main header, show moments header instead
         if (appBarLayout != null) appBarLayout.setVisibility(View.GONE);
+        if (momentsHeader != null) {
+            momentsHeader.setVisibility(View.VISIBLE);
+            if (tvCategoryTitle != null) tvCategoryTitle.setText(category.getName());
+        }
+        
+        // Switch navbar: hide Home/Reviews/Favorites, show Dates/Expenses
+        if (navHome != null) navHome.setVisibility(View.GONE);
+        if (navReviews != null) navReviews.setVisibility(View.GONE);
+        if (navFavorites != null) navFavorites.setVisibility(View.GONE);
+        if (navDates != null) navDates.setVisibility(View.VISIBLE);
+        if (navExpenses != null) navExpenses.setVisibility(View.VISIBLE);
+        
         categoriesRecyclerView.setVisibility(View.GONE);
         btnAddCategory.setVisibility(View.GONE);
         fabAdd.setVisibility(View.VISIBLE);
         hideEmptyState();
+
+        // Animate navbar - shrink and fade to show different state
+        if (floatingNavbarContainer != null) {
+            floatingNavbarContainer.animate()
+                .scaleX(0.85f)
+                .scaleY(0.85f)
+                .alpha(0.7f)
+                .setDuration(200)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .start();
+        }
 
         dateViewModel.setCurrentCategory(currentCategoryId);
 
@@ -351,8 +408,28 @@ public class MainActivity extends AppCompatActivity {
     private void exitMomentsMode() {
         sharedPreferences.edit().clear().apply();
 
+        // Animate navbar back to full size - show returning to home state
+        if (floatingNavbarContainer != null) {
+            floatingNavbarContainer.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .alpha(1f)
+                .setDuration(200)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .start();
+        }
+
         // Show header back
         if (appBarLayout != null) appBarLayout.setVisibility(View.VISIBLE);
+        if (momentsHeader != null) momentsHeader.setVisibility(View.GONE);
+        
+        // Switch navbar back: show Home/Reviews/Favorites, hide Dates/Expenses
+        if (navHome != null) navHome.setVisibility(View.VISIBLE);
+        if (navReviews != null) navReviews.setVisibility(View.VISIBLE);
+        if (navFavorites != null) navFavorites.setVisibility(View.VISIBLE);
+        if (navDates != null) navDates.setVisibility(View.GONE);
+        if (navExpenses != null) navExpenses.setVisibility(View.GONE);
+        
         momentsRecyclerView.setVisibility(View.GONE);
         categoriesRecyclerView.setVisibility(View.VISIBLE);
         btnAddCategory.setVisibility(View.VISIBLE);
