@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -12,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.R;
-import com.google.android.material.card.MaterialCardView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Calendar;
+import java.util.Date;
 
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder> {
     private List<DateLocation> dates = new ArrayList<>();
@@ -95,9 +97,28 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
     @Override
     public void onBindViewHolder(@NonNull DateViewHolder holder, int position) {
         DateLocation currentDate = dates.get(position);
+        
+        // Format date as label outside the card
+        if (currentDate.getDate() != null) {
+            Calendar dateCal = Calendar.getInstance();
+            dateCal.setTime(currentDate.getDate());
+            Calendar today = Calendar.getInstance();
+            Calendar yesterday = Calendar.getInstance();
+            yesterday.add(Calendar.DAY_OF_YEAR, -1);
+            
+            if (isSameDay(dateCal, today)) {
+                holder.tvDate.setText("Today");
+            } else if (isSameDay(dateCal, yesterday)) {
+                holder.tvDate.setText("Yesterday");
+            } else {
+                holder.tvDate.setText(dateFormat.format(currentDate.getDate()));
+            }
+        } else {
+            holder.tvDate.setText("");
+        }
+        
         holder.tvName.setText(currentDate.getName());
         holder.tvAddress.setText(currentDate.getAddress());
-        holder.tvDate.setText(dateFormat.format(currentDate.getDate()));
 
         // Set completion checkbox
         holder.checkComplete.setChecked(currentDate.isCompleted());
@@ -151,10 +172,9 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         private CheckBox checkComplete;
         private LinearLayout ratingContainer;
         private RatingBar ratingBar;
-        private TextView tvReview;
-        private TextView btnDelete;
-        private TextView dragHandle;
-        private MaterialCardView cardView;
+        private ImageView tvReview;
+        private ImageView btnDelete;
+        private View cardView; // Now a LinearLayout wrapper
 
         public DateViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -166,8 +186,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
             ratingBar = itemView.findViewById(R.id.ratingBar);
             tvReview = itemView.findViewById(R.id.tvReview);
             btnDelete = itemView.findViewById(R.id.btnDelete);
-            dragHandle = itemView.findViewById(R.id.dragHandle);
-            cardView = (MaterialCardView) itemView;
+            cardView = itemView; // Now the root LinearLayout
 
             // Item click listener
             itemView.setOnClickListener(v -> {
@@ -219,9 +238,11 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
                 }
             });
         }
-
-        public TextView getDragHandle() {
-            return dragHandle;
-        }
+    }
+    
+    // Helper to compare calendar days
+    private boolean isSameDay(Calendar cal1, Calendar cal2) {
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+               cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
     }
 }

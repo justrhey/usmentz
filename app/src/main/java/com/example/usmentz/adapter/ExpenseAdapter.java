@@ -28,8 +28,46 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         this.deleteListener = listener;
     }
 
+    public interface SortOption {
+        int NEWEST_FIRST = 0;
+        int OLDEST_FIRST = 1;
+        int HIGHEST_AMOUNT = 2;
+        int LOWEST_AMOUNT = 3;
+    }
+
+    private int currentSort = SortOption.NEWEST_FIRST;
+
+    public void setSortOption(int sortOption) {
+        this.currentSort = sortOption;
+        sortExpenses();
+        notifyDataSetChanged();
+    }
+
+    public int getSortOption() {
+        return currentSort;
+    }
+
+    private void sortExpenses() {
+        if (expenses == null || expenses.isEmpty()) return;
+
+        java.util.Collections.sort(expenses, (e1, e2) -> {
+            switch (currentSort) {
+                case SortOption.OLDEST_FIRST:
+                    return Long.compare(e1.getCreatedAt(), e2.getCreatedAt());
+                case SortOption.HIGHEST_AMOUNT:
+                    return Double.compare(e2.getAmount(), e1.getAmount());
+                case SortOption.LOWEST_AMOUNT:
+                    return Double.compare(e1.getAmount(), e2.getAmount());
+                case SortOption.NEWEST_FIRST:
+                default:
+                    return Long.compare(e2.getCreatedAt(), e1.getCreatedAt());
+            }
+        });
+    }
+
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses != null ? expenses : new ArrayList<>();
+        sortExpenses();
         notifyDataSetChanged();
     }
 
@@ -44,10 +82,60 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Expense expense = expenses.get(position);
+        
         holder.tvExpenseName.setText(expense.getDescription());
-        holder.tvExpenseAmount.setText(String.format("₱%.2f", expense.getAmount()));
-        holder.btnDeleteExpense.setOnClickListener(v -> {
-            if (deleteListener != null) deleteListener.onDelete(expense);
+        holder.tvExpenseType.setText(expense.getType());
+        
+        // Set payment method icon
+        String paymentMethod = expense.getPaymentMethod();
+        int iconRes;
+        if (paymentMethod != null) {
+            switch (paymentMethod) {
+                case "GCash":
+                    iconRes = R.drawable.gcash_logo;
+                    break;
+                case "BPI":
+                    iconRes = R.drawable.bpi_logo;
+                    break;
+                case "PayMaya":
+                    iconRes = R.drawable.paymaya_logo;
+                    break;
+                case "Cash":
+                    iconRes = R.drawable.cash_logo;
+                    break;
+                default:
+                    iconRes = R.drawable.cash_logo;
+            }
+        } else {
+            iconRes = R.drawable.cash_logo;
+        }
+        holder.ivPaymentIcon.setImageResource(iconRes);
+        
+        // Format amount with sign based on type
+        String amountStr;
+        int color;
+        
+        if (expense.getType() != null && expense.getType().equals(Expense.TYPE_FUNDS)) {
+            amountStr = "+₱" + String.format("%.0f", expense.getAmount());
+            color = 0xFF4CAF50; // Green
+        } else if (expense.getType() != null && expense.getType().equals(Expense.TYPE_SAVINGS)) {
+            amountStr = "+₱" + String.format("%.0f", expense.getAmount());
+            color = 0xFF00BFA5; // Teal
+        } else {
+            amountStr = "-₱" + String.format("%.0f", expense.getAmount());
+            color = 0xFFF44336; // Red
+        }
+        
+        holder.tvExpenseAmount.setText(amountStr);
+        holder.tvExpenseAmount.setTextColor(color);
+        
+        // Click listener
+        holder.itemView.setOnLongClickListener(v -> {
+            if (deleteListener != null) {
+                deleteListener.onDelete(expense);
+                return true;
+            }
+            return false;
         });
     }
 
@@ -57,14 +145,15 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvExpenseName, tvExpenseAmount;
-        ImageView btnDeleteExpense;
+        TextView tvExpenseName, tvExpenseAmount, tvExpenseType;
+        ImageView ivPaymentIcon;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvExpenseName    = itemView.findViewById(R.id.tvExpenseName);
-            tvExpenseAmount  = itemView.findViewById(R.id.tvExpenseAmount);
-            btnDeleteExpense = itemView.findViewById(R.id.btnDeleteExpense);
+            tvExpenseName = itemView.findViewById(R.id.tvExpenseName);
+            tvExpenseAmount = itemView.findViewById(R.id.tvExpenseAmount);
+            tvExpenseType = itemView.findViewById(R.id.tvExpenseType);
+            ivPaymentIcon = itemView.findViewById(R.id.ivPaymentIcon);
         }
     }
 }

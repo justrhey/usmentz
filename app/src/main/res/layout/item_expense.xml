@@ -1,45 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingVertical="12dp">
 
-    <!-- Bullet -->
-    <View
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:background="@color/purple_primary"
-        android:layout_marginEnd="12dp" />
+    <!-- Payment Method Icon -->
+    <ImageView
+        android:id="@+id/ivPaymentIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/bg_icon_square"
+        android:padding="8dp"/>
 
-    <!-- Expense name -->
-    <TextView
-        android:id="@+id/tvExpenseName"
+    <!-- Stacked Text -->
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textColor="@color/text_on_purple"
-        android:textSize="14sp" />
+        android:orientation="vertical"
+        android:layout_marginStart="12dp">
+
+        <TextView
+            android:id="@+id/tvExpenseName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvExpenseType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#9E9E9E"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
 
     <!-- Amount -->
     <TextView
         android:id="@+id/tvExpenseAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/purple_primary"
+        android:textColor="#F44336"
         android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_marginEnd="12dp" />
-
-    <!-- Delete button -->
-    <ImageView
-        android:id="@+id/btnDeleteExpense"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_delete"
-        android:alpha="0.5"
-        android:contentDescription="Delete expense" />
+        android:textStyle="bold"/>
 
 </LinearLayout>

@@ -44,4 +44,17 @@ public class ExpenseRepository {
     public LiveData<Double> getTotalByMoment(int momentId) {
         return expenseDao.getTotalByMoment(momentId);
     }
+
+    public LiveData<Double> getTotalSpent() {
+        return expenseDao.getTotalSpent();
+    }
+
+    // Get all expenses and filter by month in Java (to avoid schema changes)
+    public LiveData<List<Expense>> getAllExpenses() {
+        return expenseDao.getAllExpenses();
+    }
+
+    public LiveData<Double> getTotalByType(String type) {
+        return expenseDao.getTotalByType(type);
+    }
 }

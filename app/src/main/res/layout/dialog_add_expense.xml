@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Expense"
+        android:text="Add Transaction"
         android:textColor="#212121"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -22,17 +22,165 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Track your spending"
+        android:text="Track your money movement"
         android:textColor="#9E9E9E"
         android:textSize="14sp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="24dp" />
 
+    <!-- Type Selector -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Type"
+        android:textColor="#212121"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:singleSelection="true"
+        app:selectionRequired="true"
+        android:layout_marginBottom="24dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipExpenses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expenses"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            android:checked="true"
+            app:chipBackgroundColor="#FFEBEE"
+            app:chipStrokeColor="#F44336"
+            app:chipStrokeWidth="2dp"
+            app:chipCornerRadius="20dp"
+            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipFunds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Funds"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            app:chipBackgroundColor="#E8F5E9"
+            app:chipStrokeColor="#4CAF50"
+            app:chipStrokeWidth="2dp"
+            app:chipCornerRadius="20dp"
+            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipSavings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Savings"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            app:chipBackgroundColor="#E0F2F1"
+            app:chipStrokeColor="#00BFA5"
+            app:chipStrokeWidth="2dp"
+            app:chipCornerRadius="20dp"
+            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- Payment Method -->
+    <TextView
+        android:id="@+id/tvPaymentLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment Method"
+        android:textColor="#212121"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupPayment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:singleSelection="true"
+        app:selectionRequired="true"
+        android:layout_marginBottom="24dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipPayMaya"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PayMaya"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            android:checked="true"
+            app:chipBackgroundColor="#E8EAF6"
+            app:chipStrokeColor="#3F51B5"
+            app:chipStrokeWidth="1dp"
+            app:chipCornerRadius="20dp"
+            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipGCash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GCash"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            app:chipBackgroundColor="#E8F5E9"
+            app:chipStrokeColor="#4CAF50"
+            app:chipStrokeWidth="1dp"
+            app:chipCornerRadius="20dp"
+            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipBPI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BPI"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            app:chipBackgroundColor="#FFF3E0"
+            app:chipStrokeColor="#FF9800"
+            app:chipStrokeWidth="1dp"
+            app:chipCornerRadius="20dp"
+            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipOtherBanks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other Banks"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            app:chipBackgroundColor="#FCE4EC"
+            app:chipStrokeColor="#E91E63"
+            app:chipStrokeWidth="1dp"
+            app:chipCornerRadius="20dp"
+            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipCash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            app:chipBackgroundColor="#F5F5F5"
+            app:chipStrokeColor="#9E9E9E"
+            app:chipStrokeWidth="1dp"
+            app:chipCornerRadius="20dp"
+            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+    </com.google.android.material.chip.ChipGroup>
+
     <!-- What did you spend on -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="What did you spend on?"
+        android:hint="Description"
         app:hintTextColor="#9E9E9E"
         app:boxStrokeColor="#9B5CFF"
         app:boxStrokeWidth="1dp"

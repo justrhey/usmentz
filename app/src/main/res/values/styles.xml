@@ -103,4 +103,10 @@
         <item name="tint">@color/white</item>
     </style>
 
+    <!-- Circle Image View Style -->
+    <style name="CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

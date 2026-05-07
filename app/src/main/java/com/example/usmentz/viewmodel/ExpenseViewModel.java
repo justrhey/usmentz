@@ -28,6 +28,18 @@ public class ExpenseViewModel extends AndroidViewModel {
         return repository.getTotalByMoment(momentId);
     }
 
+    public LiveData<Double> getTotalSpent() {
+        return repository.getTotalSpent();
+    }
+
+    public LiveData<List<Expense>> getAllExpenses() {
+        return repository.getAllExpenses();
+    }
+
+    public LiveData<Double> getTotalByType(String type) {
+        return repository.getTotalByType(type);
+    }
+
     public void insert(Expense expense) {
         repository.insert(expense);
     }

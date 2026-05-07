@@ -14,10 +14,10 @@ import com.example.usmentz.dao.DateLocationDao;
 import com.example.usmentz.dao.ExpenseDao;
 
 @Database(
-        entities = {DateLocation.class, Category.class, Expense.class}, // Make sure Expense is here
-        version = 12, // Increment version if needed
+        entities = {DateLocation.class, Category.class, Expense.class},
+        version = 16, // Incremented from 15 due to Expense.paymentMethod field addition
         exportSchema = false
-)
+    )
 @TypeConverters({Converters.class})
 public abstract class DateDatabase extends RoomDatabase {
     public abstract DateLocationDao dateLocationDao();

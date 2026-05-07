@@ -13,10 +13,10 @@
         android:theme="@style/Theme.Usmentz"
         tools:targetApi="31">
 
-        <activity android:name=".MomentsDetailActivity" android:exported="false" />
+<activity android:name=".MomentsActivity" android:exported="false" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".HomeActivity"
             android:exported="true"
             android:theme="@style/Theme.Usmentz">
             <intent-filter>
@@ -24,6 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Usmentz" />
 
         <activity android:name=".CalendarActivity" />
 
@@ -38,6 +43,8 @@
             android:name=".ReviewsActivity"
             android:exported="false"
             android:theme="@style/Theme.Usmentz" />
+
+        <activity android:name=".SettingsActivity" />
     </application>
 
 </manifest>

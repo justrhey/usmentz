@@ -110,7 +110,7 @@ toolbar.setNavigationOnClickListener(v -> finish());
         // ── Moments adapter for day details ───────────────────────
         momentsAdapter = new DateAdapter();
         momentsAdapter.setOnItemClickListener(dateLocation -> {
-            Intent intent = new Intent(this, MomentsDetailActivity.class);
+            Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("moment_id", dateLocation.getId());
             startActivity(intent);
         });

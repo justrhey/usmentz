@@ -41,7 +41,7 @@
             <TextView android:id="@+id/tvDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Monday, May 4" android:textColor="#9E9E9E" android:textSize="12sp" android:layout_marginTop="4dp"/>
 
             <!-- Greeting -->
-            <TextView android:id="@+id/tvGreeting" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Good morning" android:textColor="#212121" android:textSize="28sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+            <TextView android:id="@+id/tvGreeting" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Explore" android:textColor="#212121" android:textSize="28sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
 
         </LinearLayout>
 
@@ -133,7 +133,7 @@
 
     </LinearLayout>
 
-    <!-- OLD Navbar - Categories view (Home/Reviews/Favorites/Calendar) - Visible by default -->
+    <!-- OLD Navbar - Categories view (Home/Reviews/Favorites/Moments/Calendar) - Visible by default -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/oldNavbarContainer"
         android:layout_width="wrap_content"
@@ -166,11 +166,33 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_home"
-                    app:tint="#9B5CFF"/>
+                    app:tint="#9E9E9E"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Home"
+                    android:textSize="9sp"
+                    android:textColor="#9E9E9E"/>
+            </LinearLayout>
+
+            <!-- Categories -->
+            <LinearLayout
+                android:id="@+id/navCategories"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_category"
+                    app:tint="#9B5CFF"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Categories"
                     android:textSize="9sp"
                     android:textColor="#9B5CFF"/>
             </LinearLayout>
@@ -193,28 +215,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Reviews"
-                    android:textSize="9sp"
-                    android:textColor="#9E9E9E"/>
-            </LinearLayout>
-
-            <!-- Favorites -->
-            <LinearLayout
-                android:id="@+id/navFavorites"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_favorite"
-                    app:tint="#9E9E9E"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Favorites"
                     android:textSize="9sp"
                     android:textColor="#9E9E9E"/>
             </LinearLayout>

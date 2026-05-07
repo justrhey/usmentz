@@ -62,7 +62,7 @@ public class ReviewsActivity extends AppCompatActivity {
         recyclerView.setAdapter(reviewAdapter);
 
         reviewAdapter.setOnReviewClickListener(review -> {
-            Intent intent = new Intent(this, MomentsDetailActivity.class);
+            Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("moment_id", review.getMomentId());
             startActivity(intent);
         });

@@ -34,7 +34,7 @@ import com.example.usmentz.fina.Expense;
 import com.example.usmentz.viewmodel.ExpenseViewModel;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
+
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.text.SimpleDateFormat;
@@ -49,9 +49,7 @@ public class DetailActivity extends AppCompatActivity {
     static ExpenseViewModel expenseVm;
     static String photoPath;
 
-    private FloatingActionButton fabEdit;
     private ViewPager2 viewPager;
-    private TabLayout tabLayout;
 
     private final SimpleDateFormat fmt = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
 
@@ -91,34 +89,83 @@ public class DetailActivity extends AppCompatActivity {
 
         // ViewPager
         viewPager = findViewById(R.id.viewPager);
-        tabLayout = findViewById(R.id.tabLayout);
-        fabEdit = findViewById(R.id.fabEdit);
 
         viewPager.setAdapter(new PagerAdapter(this));
         viewPager.setOffscreenPageLimit(3);
 
-        new TabLayoutMediator(tabLayout, viewPager, (tab, pos) -> {
-            switch (pos) {
-                case 0:
-                    tab.setText("Details");
-                    break;
-                case 1:
-                    tab.setText("Expenses");
-                    break;
-                case 2:
-                    tab.setText("Review");
-                    break;
-            }
-        }).attach();
+        // Setup segmented control tabs
+        setupPillTabs();
+    }
 
+    private void setupPillTabs() {
+        LinearLayout tabDetails = findViewById(R.id.tabDetails);
+        LinearLayout tabExpenses = findViewById(R.id.tabExpenses);
+        LinearLayout tabReview = findViewById(R.id.tabReview);
+
+        if (tabDetails != null) {
+            tabDetails.setOnClickListener(v -> viewPager.setCurrentItem(0, true));
+        }
+        if (tabExpenses != null) {
+            tabExpenses.setOnClickListener(v -> viewPager.setCurrentItem(1, true));
+        }
+        if (tabReview != null) {
+            tabReview.setOnClickListener(v -> viewPager.setCurrentItem(2, true));
+        }
+
+        // Update tab selection when swiping
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                fabEdit.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+                updateTabSelection(position);
             }
         });
 
-        fabEdit.setOnClickListener(v -> showEditDialog());
+        // Initialize tab selection
+        updateTabSelection(0);
+    }
+
+    private void updateTabSelection(int position) {
+        LinearLayout tabDetails = findViewById(R.id.tabDetails);
+        LinearLayout tabExpenses = findViewById(R.id.tabExpenses);
+        LinearLayout tabReview = findViewById(R.id.tabReview);
+        TextView tvTabDetails = findViewById(R.id.tvTabDetails);
+        TextView tvTabExpenses = findViewById(R.id.tvTabExpenses);
+        TextView tvTabReview = findViewById(R.id.tvTabReview);
+
+        // Reset all to inactive
+        if (tabDetails != null) tabDetails.setBackgroundResource(R.drawable.bg_tab_inactive);
+        if (tabExpenses != null) tabExpenses.setBackgroundResource(R.drawable.bg_tab_inactive);
+        if (tabReview != null) tabReview.setBackgroundResource(R.drawable.bg_tab_inactive);
+
+        // Reset text colors
+        if (tvTabDetails != null) tvTabDetails.setTextColor(0xFF9E9E9E);
+        if (tvTabExpenses != null) tvTabExpenses.setTextColor(0xFF9E9E9E);
+        if (tvTabReview != null) tvTabReview.setTextColor(0xFF9E9E9E);
+
+        // Set active tab
+        switch (position) {
+            case 0:
+                if (tabDetails != null) tabDetails.setBackgroundResource(R.drawable.bg_tab_active);
+                if (tvTabDetails != null) {
+                    tvTabDetails.setTextColor(0xFF212121);
+                    tvTabDetails.setTypeface(null, android.graphics.Typeface.BOLD);
+                }
+                break;
+            case 1:
+                if (tabExpenses != null) tabExpenses.setBackgroundResource(R.drawable.bg_tab_active);
+                if (tvTabExpenses != null) {
+                    tvTabExpenses.setTextColor(0xFF212121);
+                    tvTabExpenses.setTypeface(null, android.graphics.Typeface.BOLD);
+                }
+                break;
+            case 2:
+                if (tabReview != null) tabReview.setBackgroundResource(R.drawable.bg_tab_active);
+                if (tvTabReview != null) {
+                    tvTabReview.setTextColor(0xFF212121);
+                    tvTabReview.setTypeface(null, android.graphics.Typeface.BOLD);
+                }
+                break;
+        }
     }
 
     // ─── EDIT DIALOG ─────────────────────────────────────────────
@@ -268,12 +315,12 @@ public class DetailActivity extends AppCompatActivity {
 
         void refresh() {
             if (moment == null) return;
-            tvName.setText(moment.getName());
-            tvAddress.setText(!TextUtils.isEmpty(moment.getAddress()) ? moment.getAddress() : "—");
-            tvDescription.setText(!TextUtils.isEmpty(moment.getDescription())
+            if (tvName != null) tvName.setText(moment.getName());
+            if (tvAddress != null) tvAddress.setText(!TextUtils.isEmpty(moment.getAddress()) ? moment.getAddress() : "—");
+            if (tvDescription != null) tvDescription.setText(!TextUtils.isEmpty(moment.getDescription())
                     ? moment.getDescription() : "No description");
-            if (moment.getDate() != null) tvDate.setText(fmt.format(moment.getDate()));
-            ratingBar.setRating(moment.getRating());
+            if (tvDate != null && moment.getDate() != null) tvDate.setText(fmt.format(moment.getDate()));
+            if (ratingBar != null) ratingBar.setRating(moment.getRating());
         }
     }
 
@@ -291,7 +338,6 @@ public class DetailActivity extends AppCompatActivity {
             TextView tvTotal = view.findViewById(R.id.tvTotalSpent);
             TextView tvEmpty = view.findViewById(R.id.tvNoExpenses);
             RecyclerView rv = view.findViewById(R.id.rvExpenses);
-            FloatingActionButton fab = view.findViewById(R.id.fabAddExpense);
 
             ExpenseAdapter adapter = new ExpenseAdapter();
             rv.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -309,11 +355,6 @@ public class DetailActivity extends AppCompatActivity {
             expenseVm.getTotalSpentForMoment(moment.getId())
                     .observe(getViewLifecycleOwner(), total ->
                             tvTotal.setText(String.format("₱%.2f", total != null ? total : 0.0)));
-
-            fab.setOnClickListener(v -> {
-                if (getActivity() instanceof DetailActivity)
-                    ((DetailActivity) getActivity()).showAddExpenseDialog();
-            });
         }
     }
 

@@ -51,6 +51,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         holder.tvReviewText.setText(review.getReviewText());
         holder.tvDate.setText(review.getDate());
         holder.ratingBar.setRating(review.getRating());
+        holder.tvRating.setText(String.valueOf(review.getRating()));
 
         // Show photo if exists
         if (review.getPhotoPath() != null && !review.getPhotoPath().isEmpty()) {
@@ -76,7 +77,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     }
 
     static class ReviewViewHolder extends RecyclerView.ViewHolder {
-        TextView tvMomentName, tvReviewText, tvDate;
+        TextView tvMomentName, tvReviewText, tvDate, tvRating;
         RatingBar ratingBar;
         ImageView ivPhoto;
 
@@ -85,6 +86,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             tvMomentName = itemView.findViewById(R.id.tvMomentName);
             tvReviewText = itemView.findViewById(R.id.tvReviewText);
             tvDate = itemView.findViewById(R.id.tvDate);
+            tvRating = itemView.findViewById(R.id.tvRating);
             ratingBar = itemView.findViewById(R.id.ratingBar);
             ivPhoto = itemView.findViewById(R.id.ivPhoto);
         }

@@ -26,8 +26,17 @@ public interface ExpenseDao {
     @Query("SELECT * FROM expenses WHERE momentId = :momentId ORDER BY id ASC")
     LiveData<List<Expense>> getExpensesByMoment(int momentId);
 
-    @Query("SELECT SUM(amount) FROM expenses WHERE momentId = :momentId")
+    @Query("SELECT SUM(amount) FROM expenses WHERE momentId = :momentId AND type = 'expenses'")
     LiveData<Double> getTotalByMoment(int momentId);
+
+    @Query("SELECT SUM(amount) FROM expenses")
+    LiveData<Double> getTotalSpent();
+
+    @Query("SELECT * FROM expenses ORDER BY id DESC")
+    LiveData<List<Expense>> getAllExpenses();
+
+    @Query("SELECT SUM(amount) FROM expenses WHERE type = :type")
+    LiveData<Double> getTotalByType(String type);
 
     @Query("DELETE FROM expenses WHERE momentId = :momentId")
     void deleteAllForMoment(int momentId);
