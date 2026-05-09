@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base Application Theme - Simple Dark -->
+    <!-- Base Application Theme -->
     <style name="Theme.Usmentz" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary colors -->
         <item name="colorPrimary">@color/purple_primary</item>
@@ -37,6 +37,27 @@
         <!-- NO animations - instant transitions -->
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowContentTransitions">false</item>
+
+        <!-- Default shape appearances - CURVED -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Usmentz.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Usmentz.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Usmentz.Large</item>
+    </style>
+
+    <!-- Shape Appearances - All Curves -->
+    <style name="ShapeAppearance.Usmentz.Small" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Usmentz.Medium" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Usmentz.Large" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">32dp</item>
     </style>
 
     <!-- Material3 Theme Overrides -->
@@ -75,6 +96,16 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- No ActionBar Theme for Login/Register -->
+    <style name="Theme.Usmentz.NoActionBar" parent="Theme.Usmentz">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">#F8F7FF</item>
+        <item name="android:navigationBarColor">#F8F7FF</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">#F8F7FF</item>
+    </style>
+
     <!-- Splash Theme -->
     <style name="Theme.Usmentz.Splash" parent="Theme.Usmentz">
         <item name="android:windowFullscreen">true</item>
@@ -83,24 +114,40 @@
         <item name="android:navigationBarColor">@color/black_pure</item>
     </style>
 
-    <!-- Card Style -->
+    <!-- Card Style - CURVED -->
     <style name="ModernCard" parent="">
         <item name="cardBackgroundColor">@color/dark_card</item>
-        <item name="cardCornerRadius">16dp</item>
-        <item name="cardElevation">2dp</item>
+        <item name="cardCornerRadius">28dp</item>
+        <item name="cardElevation">0dp</item>
     </style>
 
-    <!-- Button Style -->
+    <!-- Button Style - CURVED -->
     <style name="ModernButton" parent="Widget.Material3.Button">
         <item name="android:textColor">@color/white</item>
         <item name="backgroundTint">@color/purple_primary</item>
-        <item name="cornerRadius">12dp</item>
+        <item name="cornerRadius">28dp</item>
+    </style>
+
+    <!-- Outlined Button Style - CURVED -->
+    <style name="OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/purple_primary</item>
+        <item name="strokeColor">@color/purple_primary</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="cornerRadius">28dp</item>
     </style>
 
     <!-- FAB Style -->
     <style name="ModernFAB" parent="Widget.Material3.FloatingActionButton.Primary">
         <item name="backgroundTint">@color/purple_primary</item>
         <item name="tint">@color/white</item>
+    </style>
+
+    <style name="ShapeAppearance.Usmentz.TopCorners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">40dp</item>
+        <item name="cornerSizeTopRight">40dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
     <!-- Circle Image View Style -->

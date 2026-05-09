@@ -59,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
     private View navHome, navCategories, navReviews, navCalendar;
     private View floatingNavbarContainer;
     private com.google.android.material.floatingactionbutton.FloatingActionButton fabAdd;
-    private ImageButton btnNotifications;
+    private ImageButton btnNotifications, btnProfile;
     private View cardQuickAdd, cardUpcoming, cardFavorites;
     private com.google.android.material.appbar.MaterialToolbar toolbar;
 
@@ -130,6 +130,7 @@ public class HomeActivity extends AppCompatActivity {
         rvRecentActivity = findViewById(R.id.rvRecentActivity);
 
         btnNotifications = findViewById(R.id.btnNotifications);
+        btnProfile = findViewById(R.id.btnProfile);
 
         cardQuickAdd = findViewById(R.id.cardAddExpense);
         cardUpcoming = findViewById(R.id.cardUpcoming);
@@ -392,6 +393,12 @@ public class HomeActivity extends AppCompatActivity {
             });
         }
 
+        if (btnProfile != null) {
+            btnProfile.setOnClickListener(v -> {
+                startActivity(new Intent(this, ProfileActivity.class));
+            });
+        }
+
         if (fabAdd != null) {
             fabAdd.setOnClickListener(v -> {
                 showAddMomentDialog();
@@ -453,6 +460,8 @@ public class HomeActivity extends AppCompatActivity {
         if (timeHandler != null) {
             timeHandler.post(timeRunnable);
         }
+        // Refresh data - ViewModels will automatically notify observers
+        // since they query LiveData from Room database
     }
 
     @Override

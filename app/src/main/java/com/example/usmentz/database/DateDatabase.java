@@ -15,7 +15,7 @@ import com.example.usmentz.dao.ExpenseDao;
 
 @Database(
         entities = {DateLocation.class, Category.class, Expense.class},
-        version = 16, // Incremented from 15 due to Expense.paymentMethod field addition
+        version = 17, // Incremented from 16 due to Expense.paymentMethod field addition
         exportSchema = false
     )
 @TypeConverters({Converters.class})

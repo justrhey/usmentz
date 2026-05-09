@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Internet permission for Google Maps -->
+    <!-- Internet permission for Google Maps & Firebase -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -22,26 +22,55 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
-<activity android:name=".MomentsActivity" android:exported="false" />
+        <!-- Firebase metadata -->
+        <meta-data
+            android:name="com.google.firebase.auth.DEVELOPER_AUTH_STATE"
+            android:value="enabled"/>
 
+        <!-- Splash Activity (Launcher) -->
         <activity
-            android:name=".HomeActivity"
+            android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.Usmentz">
+            android:theme="@style/Theme.Usmentz.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <!-- Onboarding Activity -->
+        <activity
+            android:name=".OnboardingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Usmentz.NoActionBar" />
+
+        <!-- Login Activity -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Usmentz.NoActionBar" />
+
+        <!-- Register Activity -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Usmentz.NoActionBar" />
+
+        <!-- Home Activity -->
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Usmentz" />
+
+        <!-- Main Activity (Categories) -->
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:theme="@style/Theme.Usmentz" />
 
-        <activity android:name=".CalendarActivity" />
-
-        <activity android:name=".FavoritesActivity" />
+        <activity android:name=".MomentsActivity" android:exported="false" />
+        <activity android:name=".CalendarActivity" android:exported="false" />
+        <activity android:name=".FavoritesActivity" android:exported="false" />
 
         <activity
             android:name=".DetailActivity"
@@ -53,7 +82,13 @@
             android:exported="false"
             android:theme="@style/Theme.Usmentz" />
 
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".SettingsActivity" android:exported="false" />
+
+        <!-- Profile Activity -->
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Usmentz.NoActionBar" />
     </application>
 
 </manifest>

@@ -64,7 +64,7 @@ public class AddMomentDialog extends DialogFragment {
         Button btnSave = view.findViewById(R.id.btnSave);
 
         // Load categories
-        categoryViewModel.getAllCategories().observe(getViewLifecycleOwner(), categories -> {
+        categoryViewModel.getAllCategories().observe(getActivity(), categories -> {
             if (categories != null && !categories.isEmpty()) {
                 String[] categoryNames = new String[categories.size()];
                 for (int i = 0; i < categories.size(); i++) {

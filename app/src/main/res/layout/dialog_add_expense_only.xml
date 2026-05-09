@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="28dp"
+    android:paddingBottom="24dp">
+
+    <!-- Header with Icon -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_circle_red_light"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Expense"
+            android:textColor="#212121"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginStart="12dp"/>
+
+    </LinearLayout>
+
+    <!-- Category Selector -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        android:textColor="#9E9E9E"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_marginBottom="20dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:singleLine="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipFood"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Food"
+                android:textSize="12sp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipTransport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Transport"
+                android:textSize="12sp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipShopping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shopping"
+                android:textSize="12sp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipBills"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bills"
+                android:textSize="12sp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipEntertainment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Entertainment"
+                android:textSize="12sp"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipOthers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Others"
+                android:textSize="12sp"
+                android:checked="true"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
+
+    <!-- Payment Method -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment Method"
+        android:textColor="#9E9E9E"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupPayment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:singleSelection="true"
+        app:selectionRequired="true"
+        android:layout_marginBottom="20dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipCash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash"
+            android:textSize="12sp"
+            android:checked="true"
+            style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipGCash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GCash"
+            android:textSize="12sp"
+            style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipBPI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BPI"
+            android:textSize="12sp"
+            style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipPayMaya"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PayMaya"
+            android:textSize="12sp"
+            style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- Description -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        app:hintTextColor="#9E9E9E"
+        app:boxStrokeColor="#9B5CFF"
+        app:boxStrokeWidth="1dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            android:inputType="textCapSentences"
+            android:singleLine="true"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Amount -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Amount"
+        app:prefixText="₱"
+        app:prefixTextColor="#212121"
+        app:hintTextColor="#9E9E9E"
+        app:boxStrokeColor="#9B5CFF"
+        app:boxStrokeWidth="1dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginBottom="24dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#212121"
+            android:textSize="20sp"
+            android:inputType="numberDecimal"
+            android:singleLine="true"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="#757575"
+            android:textSize="14sp"
+            android:backgroundTint="#F5F5F5"
+            android:layout_marginEnd="8dp"
+            app:cornerRadius="12dp"/>
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Add Expense"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:backgroundTint="#F44336"
+            app:cornerRadius="12dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

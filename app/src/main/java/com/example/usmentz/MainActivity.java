@@ -297,6 +297,8 @@ public class MainActivity extends AppCompatActivity {
         // Home - navigate to HomeActivity
         if (navHome != null) {
             navHome.setOnClickListener(v -> {
+                // Clear saved category state so Categories always starts fresh
+                sharedPreferences.edit().clear().apply();
                 startActivity(new Intent(this, HomeActivity.class));
                 finish();
             });
@@ -534,6 +536,35 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (isInMomentsMode) exitMomentsMode();
         else super.onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh data when returning from other activities (e.g., DetailActivity)
+        // This ensures any changes made (new moment, deleted moment, etc.) are reflected
+        if (categoryViewModel != null && categoryViewModel.getAllCategories() != null) {
+            categoryViewModel.getAllCategories().observe(this, categories -> {
+                if (categories != null && categoryAdapter != null) {
+                    categoryAdapter.setCategories(categories);
+                    if (!isInMomentsMode && currentView == VIEW_CATEGORIES) {
+                        if (categories == null || categories.isEmpty()) {
+                            categoriesRecyclerView.setVisibility(View.GONE);
+                            momentsRecyclerView.setVisibility(View.GONE);
+                            setEmptyText("No categories yet", "Tap + to create your first category");
+                            btnAddCategory.setVisibility(View.VISIBLE);
+                        } else {
+                            categoriesRecyclerView.setVisibility(View.VISIBLE);
+                            hideEmptyState();
+                        }
+                    }
+                }
+            });
+        }
+        // Also refresh moments if in moments mode
+        if (isInMomentsMode && currentCategoryId > 0 && dateViewModel != null) {
+            dateViewModel.setCurrentCategory(currentCategoryId);
+        }
     }
 
     private void saveCurrentCategory() {

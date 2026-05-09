@@ -36,7 +36,9 @@ public class CalendarActivity extends AppCompatActivity {
     private TextView tvMonth, tvYear, tvSelectedDate, tvDayTotal;
     private TextView tvNoMomentsDay, tvCalendarHint;
     private RecyclerView rvCalendar, rvDayMoments;
-    private View cardDayEvents, fabAdd, navAdd;
+    private View cardDayEvents, fabAdd;
+    private View navHome, navCategories, navReviews;
+    private ImageButton btnProfile;
 
     private CalendarAdapter calendarAdapter;
     private DateAdapter momentsAdapter;
@@ -75,7 +77,6 @@ public class CalendarActivity extends AppCompatActivity {
         rvCalendar = findViewById(R.id.rvCalendar);
         rvDayMoments = findViewById(R.id.rvDayMoments);
         fabAdd = findViewById(R.id.fabAdd);
-        navAdd = findViewById(R.id.navAdd);
     }
 
     private void setupCalendar() {
@@ -133,18 +134,16 @@ public class CalendarActivity extends AppCompatActivity {
             updateCalendarDisplay();
         });
 
-        // FAB and Add button
+        // FAB
         if (fabAdd != null) {
             fabAdd.setOnClickListener(v -> showAddMomentDialog());
         }
-        if (navAdd != null) {
-            navAdd.setOnClickListener(v -> showAddMomentDialog());
-        }
 
         // Navbar
-        View navHome = findViewById(R.id.navHome);
-        View navCategories = findViewById(R.id.navCategories);
-        View navReviews = findViewById(R.id.navReviews);
+        navHome = findViewById(R.id.navHome);
+        navCategories = findViewById(R.id.navCategories);
+        navReviews = findViewById(R.id.navReviews);
+        btnProfile = findViewById(R.id.btnProfile);
 
         if (navHome != null) {
             navHome.setOnClickListener(v -> {
@@ -161,6 +160,13 @@ public class CalendarActivity extends AppCompatActivity {
         if (navReviews != null) {
             navReviews.setOnClickListener(v -> {
                 startActivity(new Intent(this, ReviewsActivity.class));
+                finish();
+            });
+        }
+
+        if (btnProfile != null) {
+            btnProfile.setOnClickListener(v -> {
+                startActivity(new Intent(this, ProfileActivity.class));
                 finish();
             });
         }
@@ -269,9 +275,19 @@ public class CalendarActivity extends AppCompatActivity {
         } else {
             tvNoMomentsDay.setVisibility(View.GONE);
             rvDayMoments.setVisibility(View.VISIBLE);
-            
+
             // Calculate total (simplified)
             tvDayTotal.setText(dayMoments.size() + " moment" + (dayMoments.size() > 1 ? "s" : ""));
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Calendar data auto-refreshes via LiveData observer
+        // Just rebuild the grid to update any date indicators
+        if (dataLoaded) {
+            updateCalendarDisplay();
         }
     }
 }

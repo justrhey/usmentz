@@ -265,13 +265,34 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     // ─── ADD EXPENSE DIALOG ──────────────────────────────────────
-    void showAddExpenseDialog() {
+    void showAddExpenseDialog(String preSelectedType) {
         View dv = getLayoutInflater().inflate(R.layout.dialog_add_expense, null);
 
         EditText etDesc = dv.findViewById(R.id.etExpenseName);
         EditText etAmount = dv.findViewById(R.id.etExpenseAmount);
         Button btnCancel = dv.findViewById(R.id.btnCancelExpense);
         Button btnSave = dv.findViewById(R.id.btnSaveExpense);
+
+        com.google.android.material.chip.ChipGroup chipGroupType = dv.findViewById(R.id.chipGroupType);
+        com.google.android.material.chip.ChipGroup chipGroupPayment = dv.findViewById(R.id.chipGroupPayment);
+
+        // Pre-select the type
+        if (preSelectedType != null) {
+            switch (preSelectedType) {
+                case Expense.TYPE_FUNDS:
+                    com.google.android.material.chip.Chip chipFunds = dv.findViewById(R.id.chipFunds);
+                    if (chipFunds != null) chipFunds.setChecked(true);
+                    break;
+                case Expense.TYPE_SAVINGS:
+                    com.google.android.material.chip.Chip chipSavings = dv.findViewById(R.id.chipSavings);
+                    if (chipSavings != null) chipSavings.setChecked(true);
+                    break;
+                default:
+                    com.google.android.material.chip.Chip chipExpenses = dv.findViewById(R.id.chipExpenses);
+                    if (chipExpenses != null) chipExpenses.setChecked(true);
+                    break;
+            }
+        }
 
         AlertDialog dialog = new AlertDialog.Builder(this).setView(dv).create();
         dialog.show();
@@ -296,7 +317,33 @@ public class DetailActivity extends AppCompatActivity {
                 return;
             }
 
-            expenseVm.insert(new Expense(desc, amount, moment.getId()));
+            // Get selected type
+            String selectedType = Expense.TYPE_EXPENSES;
+            int checkedTypeId = chipGroupType.getCheckedChipId();
+            if (checkedTypeId == R.id.chipFunds) {
+                selectedType = Expense.TYPE_FUNDS;
+            } else if (checkedTypeId == R.id.chipSavings) {
+                selectedType = Expense.TYPE_SAVINGS;
+            }
+
+            // Get selected payment method
+            String paymentMethod = "Cash";
+            int checkedPaymentId = chipGroupPayment.getCheckedChipId();
+            if (checkedPaymentId == R.id.chipGCash) {
+                paymentMethod = "GCash";
+            } else if (checkedPaymentId == R.id.chipBPI) {
+                paymentMethod = "BPI";
+            } else if (checkedPaymentId == R.id.chipPayMaya) {
+                paymentMethod = "PayMaya";
+            } else if (checkedPaymentId == R.id.chipOtherBanks) {
+                paymentMethod = "Other Banks";
+            } else if (checkedPaymentId == R.id.chipCash) {
+                paymentMethod = "Cash";
+            }
+
+            Expense expense = new Expense(desc, amount, moment.getId(), selectedType, paymentMethod);
+            expenseVm.insert(expense);
+            Toast.makeText(this, "Transaction added", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
     }
@@ -486,7 +533,7 @@ public class DetailActivity extends AppCompatActivity {
             if (tvDescription != null) tvDescription.setText(!TextUtils.isEmpty(moment.getDescription())
                     ? moment.getDescription() : "No description");
             if (tvDate != null && moment.getDate() != null) tvDate.setText(fmt.format(moment.getDate()));
-            if (ratingBar != null) ratingBar.setRating(moment.getRating());
+            // RatingBar is only in fragment_detail_review.xml, not fragment_detail_info.xml
             if (tvRatingNumber != null) tvRatingNumber.setText(String.valueOf(moment.getRating()));
             if (tvExperience != null) tvExperience.setText(String.valueOf((int) moment.getRating()));
 
@@ -505,15 +552,22 @@ public class DetailActivity extends AppCompatActivity {
     // ═══════════════════════════════════════════════════════════
     public static class ExpensesFragment extends Fragment {
 
+        private TextView tvTotal, tvNoExpenses, tvIncome, tvExpensesLabel;
+
         public ExpensesFragment() {
             super(R.layout.fragment_detail_expenses);
         }
 
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-            TextView tvTotal = view.findViewById(R.id.tvTotalSpent);
-            TextView tvEmpty = view.findViewById(R.id.tvNoExpenses);
+            TextView tvTotalSpent = view.findViewById(R.id.tvTotalSpent);
+            tvNoExpenses = view.findViewById(R.id.tvNoExpenses);
+            tvIncome = view.findViewById(R.id.tvIncome);
+            tvExpensesLabel = view.findViewById(R.id.tvExpenses);
+            tvTotal = tvTotalSpent;
+
             RecyclerView rv = view.findViewById(R.id.rvExpenses);
+            View btnSort = view.findViewById(R.id.btnSort);
 
             ExpenseAdapter adapter = new ExpenseAdapter();
             rv.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -521,16 +575,92 @@ public class DetailActivity extends AppCompatActivity {
 
             adapter.setOnExpenseDeleteListener(expense -> expenseVm.delete(expense));
 
+            // Sort button
+            if (btnSort != null) {
+                btnSort.setOnClickListener(v -> {
+                    int currentSort = adapter.getSortOption();
+                    int nextSort = (currentSort + 1) % 4;
+                    adapter.setSortOption(nextSort);
+
+                    String[] sortLabels = {"Newest", "Oldest", "Highest", "Lowest"};
+                    View filterDate = view.findViewById(R.id.tvFilterDate);
+                    if (filterDate instanceof TextView) {
+                        ((TextView) filterDate).setText(sortLabels[nextSort]);
+                    }
+                });
+            }
+
+            // Add Expense / Funds / Savings buttons
+            View btnAddExpense = view.findViewById(R.id.btnAddExpense);
+            View btnAddFunds = view.findViewById(R.id.btnAddFunds);
+            View btnAddSavings = view.findViewById(R.id.btnAddSavings);
+
+            if (btnAddExpense != null) {
+                btnAddExpense.setOnClickListener(v -> {
+                    AddExpenseOnlyDialog dialog = AddExpenseOnlyDialog.newInstance(moment.getId(), () -> {
+                        // Refresh handled by LiveData observer
+                    });
+                    dialog.setViewModel(expenseVm);
+                    dialog.show(getParentFragmentManager(), "AddExpenseOnly");
+                });
+            }
+            if (btnAddFunds != null) {
+                btnAddFunds.setOnClickListener(v -> {
+                    AddFundsOnlyDialog dialog = AddFundsOnlyDialog.newInstance(moment.getId(), () -> {
+                        // Refresh handled by LiveData observer
+                    });
+                    dialog.setViewModel(expenseVm);
+                    dialog.show(getParentFragmentManager(), "AddFundsOnly");
+                });
+            }
+            if (btnAddSavings != null) {
+                btnAddSavings.setOnClickListener(v -> {
+                    AddSavingsOnlyDialog dialog = AddSavingsOnlyDialog.newInstance(moment.getId(), () -> {
+                        // Refresh handled by LiveData observer
+                    });
+                    dialog.setViewModel(expenseVm);
+                    dialog.show(getParentFragmentManager(), "AddSavingsOnly");
+                });
+            }
+
+            // Observe expenses
             expenseVm.getExpensesForMoment(moment.getId())
                     .observe(getViewLifecycleOwner(), expenses -> {
                         adapter.setExpenses(expenses);
-                        tvEmpty.setVisibility(expenses == null || expenses.isEmpty()
+                        tvNoExpenses.setVisibility(expenses == null || expenses.isEmpty()
                                 ? View.VISIBLE : View.GONE);
+                        rv.setVisibility(expenses == null || expenses.isEmpty()
+                                ? View.GONE : View.VISIBLE);
+
+                        // Calculate totals
+                        if (expenses != null) {
+                            double incomeTotal = 0;
+                            double expenseTotal = 0;
+                            for (Expense e : expenses) {
+                                if (Expense.TYPE_FUNDS.equals(e.getType()) || Expense.TYPE_SAVINGS.equals(e.getType())) {
+                                    incomeTotal += e.getAmount();
+                                } else {
+                                    expenseTotal += e.getAmount();
+                                }
+                            }
+
+                            if (tvIncome != null) {
+                                tvIncome.setText("+₱" + String.format("%.0f", incomeTotal));
+                            }
+                            if (tvExpensesLabel != null) {
+                                tvExpensesLabel.setText("-₱" + String.format("%.0f", expenseTotal));
+                            }
+                            if (tvTotal != null) {
+                                tvTotal.setText("₱" + String.format("%.0f", incomeTotal - expenseTotal));
+                            }
+                        }
                     });
 
+            // Observe total spent (for legacy compatibility)
             expenseVm.getTotalSpentForMoment(moment.getId())
-                    .observe(getViewLifecycleOwner(), total ->
-                            tvTotal.setText(String.format("₱%.2f", total != null ? total : 0.0)));
+                    .observe(getViewLifecycleOwner(), total -> {
+                        // Already handled above with per-type calculation
+                    });
         }
     }
 

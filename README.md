@@ -4,6 +4,45 @@ A mobile application for organizing and tracking your special moments and experi
 
 ---
 
+## What's New
+
+### Authentication & User Management
+| Feature | Description |
+|---|---|
+| [icon] Firebase Authentication | Email/password sign-in and registration |
+| [icon] Google Sign-In | OAuth-based login via Google accounts |
+| [icon] SharedPreferences Session | Local session caching for instant login |
+| [icon] Password Reset | Firebase-powered email reset flow |
+
+### User Interface
+| Feature | Description |
+|---|---|
+| [icon] Draggable Bottom Sheet Login | Sliding card with smooth animation, drag-to-close, and swipe gesture |
+| [icon] Full-Page Auth Layouts | No-scrolling single-screen login and register pages |
+| [icon] Floating Card Login UI | Slide-up card design with purple branding background visible behind |
+| [icon] Top-Bar Profile Icon | Profile moved from bottom navbar to header alongside notifications |
+| [icon] Material Design 3 | Rounded corners, curved elements, 40dp bottom sheet radius |
+
+### Data & Architecture
+| Feature | Description |
+|---|---|
+| [icon] Room Database v16 | SQLite persistence with automatic schema migration |
+| [icon] MVVM + Repository Pattern | Clean separation of UI, logic, and data layers |
+| [icon] LiveData Observers | Reactive UI updates across all screens |
+| [icon] Groovy DSL Build Scripts | Traditional .gradle format instead of Kotlin DSL |
+
+### Technical Details
+| Component | Version |
+|---|---|
+| [icon] Java | 17 |
+| [icon] Android SDK | 34 |
+| [icon] Gradle | 8.11.1 |
+| [icon] Firebase BoM | 33.7.0 |
+| [icon] Material Components | 1.11.0 |
+| [icon] Room | 2.6.1 |
+
+---
+
 ## Overview
 
 Usmentz is a personal moments management application that helps users organize their special dates and experiences. The app provides category-based organization, expense tracking for each moment, rating and review systems, and automatic favorites collection.
@@ -54,7 +93,7 @@ flowchart TD
 ## Technology Stack
 
 | Layer | Technology |
-|-------|------------|
+|---|---|
 | Language | Java 17 |
 | Platform | Android (SDK 34) |
 | Architecture | MVVM |
@@ -72,7 +111,7 @@ flowchart TD
 
 **categories**
 | Column | Type | Description |
-|--------|------|-------------|
+|---|---|---|
 | id | INTEGER | Primary key, auto-generated |
 | name | TEXT | Category name |
 | iconName | TEXT | Icon identifier |
@@ -81,7 +120,7 @@ flowchart TD
 
 **date_locations**
 | Column | Type | Description |
-|--------|------|-------------|
+|---|---|---|
 | id | INTEGER | Primary key, auto-generated |
 | name | TEXT | Location name |
 | address | TEXT | Location address |
@@ -94,7 +133,7 @@ flowchart TD
 
 **expenses**
 | Column | Type | Description |
-|--------|------|-------------|
+|---|---|---|
 | id | INTEGER | Primary key, auto-generated |
 | description | TEXT | Expense description |
 | amount | REAL | Expense amount |
@@ -109,6 +148,7 @@ flowchart TD
 - Android Studio Arctic Fox or later
 - JDK 17 or later
 - Android SDK 34
+- Firebase project with Authentication enabled
 
 ### Build
 
@@ -120,6 +160,7 @@ git clone https://github.com/justrhey/usmentz.git
 # Wait for Gradle sync to complete
 
 # Build and run
+./gradlew assembleDebug
 ```
 
 ---
@@ -134,16 +175,19 @@ usmentz/
 │   │   ├── DetailActivity.java
 │   │   ├── CalendarActivity.java
 │   │   ├── FavoritesActivity.java
-│   │   └── ReviewsActivity.java
+│   │   ├── ReviewsActivity.java
+│   │   ├── LoginActivity.java
+│   │   ├── RegisterActivity.java
+│   │   └── SplashActivity.java
 │   ├── adapter/          # RecyclerView Adapters
 │   ├── category/         # Category models & dialogs
 │   ├── date/            # DateLocation model
 │   ├── fina/            # Expense model
-│   ├── database/       # Room database & converters
-│   ├── dao/            # Data Access Objects
-│   ├── repo/           # Repository pattern
-│   └── viewmodel/      # MVVM ViewModels
-└── app/src/main/res/   # Resources & layouts
+│   ├── database/        # Room database & converters
+│   ├── dao/             # Data Access Objects
+│   ├── repo/            # Repository pattern
+│   └── viewmodel/       # MVVM ViewModels
+└── app/src/main/res/    # Resources & layouts
 ```
 
 ---

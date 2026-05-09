@@ -106,4 +106,10 @@ public class ReviewsActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // LiveData observers will automatically refresh since Room queries update in real-time
+    }
 }
