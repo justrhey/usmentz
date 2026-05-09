@@ -3,11 +3,11 @@ package com.example.usmentz;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -15,13 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.usmentz.adapter.CalendarAdapter;
-import com.example.usmentz.adapter.ExpenseAdapter;
 import com.example.usmentz.adapter.DateAdapter;
 import com.example.usmentz.date.DateLocation;
-import com.example.usmentz.fina.Expense;
 import com.example.usmentz.model.CalendarDay;
 import com.example.usmentz.viewmodel.DateViewModel;
-import com.example.usmentz.viewmodel.ExpenseViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
 import java.text.SimpleDateFormat;
@@ -35,128 +32,70 @@ import java.util.Map;
 public class CalendarActivity extends AppCompatActivity {
 
     private DateViewModel dateViewModel;
-    private ExpenseViewModel expenseViewModel;
 
-    private TextView tvMonth, tvYear, tvSelectedDate;
-    private TextView tvNoMomentsDay, tvNoExpensesDay, tvDayTotal;
-    private TextView tvCalendarHint;
-    private RecyclerView rvCalendar, rvDayMoments, rvDayExpenses;
-    private View cardDayEvents;
+    private TextView tvMonth, tvYear, tvSelectedDate, tvDayTotal;
+    private TextView tvNoMomentsDay, tvCalendarHint;
+    private RecyclerView rvCalendar, rvDayMoments;
+    private View cardDayEvents, fabAdd, navAdd;
 
     private CalendarAdapter calendarAdapter;
     private DateAdapter momentsAdapter;
-    private ExpenseAdapter expenseAdapter;
 
     private final Calendar currentMonth = Calendar.getInstance();
     private CalendarDay selectedDay = null;
 
     private final SimpleDateFormat monthFmt = new SimpleDateFormat("MMMM", Locale.getDefault());
-    private final SimpleDateFormat dayFmt   = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
-    private final SimpleDateFormat keyFmt   = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private final SimpleDateFormat dayFmt = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
+    private final SimpleDateFormat keyFmt = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    // FIX: Cache all moments and expenses
     private List<DateLocation> allMoments = new ArrayList<>();
-    private Map<Integer, List<Expense>> expensesCache = new HashMap<>();
     private boolean dataLoaded = false;
-
-    // Floating navbar clickable areas
-    private LinearLayout navHome, navCalendar, navReviews, navFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        dateViewModel    = new ViewModelProvider(this).get(DateViewModel.class);
-        expenseViewModel = new ViewModelProvider(this).get(ExpenseViewModel.class);
+        dateViewModel = new ViewModelProvider(this).get(DateViewModel.class);
 
-        // ── Toolbar with back ─────────────────────────────────────
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        initViews();
+        setupCalendar();
+        setupClickListeners();
+        loadData();
+    }
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-
-toolbar.setNavigationOnClickListener(v -> finish());
-        // ── Floating navbar clickable areas ──────────────────────
-        navHome       = findViewById(R.id.navHome);
-        navCalendar   = findViewById(R.id.navCalendar);
-        navReviews   = findViewById(R.id.navReviews);
-        navFavorites = findViewById(R.id.navFavorites);
-
-        // Setup click listeners for navbar
-        setupFloatingNavbar();
-
-        // ── Views ─────────────────────────────────────────────────
-        tvMonth        = findViewById(R.id.tvMonth);
-        tvMonth        = findViewById(R.id.tvMonth);
-        tvYear         = findViewById(R.id.tvYear);
+    private void initViews() {
+        tvMonth = findViewById(R.id.tvMonth);
+        tvYear = findViewById(R.id.tvYear);
         tvSelectedDate = findViewById(R.id.tvSelectedDate);
-        tvCalendarHint = findViewById(R.id.tvCalendarHint);
+        tvDayTotal = findViewById(R.id.tvDayTotal);
         tvNoMomentsDay = findViewById(R.id.tvNoMomentsDay);
-        tvNoExpensesDay= findViewById(R.id.tvNoExpensesDay);
-        tvDayTotal     = findViewById(R.id.tvDayTotal);
-        cardDayEvents  = findViewById(R.id.cardDayEvents);
-        rvCalendar     = findViewById(R.id.rvCalendar);
-        rvDayMoments   = findViewById(R.id.rvDayMoments);
-        rvDayExpenses  = findViewById(R.id.rvDayExpenses);
+        tvCalendarHint = findViewById(R.id.tvCalendarHint);
+        cardDayEvents = findViewById(R.id.cardDayEvents);
+        rvCalendar = findViewById(R.id.rvCalendar);
+        rvDayMoments = findViewById(R.id.rvDayMoments);
+        fabAdd = findViewById(R.id.fabAdd);
+        navAdd = findViewById(R.id.navAdd);
+    }
 
-        // ── Calendar grid ─────────────────────────────────────────
+    private void setupCalendar() {
         calendarAdapter = new CalendarAdapter();
         rvCalendar.setLayoutManager(new GridLayoutManager(this, 7));
         rvCalendar.setAdapter(calendarAdapter);
 
-        // ── Moments adapter for day details ───────────────────────
         momentsAdapter = new DateAdapter();
         momentsAdapter.setOnItemClickListener(dateLocation -> {
             Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("moment_id", dateLocation.getId());
+            intent.putExtra("date_location", dateLocation);
             startActivity(intent);
         });
         rvDayMoments.setLayoutManager(new LinearLayoutManager(this));
         rvDayMoments.setAdapter(momentsAdapter);
 
-        // ── Expenses adapter ──────────────────────────────────────
-        expenseAdapter = new ExpenseAdapter();
-        expenseAdapter.setOnExpenseDeleteListener(expense -> {
-            // Handle delete if needed
-        });
-        rvDayExpenses.setLayoutManager(new LinearLayoutManager(this));
-        rvDayExpenses.setAdapter(expenseAdapter);
-
-        // ── Month nav ─────────────────────────────────────────────
-        findViewById(R.id.btnPrevMonth).setOnClickListener(v -> {
-            currentMonth.add(Calendar.MONTH, -1);
-            updateCalendarDisplay(); // FIX: Use cached data
-        });
-        findViewById(R.id.btnNextMonth).setOnClickListener(v -> {
-            currentMonth.add(Calendar.MONTH, 1);
-            updateCalendarDisplay(); // FIX: Use cached data
-        });
-
-        // ── Year nav ─────────────────────────────────────────────
-        findViewById(R.id.btnPrevYear).setOnClickListener(v -> {
-            currentMonth.add(Calendar.YEAR, -1);
-            updateCalendarDisplay(); // FIX: Use cached data
-        });
-        findViewById(R.id.btnNextYear).setOnClickListener(v -> {
-            currentMonth.add(Calendar.YEAR, 1);
-            updateCalendarDisplay(); // FIX: Use cached data
-        });
-        tvYear.setOnClickListener(v -> showYearPickerDialog());
-
-        // ── Today ─────────────────────────────────────────────────
-        findViewById(R.id.btnToday).setOnClickListener(v -> {
-            currentMonth.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
-            selectedDay = null;
-            cardDayEvents.setVisibility(View.GONE);
-            tvCalendarHint.setVisibility(View.VISIBLE);
-            updateCalendarDisplay(); // FIX: Use cached data
-        });
-
-        // ── Day click ─────────────────────────────────────────────
+        // Day click
         calendarAdapter.setOnDayClickListener(day -> {
+            if (day.getDay() == 0) return; // Empty cell
+            
             if (selectedDay != null) selectedDay.setSelected(false);
             day.setSelected(true);
             selectedDay = day;
@@ -164,64 +103,97 @@ toolbar.setNavigationOnClickListener(v -> finish());
             showDayEvents(day);
         });
 
-        // FIX: Load data ONCE and cache it
-        loadAllDataOnce();
+        updateCalendarDisplay();
     }
 
-    // FIX: Load all data once and observe permanently
-    private void loadAllDataOnce() {
+    private void setupClickListeners() {
+        // Month navigation
+        findViewById(R.id.btnPrevMonth).setOnClickListener(v -> {
+            currentMonth.add(Calendar.MONTH, -1);
+            selectedDay = null;
+            cardDayEvents.setVisibility(View.GONE);
+            tvCalendarHint.setVisibility(View.VISIBLE);
+            updateCalendarDisplay();
+        });
+
+        findViewById(R.id.btnNextMonth).setOnClickListener(v -> {
+            currentMonth.add(Calendar.MONTH, 1);
+            selectedDay = null;
+            cardDayEvents.setVisibility(View.GONE);
+            tvCalendarHint.setVisibility(View.VISIBLE);
+            updateCalendarDisplay();
+        });
+
+        // Today button
+        ((Button) findViewById(R.id.btnToday)).setOnClickListener(v -> {
+            currentMonth.setTimeInMillis(System.currentTimeMillis());
+            selectedDay = null;
+            cardDayEvents.setVisibility(View.GONE);
+            tvCalendarHint.setVisibility(View.VISIBLE);
+            updateCalendarDisplay();
+        });
+
+        // FAB and Add button
+        if (fabAdd != null) {
+            fabAdd.setOnClickListener(v -> showAddMomentDialog());
+        }
+        if (navAdd != null) {
+            navAdd.setOnClickListener(v -> showAddMomentDialog());
+        }
+
+        // Navbar
+        View navHome = findViewById(R.id.navHome);
+        View navCategories = findViewById(R.id.navCategories);
+        View navReviews = findViewById(R.id.navReviews);
+
+        if (navHome != null) {
+            navHome.setOnClickListener(v -> {
+                startActivity(new Intent(this, HomeActivity.class));
+                finish();
+            });
+        }
+        if (navCategories != null) {
+            navCategories.setOnClickListener(v -> {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            });
+        }
+        if (navReviews != null) {
+            navReviews.setOnClickListener(v -> {
+                startActivity(new Intent(this, ReviewsActivity.class));
+                finish();
+            });
+        }
+    }
+
+    private void showAddMomentDialog() {
+        AddMomentDialog dialog = AddMomentDialog.newInstance(() -> {
+            // Refresh data
+            loadData();
+        });
+        dialog.show(getSupportFragmentManager(), "AddMomentDialog");
+    }
+
+    private void loadData() {
         dateViewModel.getAllMoments().observe(this, moments -> {
             if (moments != null) {
                 allMoments = moments;
                 dataLoaded = true;
                 updateCalendarDisplay();
-
-                // Pre-load expenses for all moments
-                for (DateLocation moment : moments) {
-                    loadExpensesForMoment(moment.getId());
-                }
             }
         });
     }
 
-    // FIX: Cache expenses per moment
-    private void loadExpensesForMoment(int momentId) {
-        expenseViewModel.getExpensesForMoment(momentId).observe(this, expenses -> {
-            if (expenses != null) {
-                expensesCache.put(momentId, expenses);
-                // If this is the currently selected day, update display
-                if (selectedDay != null) {
-                    String selectedKey = keyFmt.format(selectedDay.getDate().getTime());
-                    String momentKey = getMomentKey(momentId);
-                    if (momentKey != null && momentKey.equals(selectedKey)) {
-                        showDayEvents(selectedDay);
-                    }
-                }
-            }
-        });
-    }
-
-    private String getMomentKey(int momentId) {
-        for (DateLocation moment : allMoments) {
-            if (moment.getId() == momentId && moment.getDate() != null) {
-                return keyFmt.format(moment.getDate());
-            }
-        }
-        return null;
-    }
-
-    // FIX: Update calendar instantly using cached data
     private void updateCalendarDisplay() {
         tvMonth.setText(monthFmt.format(currentMonth.getTime()));
         tvYear.setText(String.valueOf(currentMonth.get(Calendar.YEAR)));
 
         if (dataLoaded) {
-            buildGridInstant();
+            buildGrid();
         }
     }
 
-    // FIX: Build grid without database queries
-    private void buildGridInstant() {
+    private void buildGrid() {
         Calendar cal = (Calendar) currentMonth.clone();
         cal.set(Calendar.DAY_OF_MONTH, 1);
 
@@ -231,7 +203,7 @@ toolbar.setNavigationOnClickListener(v -> finish());
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         String todayStr = keyFmt.format(Calendar.getInstance().getTime());
 
-        // Create a set of moment dates for quick lookup
+        // Build moment dates map
         Map<String, Boolean> momentDateMap = new HashMap<>();
         for (DateLocation moment : allMoments) {
             if (moment.getDate() != null) {
@@ -241,7 +213,7 @@ toolbar.setNavigationOnClickListener(v -> finish());
 
         List<CalendarDay> days = new ArrayList<>();
 
-        // Empty cells
+        // Empty cells before first day
         for (int i = 0; i < leadingDays; i++) {
             days.add(new CalendarDay(0, null));
         }
@@ -257,6 +229,7 @@ toolbar.setNavigationOnClickListener(v -> finish());
             cd.setHasMoment(momentDateMap.containsKey(key));
             cd.setToday(key.equals(todayStr));
 
+            // Check if this was previously selected
             if (selectedDay != null && selectedDay.getDay() == d &&
                     selectedDay.getDate() != null &&
                     selectedDay.getDate().get(Calendar.MONTH) == currentMonth.get(Calendar.MONTH) &&
@@ -272,13 +245,14 @@ toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     private void showDayEvents(CalendarDay day) {
+        if (day.getDay() == 0) return;
+
         tvSelectedDate.setText(dayFmt.format(day.getDate().getTime()));
         cardDayEvents.setVisibility(View.VISIBLE);
         tvCalendarHint.setVisibility(View.GONE);
 
         String dayKey = keyFmt.format(day.getDate().getTime());
 
-        // Use cached moments
         List<DateLocation> dayMoments = new ArrayList<>();
         for (DateLocation m : allMoments) {
             if (m.getDate() != null && keyFmt.format(m.getDate()).equals(dayKey)) {
@@ -287,82 +261,17 @@ toolbar.setNavigationOnClickListener(v -> finish());
         }
 
         momentsAdapter.setDates(dayMoments);
-        tvNoMomentsDay.setVisibility(dayMoments.isEmpty() ? View.VISIBLE : View.GONE);
 
-        // Use cached expenses
-        showDayExpenses(dayMoments);
-    }
-
-    private void showDayExpenses(List<DateLocation> dayMoments) {
-        List<Expense> allExpenses = new ArrayList<>();
-        double total = 0.0;
-
-        for (DateLocation moment : dayMoments) {
-            List<Expense> expenses = expensesCache.get(moment.getId());
-            if (expenses != null) {
-                allExpenses.addAll(expenses);
-                for (Expense e : expenses) {
-                    total += e.getAmount();
-                }
-            }
-        }
-
-        expenseAdapter.setExpenses(allExpenses);
-        tvNoExpensesDay.setVisibility(allExpenses.isEmpty() ? View.VISIBLE : View.GONE);
-        tvDayTotal.setText(String.format(Locale.getDefault(), "₱%.2f", total));
-    }
-
-    private void showYearPickerDialog() {
-        int currentYear = currentMonth.get(Calendar.YEAR);
-
-        NumberPicker picker = new NumberPicker(this);
-        picker.setMinValue(2000);
-        picker.setMaxValue(2100);
-        picker.setValue(currentYear);
-        picker.setWrapSelectorWheel(false);
-
-        new AlertDialog.Builder(this)
-                .setTitle("Select Year")
-                .setView(picker)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    currentMonth.set(Calendar.YEAR, picker.getValue());
-                    updateCalendarDisplay();
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
-    }
-
-    // ── Floating navbar click listeners ───────────────────────────────────
-    private void setupFloatingNavbar() {
-        // Home - navigate to MainActivity
-        if (navHome != null) {
-            navHome.setOnClickListener(v -> {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-            });
-        }
-
-        // Calendar - stay on current activity
-        if (navCalendar != null) {
-            navCalendar.setOnClickListener(v -> {
-                // Already on CalendarActivity
-            });
-        }
-
-        // Reviews - navigate to ReviewsActivity
-        if (navReviews != null) {
-            navReviews.setOnClickListener(v -> {
-                startActivity(new Intent(this, ReviewsActivity.class));
-                finish();
-            });
-        }
-
-        // Favorites - navigate to FavoritesActivity
-        if (navFavorites != null) {
-            navFavorites.setOnClickListener(v -> {
-                startActivity(new Intent(this, FavoritesActivity.class));
-                finish();
-            });
+        if (dayMoments.isEmpty()) {
+            tvNoMomentsDay.setVisibility(View.VISIBLE);
+            rvDayMoments.setVisibility(View.GONE);
+            tvDayTotal.setText("₱0.00");
+        } else {
+            tvNoMomentsDay.setVisibility(View.GONE);
+            rvDayMoments.setVisibility(View.VISIBLE);
+            
+            // Calculate total (simplified)
+            tvDayTotal.setText(dayMoments.size() + " moment" + (dayMoments.size() > 1 ? "s" : ""));
         }
     }
 }

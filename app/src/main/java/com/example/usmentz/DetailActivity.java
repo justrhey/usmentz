@@ -1,5 +1,6 @@
 package com.example.usmentz;
 
+import android.content.Intent;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -37,6 +38,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -56,8 +58,16 @@ public class DetailActivity extends AppCompatActivity {
     final ActivityResultLauncher<String> photoPicker =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
-                    photoPath = uri.toString();
-                    // ReviewFragment observes this via onResume
+                    // Copy image to app's internal storage for persistence
+                    String savedPath = saveImageToInternalStorage(uri);
+                    if (savedPath != null) {
+                        photoPath = savedPath;
+                        // Notify fragment to refresh
+                        Fragment f = getSupportFragmentManager().findFragmentByTag("f2");
+                        if (f instanceof ReviewFragment) {
+                            ((ReviewFragment) f).refreshPhoto();
+                        }
+                    }
                 }
             });
 
@@ -122,6 +132,33 @@ public class DetailActivity extends AppCompatActivity {
 
         // Initialize tab selection
         updateTabSelection(0);
+    }
+
+    // Save image to internal storage for persistence
+    private String saveImageToInternalStorage(android.net.Uri sourceUri) {
+        try {
+            java.io.InputStream inputStream = getContentResolver().openInputStream(sourceUri);
+            if (inputStream == null) return null;
+
+            String fileName = "review_photo_" + System.currentTimeMillis() + ".jpg";
+            java.io.File outputDir = new java.io.File(getFilesDir(), "images");
+            if (!outputDir.exists()) outputDir.mkdirs();
+            java.io.File outputFile = new java.io.File(outputDir, fileName);
+
+            java.io.FileOutputStream outputStream = new java.io.FileOutputStream(outputFile);
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            outputStream.close();
+            inputStream.close();
+
+            return outputFile.getAbsolutePath();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void updateTabSelection(int position) {
@@ -295,9 +332,18 @@ public class DetailActivity extends AppCompatActivity {
     public static class InfoFragment extends Fragment {
 
         private TextView tvName, tvDate, tvAddress, tvDescription;
+        private TextView tvRatingNumber, tvExperience, tvFees, tvAvailability, tvCategory;
         private RatingBar ratingBar;
+        private ImageView ivProfile, btnFavorite, btnShare, btnEdit;
+        private View mapContainer;
+        private com.google.android.gms.maps.SupportMapFragment mapFragment;
+
         private final SimpleDateFormat fmt =
                 new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+
+        // Local data holders for LiveData observation
+        private double totalExpensesForMoment = 0;
+        private double totalFundsForMoment = 0;
 
         public InfoFragment() {
             super(R.layout.fragment_detail_info);
@@ -309,8 +355,128 @@ public class DetailActivity extends AppCompatActivity {
             tvDate = view.findViewById(R.id.tvDate);
             tvAddress = view.findViewById(R.id.tvAddress);
             tvDescription = view.findViewById(R.id.tvDescription);
+            tvRatingNumber = view.findViewById(R.id.tvRatingNumber);
+            tvExperience = view.findViewById(R.id.tvExperience);
+            tvFees = view.findViewById(R.id.tvFees);
+            tvAvailability = view.findViewById(R.id.tvAvailability);
+            tvCategory = view.findViewById(R.id.tvCategory);
             ratingBar = view.findViewById(R.id.ratingBar);
+            ivProfile = view.findViewById(R.id.ivProfile);
+            btnFavorite = view.findViewById(R.id.btnFavorite);
+            btnShare = view.findViewById(R.id.btnShare);
+            btnEdit = view.findViewById(R.id.btnEdit);
+            mapContainer = view.findViewById(R.id.mapContainer);
+
+            // Setup action buttons
+            if (btnEdit != null) {
+                btnEdit.setOnClickListener(v -> {
+                    if (getActivity() instanceof DetailActivity) {
+                        ((DetailActivity) getActivity()).showEditDialog();
+                    }
+                });
+            }
+
+            if (btnFavorite != null) {
+                btnFavorite.setOnClickListener(v -> {
+                    Toast.makeText(getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            if (btnShare != null) {
+                btnShare.setOnClickListener(v -> {
+                    if (moment != null) {
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("text/plain");
+                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, moment.getName());
+                        shareIntent.putExtra(Intent.EXTRA_TEXT,
+                            moment.getName() + "\n" +
+                            moment.getAddress() + "\n" +
+                            "Rated: " + moment.getRating() + "/5");
+                        startActivity(Intent.createChooser(shareIntent, "Share via"));
+                    }
+                });
+            }
+
+            // Observe real expense data for this moment
+            observeExpenseData();
+
+            // Setup Google Maps
+            setupMap();
+
             refresh();
+        }
+
+        private void observeExpenseData() {
+            if (expenseVm != null && moment != null) {
+                // Observe expenses for this moment
+                expenseVm.getExpensesForMoment(moment.getId()).observe(getViewLifecycleOwner(), expenses -> {
+                    if (expenses != null) {
+                        totalExpensesForMoment = 0;
+                        totalFundsForMoment = 0;
+
+                        for (com.example.usmentz.fina.Expense expense : expenses) {
+                            if (Expense.TYPE_EXPENSES.equals(expense.getType())) {
+                                totalExpensesForMoment += expense.getAmount();
+                            } else if (Expense.TYPE_FUNDS.equals(expense.getType())) {
+                                totalFundsForMoment += expense.getAmount();
+                            }
+                        }
+
+                        // Update UI
+                        if (tvFees != null) {
+                            tvFees.setText(formatCurrency(totalExpensesForMoment));
+                        }
+                        if (tvAvailability != null) {
+                            tvAvailability.setText(formatCurrency(totalFundsForMoment));
+                        }
+                    }
+                });
+
+                // Observe total spent for this moment
+                expenseVm.getTotalSpentForMoment(moment.getId()).observe(getViewLifecycleOwner(), total -> {
+                    // This gives total of all expenses (type = expenses)
+                    // We use the per-type calculation above instead
+                });
+            }
+        }
+
+        private void setupMap() {
+            if (mapContainer != null) {
+                mapFragment = com.google.android.gms.maps.SupportMapFragment.newInstance();
+                getChildFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.mapContainer, mapFragment)
+                    .commit();
+
+                mapFragment.getMapAsync(googleMap -> {
+                    if (moment != null && !TextUtils.isEmpty(moment.getAddress())) {
+                        // Default location (Boracay) - you can geocode the address
+                        double lat = 11.9674;
+                        double lng = 121.9248;
+
+                        com.google.android.gms.maps.model.LatLng location =
+                            new com.google.android.gms.maps.model.LatLng(lat, lng);
+
+                        googleMap.addMarker(new com.google.android.gms.maps.model.MarkerOptions()
+                            .position(location)
+                            .title(moment.getName())
+                            .icon(com.google.android.gms.maps.model.BitmapDescriptorFactory
+                                .defaultMarker(com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_VIOLET)));
+
+                        googleMap.moveCamera(
+                            com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(location, 14f));
+
+                        // Disable UI controls for embedded look
+                        com.google.android.gms.maps.UiSettings ui = googleMap.getUiSettings();
+                        ui.setZoomControlsEnabled(false);
+                        ui.setScrollGesturesEnabled(false);
+                        ui.setZoomGesturesEnabled(false);
+                        ui.setTiltGesturesEnabled(false);
+                        ui.setRotateGesturesEnabled(false);
+                        ui.setMapToolbarEnabled(false);
+                    }
+                });
+            }
         }
 
         void refresh() {
@@ -321,6 +487,16 @@ public class DetailActivity extends AppCompatActivity {
                     ? moment.getDescription() : "No description");
             if (tvDate != null && moment.getDate() != null) tvDate.setText(fmt.format(moment.getDate()));
             if (ratingBar != null) ratingBar.setRating(moment.getRating());
+            if (tvRatingNumber != null) tvRatingNumber.setText(String.valueOf(moment.getRating()));
+            if (tvExperience != null) tvExperience.setText(String.valueOf((int) moment.getRating()));
+
+            // Show real calculated values (will be updated by LiveData observer)
+            if (tvFees != null) tvFees.setText(formatCurrency(totalExpensesForMoment));
+            if (tvAvailability != null) tvAvailability.setText(formatCurrency(totalFundsForMoment));
+        }
+
+        private String formatCurrency(double amount) {
+            return "₱" + String.format(java.util.Locale.getDefault(), "%,.0f", Math.abs(amount));
         }
     }
 
@@ -367,11 +543,10 @@ public class DetailActivity extends AppCompatActivity {
         private EditText etReview;
         private RatingBar ratingBarReview;
         private TextView tvRatingLabel;
-        private View cardPhoto;
         private View noPhotoPlaceholder;
 
         private final String[] ratingLabels = {
-                "Tap to rate", "😞 Poor", "😕 Fair", "😊 Good", "😄 Great", "🤩 Amazing!"
+                "Tap to rate", "Poor", "Fair", "Good", "Great", "Amazing!"
         };
 
         public ReviewFragment() {
@@ -388,7 +563,7 @@ public class DetailActivity extends AppCompatActivity {
                 ivPhoto = view.findViewById(R.id.ivPhoto);
                 ratingBarReview = view.findViewById(R.id.ratingBarReview);
                 tvRatingLabel = view.findViewById(R.id.tvRatingLabel);
-                cardPhoto = view.findViewById(R.id.cardPhoto);
+                noPhotoPlaceholder = view.findViewById(R.id.noPhotoPlaceholder);
 
 
                 // Load existing data
@@ -458,16 +633,30 @@ public class DetailActivity extends AppCompatActivity {
         private void loadPhoto() {
             try {
                 if (!TextUtils.isEmpty(photoPath) && ivPhoto != null) {
-                    if (cardPhoto != null) cardPhoto.setVisibility(View.VISIBLE);
+                    // Show photo, hide placeholder
+                    ivPhoto.setVisibility(View.VISIBLE);
                     if (noPhotoPlaceholder != null) noPhotoPlaceholder.setVisibility(View.GONE);
-                    Glide.with(this).load(photoPath).centerCrop().into(ivPhoto);
+                    
+                    // Load image
+                    File imgFile = new File(photoPath);
+                    if (imgFile.exists()) {
+                        Glide.with(this).load(imgFile).centerCrop().into(ivPhoto);
+                    } else {
+                        Glide.with(this).load(photoPath).centerCrop().into(ivPhoto);
+                    }
                 } else {
-                    if (cardPhoto != null) cardPhoto.setVisibility(View.GONE);
+                    // Hide photo, show placeholder
+                    if (ivPhoto != null) ivPhoto.setVisibility(View.GONE);
                     if (noPhotoPlaceholder != null) noPhotoPlaceholder.setVisibility(View.VISIBLE);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        // Called when photo is selected to refresh the preview
+        void refreshPhoto() {
+            loadPhoto();
         }
     }
 }

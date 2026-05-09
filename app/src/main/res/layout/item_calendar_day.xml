@@ -2,130 +2,52 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF"
-    android:minHeight="80dp">
+    android:padding="2dp">
 
-    <!-- Grid cell background -->
     <LinearLayout
-        android:id="@+id/cellBackground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="44dp"
         android:orientation="vertical"
-        android:padding="2dp">
+        android:gravity="center"
+        android:background="?attr/selectableItemBackground">
 
-        <!-- Today highlight border -->
+        <!-- Day number -->
+        <TextView
+            android:id="@+id/tvDay"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:text="24"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <!-- Event dot indicator -->
         <View
-            android:id="@+id/viewTodayBorder"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="#9B5CFF"
-            android:visibility="gone" />
-
-        <!-- Day number row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/tvDay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="24"
-                android:textColor="#212121"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <!-- Event count badge -->
-            <TextView
-                android:id="@+id/tvEventCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3"
-                android:textColor="#FFFFFF"
-                android:textSize="9sp"
-                android:background="@drawable/bg_badge_count"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="1dp"
-                android:visibility="gone"
-                android:layout_marginStart="2dp" />
-        </LinearLayout>
-
-        <!-- Event blocks container -->
-        <LinearLayout
-            android:id="@+id/eventContainer"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginTop="2dp">
-
-            <!-- Event block 1 -->
-            <TextView
-                android:id="@+id/tvEvent1"
-                android:layout_width="match_parent"
-                android:layout_height="14dp"
-                android:text="Gym"
-                android:textColor="#FFFFFF"
-                android:textSize="8sp"
-                android:background="#4CAF50"
-                android:paddingHorizontal="4dp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:visibility="gone"
-                android:layout_marginBottom="1dp" />
-
-            <!-- Event block 2 -->
-            <TextView
-                android:id="@+id/tvEvent2"
-                android:layout_width="match_parent"
-                android:layout_height="14dp"
-                android:text="Meeting"
-                android:textColor="#FFFFFF"
-                android:textSize="8sp"
-                android:background="#E91E63"
-                android:paddingHorizontal="4dp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:visibility="gone"
-                android:layout_marginBottom="1dp" />
-
-            <!-- Event block 3 -->
-            <TextView
-                android:id="@+id/tvEvent3"
-                android:layout_width="match_parent"
-                android:layout_height="14dp"
-                android:text="Lunch"
-                android:textColor="#FFFFFF"
-                android:textSize="8sp"
-                android:background="#2196F3"
-                android:paddingHorizontal="4dp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:visibility="gone"
-                android:layout_marginBottom="1dp" />
-
-            <!-- More events indicator -->
-            <TextView
-                android:id="@+id/tvMoreEvents"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+2 more"
-                android:textColor="#9E9E9E"
-                android:textSize="9sp"
-                android:visibility="gone"
-                android:layout_marginTop="2dp" />
-        </LinearLayout>
+            android:id="@+id/viewEventDot"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="@drawable/bg_timeline_dot"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
-    <!-- Weekend dimming -->
+    <!-- Today circle overlay (hidden by default) -->
     <View
-        android:id="@+id/viewDimmed"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#00000000"
-        android:visibility="gone" />
+        android:id="@+id/viewTodayCircle"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_day_today"
+        android:visibility="gone"/>
+
+    <!-- Selected circle overlay (hidden by default) -->
+    <View
+        android:id="@+id/viewSelectedCircle"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_day_selected"
+        android:visibility="gone"/>
 
 </FrameLayout>

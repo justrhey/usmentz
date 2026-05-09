@@ -1,15 +1,21 @@
-*.iml
+# Gradle
 .gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+build
+
+# IDE
+*.iml
+.idea/
+*.ipr
+*.iws
 .DS_Store
-/build
+
+# Local configuration - API keys
+local.properties
+api-keys.properties
+secrets.properties
+*.properties
+
+# Build outputs
 /captures
 .externalNativeBuild
 .cxx
-local.properties

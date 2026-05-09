@@ -3,7 +3,6 @@ package com.example.usmentz;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,9 +31,6 @@ public class ReviewsActivity extends AppCompatActivity {
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy", Locale.getDefault());
 
-    // Floating navbar clickable areas
-    private LinearLayout navHome, navCalendar, navReviews, navFavorites;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,39 +38,36 @@ public class ReviewsActivity extends AppCompatActivity {
 
         dateViewModel = new ViewModelProvider(this).get(DateViewModel.class);
 
-        // Toolbar
+        // Toolbar with back button only
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("");
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        // RecyclerView
-        recyclerView    = findViewById(R.id.rvReviews);
-        emptyState      = findViewById(R.id.emptyStateLayout);
-        tvEmptyTitle    = findViewById(R.id.emptyStateText);
+        // Views
+        recyclerView = findViewById(R.id.rvReviews);
+        emptyState = findViewById(R.id.emptyStateLayout);
+        tvEmptyTitle = findViewById(R.id.emptyStateText);
         tvEmptySubtitle = findViewById(R.id.emptyStateSubtext);
 
+        // Setup RecyclerView
         reviewAdapter = new ReviewAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(reviewAdapter);
 
+        // Click listener to go to detail
         reviewAdapter.setOnReviewClickListener(review -> {
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("moment_id", review.getMomentId());
-            startActivity(intent);
+            // Find the DateLocation for this review and open detail
+            dateViewModel.getDateById(review.getMomentId()).observe(this, moment -> {
+                if (moment != null) {
+                    Intent intent = new Intent(ReviewsActivity.this, DetailActivity.class);
+                    intent.putExtra("date_location", moment);
+                    startActivity(intent);
+                }
+            });
         });
-
-        // Floating navbar clickable areas
-        navHome       = findViewById(R.id.navHome);
-        navCalendar   = findViewById(R.id.navCalendar);
-        navReviews   = findViewById(R.id.navReviews);
-        navFavorites = findViewById(R.id.navFavorites);
-
-        // Setup click listeners for navbar
-        setupFloatingNavbar();
 
         // Observe and convert moments to reviews
         dateViewModel.getAllMoments().observe(this, moments -> {
@@ -90,7 +83,7 @@ public class ReviewsActivity extends AppCompatActivity {
                         Review review = new Review(
                                 m.getId(),
                                 m.getName(),
-                                m.getReview() != null ? m.getReview() : "No review text",
+                                m.getReview() != null ? m.getReview() : "",
                                 m.getRating(),
                                 m.getPhotoPath(),
                                 date
@@ -106,45 +99,11 @@ public class ReviewsActivity extends AppCompatActivity {
                 recyclerView.setVisibility(View.GONE);
                 emptyState.setVisibility(View.VISIBLE);
                 if (tvEmptyTitle != null) tvEmptyTitle.setText("No reviews yet");
-                if (tvEmptySubtitle != null) tvEmptySubtitle.setText("Add reviews or photos to moments to see them here");
+                if (tvEmptySubtitle != null) tvEmptySubtitle.setText("Add reviews to moments to see them here");
             } else {
                 recyclerView.setVisibility(View.VISIBLE);
                 emptyState.setVisibility(View.GONE);
             }
         });
-    }
-
-    // ── Floating navbar click listeners ───────────────────────────────────
-    private void setupFloatingNavbar() {
-        // Home - navigate to MainActivity
-        if (navHome != null) {
-            navHome.setOnClickListener(v -> {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-            });
-        }
-
-        // Calendar - navigate to CalendarActivity
-        if (navCalendar != null) {
-            navCalendar.setOnClickListener(v -> {
-                startActivity(new Intent(this, CalendarActivity.class));
-                finish();
-            });
-        }
-
-        // Reviews - stay on current activity
-        if (navReviews != null) {
-            navReviews.setOnClickListener(v -> {
-                // Already on ReviewsActivity
-            });
-        }
-
-        // Favorites - navigate to FavoritesActivity
-        if (navFavorites != null) {
-            navFavorites.setOnClickListener(v -> {
-                startActivity(new Intent(this, FavoritesActivity.class));
-                finish();
-            });
-        }
     }
 }

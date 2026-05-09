@@ -312,10 +312,10 @@ public class MainActivity extends AppCompatActivity {
             navFavorites.setOnClickListener(v -> navigateTo(FavoritesActivity.class));
         }
 
-        // Categories - stay on current activity
+        // Categories - switch back to categories view
         if (navCategories != null) {
             navCategories.setOnClickListener(v -> {
-                // Already on categories - do nothing
+                switchToCategoriesView();
             });
         }
 

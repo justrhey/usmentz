@@ -1,197 +1,318 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="#F8F7FF">
 
-    <!-- Clean Header - Month & Year same baseline -->
+    <!-- Header with Month & Year -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="bottom"
+        android:orientation="vertical"
         android:paddingHorizontal="20dp"
         android:paddingTop="20dp"
-        android:paddingBottom="8dp">
+        android:paddingBottom="16dp"
+        android:background="#FFFFFF">
 
-        <!-- Month - Large -->
-        <TextView
-            android:id="@+id/tvMonth"
-            android:layout_width="wrap_content"
+        <!-- Month and Year Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="July"
-            android:textColor="#212121"
-            android:textSize="32sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <!-- Year - Muted tone -->
-        <TextView
-            android:id="@+id/tvYear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2026"
-            android:textColor="#BDBDBD"
-            android:textSize="16sp"
-            android:layout_marginStart="4dp"
-            android:layout_marginBottom="4dp" />
+            <TextView
+                android:id="@+id/tvMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="July"
+                android:textColor="#1A1A1A"
+                android:textSize="32sp"
+                android:textStyle="bold"/>
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2026"
+                android:textColor="#BDBDBD"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="4dp"/>
 
-    <!-- Year Options - Inline row (slides open) -->
-    <LinearLayout
-        android:id="@+id/yearOptionsContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="8dp"
-        android:visibility="gone">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
-        <TextView android:layout_width="wrap_content" android:layout_height="36dp" android:text="2024" android:textColor="#757575" android:textSize="14sp" android:gravity="center" android:paddingHorizontal="12dp" android:background="?attr/selectableItemBackgroundBorderless" />
-        <TextView android:layout_width="wrap_content" android:layout_height="36dp" android:text="2025" android:textColor="#757575" android:textSize="14sp" android:gravity="center" android:paddingHorizontal="12dp" android:background="?attr/selectableItemBackgroundBorderless" />
-        <TextView android:layout_width="wrap_content" android:layout_height="36dp" android:text="2026" android:textColor="#9B5CFF" android:textSize="14sp" android:textStyle="bold" android:gravity="center" android:paddingHorizontal="12dp" android:background="@drawable/bg_year_selected" />
-        <TextView android:layout_width="wrap_content" android:layout_height="36dp" android:text="2027" android:textColor="#757575" android:textSize="14sp" android:gravity="center" android:paddingHorizontal="12dp" android:background="?attr/selectableItemBackgroundBorderless" />
-    </LinearLayout>
+            <!-- Today Button - Pill Style -->
+            <Button
+                android:id="@+id/btnToday"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="Today"
+                android:textColor="#9B5CFF"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:background="@drawable/bg_pill_purple"
+                android:paddingHorizontal="16dp"/>
 
-    <!-- Week Navigation - Bare icons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="12dp">
-
-        <ImageButton
-            android:id="@+id/btnPrevWeek"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_back"
-            android:rotation="180"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="#757575" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="This Week"
-            android:textColor="#9E9E9E"
-            android:textSize="12sp"
-            android:gravity="center" />
-
-        <ImageButton
-            android:id="@+id/btnNextWeek"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_back"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="#757575" />
-    </LinearLayout>
-
-    <!-- Day Columns -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingHorizontal="4dp">
-
-        <!-- MON -->
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:padding="4dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="MON" android:textColor="#9E9E9E" android:textSize="10sp" />
-            <TextView android:id="@+id/tvDay13" android:layout_width="44dp" android:layout_height="44dp" android:gravity="center" android:text="13" android:textColor="#212121" android:textSize="18sp" android:textStyle="bold" android:background="@drawable/bg_day_inactive" />
-        </LinearLayout>
-
-        <!-- TUE -->
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:padding="4dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TUE" android:textColor="#9E9E9E" android:textSize="10sp" />
-            <TextView android:id="@+id/tvDay14" android:layout_width="44dp" android:layout_height="44dp" android:gravity="center" android:text="14" android:textColor="#212121" android:textSize="18sp" android:textStyle="bold" android:background="@drawable/bg_day_active" />
-        </LinearLayout>
-
-        <!-- WED -->
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:padding="4dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="WED" android:textColor="#9E9E9E" android:textSize="10sp" />
-            <TextView android:id="@+id/tvDay15" android:layout_width="44dp" android:layout_height="44dp" android:gravity="center" android:text="15" android:textColor="#2196F3" android:textSize="18sp" android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- THU -->
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:padding="4dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="THU" android:textColor="#9E9E9E" android:textSize="10sp" />
-            <TextView android:id="@+id/tvDay16" android:layout_width="44dp" android:layout_height="44dp" android:gravity="center" android:text="16" android:textColor="#212121" android:textSize="18sp" android:textStyle="bold" android:background="@drawable/bg_day_inactive" />
-        </LinearLayout>
-
-        <!-- FRI -->
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:padding="4dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FRI" android:textColor="#9E9E9E" android:textSize="10sp" />
-            <TextView android:id="@+id/tvDay17" android:layout_width="44dp" android:layout_height="44dp" android:gravity="center" android:text="17" android:textColor="#212121" android:textSize="18sp" android:textStyle="bold" android:background="@drawable/bg_day_inactive" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <!-- Events Section - Live Data Only -->
-    <TextView
-        android:id="@+id/tvEventsHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Events"
-        android:textColor="#212121"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="24dp"
-        android:paddingBottom="12dp" />
-
-    <!-- Live Events RecyclerView -->
+    <!-- Calendar Grid - 7 columns -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvDayMoments"
+        android:id="@+id/rvCalendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:clipToPadding="false" />
+        android:layout_marginTop="90dp"
+        android:paddingHorizontal="8dp"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"
+        android:background="#FFFFFF"/>
 
-    <!-- Empty State -->
+    <!-- Month Navigation Buttons (Floating) -->
+    <ImageButton
+        android:id="@+id/btnPrevMonth"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_back"
+        android:background="@drawable/bg_circle_white"
+        android:elevation="4dp"
+        app:tint="#9B5CFF"/>
+
+    <ImageButton
+        android:id="@+id/btnNextMonth"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="28dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_back"
+        android:rotation="180"
+        android:background="@drawable/bg_circle_white"
+        android:elevation="4dp"
+        app:tint="#9B5CFF"/>
+
+    <!-- Bottom Sheet - Selected Day Events (Glassmorphism) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardDayEvents"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="bottom"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="100dp"
+        app:cardBackgroundColor="#E6FFFFFF"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Selected Date Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/tvSelectedDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="July 15, 2026"
+                    android:textColor="#1A1A1A"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvDayTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 moments"
+                    android:textColor="#9B5CFF"
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
+
+            <!-- Moments List -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvDayMoments"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <!-- Empty State -->
+            <TextView
+                android:id="@+id/tvNoMomentsDay"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="No moments on this day"
+                android:textColor="#BDBDBD"
+                android:textSize="14sp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Hint -->
     <TextView
-        android:id="@+id/tvNoMomentsDay"
+        android:id="@+id/tvCalendarHint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No events today"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="420dp"
+        android:text="Tap a date to see events"
         android:textColor="#BDBDBD"
         android:textSize="14sp"
-        android:gravity="center"
-        android:padding="32dp"
-        android:visibility="gone" />
+        android:gravity="center"/>
 
-    <!-- FAB -->
+    <!-- FAB on the right -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
         android:src="@drawable/ic_add"
         android:contentDescription="Add"
-        app:backgroundTint="#212121"
-        app:tint="#FFFFFF" />
+        app:backgroundTint="#9B5CFF"
+        app:tint="#FFFFFF"
+        app:fabSize="normal"
+        app:elevation="16dp"/>
 
-    <!-- Hidden for compatibility -->
-    <ImageButton android:id="@+id/btnPrevMonth" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <ImageButton android:id="@+id/btnNextMonth" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <ImageButton android:id="@+id/btnPrevYear" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <ImageButton android:id="@+id/btnNextYear" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <Button android:id="@+id/btnToday" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvCalendar" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvWeek" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <TextView android:id="@+id/tvCalendarHint" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <TextView android:id="@+id/tvSelectedDate" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <TextView android:id="@+id/tvDayTotal" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <LinearLayout android:id="@+id/emptyState" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <com.google.android.material.card.MaterialCardView android:id="@+id/floatingNavbarContainer" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <com.google.android.material.appbar.MaterialToolbar android:id="@+id/toolbar" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <com.google.android.material.appbar.AppBarLayout android:id="@+id/appBarLayout" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <androidx.cardview.widget.CardView android:id="@+id/cardDayEvents" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvDayExpenses" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <TextView android:id="@+id/tvNoExpensesDay" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+    <!-- Floating Pill Navbar (Same as Home) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/floatingNavbarContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="#F2FFFFFF"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="8dp">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+
+            <!-- Home -->
+            <LinearLayout
+                android:id="@+id/navHome"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_home"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textSize="9sp"
+                    android:textColor="#9E9E9E"/>
+            </LinearLayout>
+
+            <!-- Categories -->
+            <LinearLayout
+                android:id="@+id/navCategories"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_category"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Categories"
+                    android:textSize="9sp"
+                    android:textColor="#9E9E9E"/>
+            </LinearLayout>
+
+            <!-- Reviews -->
+            <LinearLayout
+                android:id="@+id/navReviews"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_star"
+                    app:tint="#9E9E9E"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reviews"
+                    android:textSize="9sp"
+                    android:textColor="#9E9E9E"/>
+            </LinearLayout>
+
+            <!-- Calendar -->
+            <LinearLayout
+                android:id="@+id/navCalendar"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="#9B5CFF"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"
+                    android:textSize="9sp"
+                    android:textColor="#9B5CFF"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Hidden for Java compatibility -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
 }
@@ -5,7 +7,13 @@ plugins {
 android {
     namespace = "com.example.usmentz"
     compileSdk = 34
-    buildToolsVersion = "34.0.0"  // Add this line
+
+    // Load API keys from properties file
+    val localFile = file("api-keys.properties")
+    val apiKeys = Properties()
+    if (localFile.exists()) {
+        localFile.inputStream().use { apiKeys.load(it) }
+    }
 
     defaultConfig {
         applicationId = "com.example.usmentz"
@@ -13,6 +21,9 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        // Inject API key into manifest
+        manifestPlaceholders["MAPS_API_KEY"] = apiKeys.getProperty("MAPS_API_KEY", "")
     }
 
     buildTypes {
@@ -45,6 +56,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata:2.7.0")
     implementation("androidx.lifecycle:lifecycle-common-java8:2.7.0")
+
+    // Google Maps
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
+    // Charts
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

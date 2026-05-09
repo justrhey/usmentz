@@ -1,58 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#F8F7FF"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:paddingBottom="32dp">
 
-        <!-- BACK BUTTON - Bare, no card -->
+        <!-- TOP BAR -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
 
-        <!-- PROFILE CARD - Full width, image left, stacked text right -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Moment Detail"
+                android:textColor="#1A1A1A"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"/>
+
+        </LinearLayout>
+
+        <!-- PROFILE CARD -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginTop="8dp"
-            app:cardBackgroundColor="#F5F5F5"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="20dp"
-            app:cardElevation="0dp">
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#F5F5F5"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:padding="16dp">
 
-                <!-- Image -->
                 <ImageView
                     android:id="@+id/ivProfile"
-                    android:layout_width="88dp"
-                    android:layout_height="88dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:scaleType="centerCrop"
-                    android:background="@drawable/bg_icon_square"/>
+                    android:background="@drawable/bg_icon_purple"
+                    android:src="@drawable/ic_photo"
+                    android:padding="16dp"
+                    app:tint="#9B5CFF"
+                    android:contentDescription="Moment image"/>
 
-                <!-- Stacked Text -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:layout_marginStart="16dp">
+                    android:layout_marginStart="14dp">
 
                     <TextView
                         android:id="@+id/tvMomentName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Moment Name"
-                        android:textColor="#212121"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textColor="#1A1A1A"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
 
                     <TextView
                         android:id="@+id/tvDate"
@@ -60,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:text="Date"
                         android:textColor="#9E9E9E"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:layout_marginTop="4dp"/>
 
                     <TextView
@@ -68,273 +94,386 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Category"
-                        android:textColor="#9B5CFF"
-                        android:textSize="12sp"
+                        android:textColor="#7C3AED"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/bg_badge_purple"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="3dp"
+                        android:paddingBottom="3dp"
                         android:layout_marginTop="8dp"/>
 
                 </LinearLayout>
 
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- STAT ROW - On surface with divider, no card -->
+        <!-- STAT ROW -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeColor="#F0EEF9"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/tvRatingNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4.8"
+                        android:textColor="#1A1A1A"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rating"
+                        android:textColor="#9E9E9E"
+                        android:textSize="11sp"
+                        android:layout_marginTop="2dp"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="40dp"
+                    android:background="#EEEEEE"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/tvExperience"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12"
+                        android:textColor="#1A1A1A"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Experience"
+                        android:textColor="#9E9E9E"
+                        android:textSize="11sp"
+                        android:layout_marginTop="2dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- EXPENSES AND FUNDS CARDS -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="24dp"
-            android:gravity="center_vertical">
+            android:layout_marginBottom="16dp">
 
-            <!-- Rating -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/tvRatingNumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="#212121"
-                    android:textSize="24sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rating"
-                    android:textColor="#9E9E9E"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-
-            <!-- Hairline Divider -->
-            <View
-                android:layout_width="1dp"
-                android:layout_height="40dp"
-                android:background="#E0E0E0"/>
-
-            <!-- Experience -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/tvExperience"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="#212121"
-                    android:textSize="24sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Experience"
-                    android:textColor="#9E9E9E"
-                    android:textSize="12sp"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- TWO-COLUMN CARD - Expenses and Funds -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="24dp"
-            android:weightSum="2">
-
-            <!-- Expenses Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                app:cardBackgroundColor="#FFFFFF"
+                android:layout_marginEnd="6dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeColor="#F0EEF9"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Expenses"
                         android:textColor="#9E9E9E"
-                        android:textSize="12sp"/>
+                        android:textSize="11sp"/>
 
                     <TextView
                         android:id="@+id/tvFees"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="₱0"
-                        android:textColor="#F44336"
+                        android:textColor="#E74C3C"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp"/>
+
                 </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Funds Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                app:cardBackgroundColor="#FFFFFF"
+                android:layout_marginStart="6dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp">
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeColor="#F0EEF9"
+                app:strokeWidth="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Funds"
                         android:textColor="#9E9E9E"
-                        android:textSize="12sp"/>
+                        android:textSize="11sp"/>
 
                     <TextView
                         android:id="@+id/tvAvailability"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="₱0"
-                        android:textColor="#4CAF50"
+                        android:textColor="#27AE60"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp"/>
+
                 </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
-        <!-- THREE ICON BUTTONS - Bare in a row -->
+        <!-- ACTION BUTTONS ROW -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginTop="24dp">
+            android:layout_marginBottom="24dp">
 
-            <ImageView
-                android:id="@+id/btnFavorite"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_favorite"
-                android:padding="12dp"
-                app:tint="#9B5CFF"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="20dp">
 
-            <ImageView
-                android:id="@+id/btnShare"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_share"
-                android:padding="12dp"
-                android:layout_marginHorizontal="16dp"
-                app:tint="#9B5CFF"/>
+                <ImageView
+                    android:id="@+id/btnFavorite"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_icon_purple"
+                    android:src="@drawable/ic_favorite"
+                    android:padding="14dp"
+                    app:tint="#9B5CFF"
+                    android:contentDescription="Favorite"/>
 
-            <ImageView
-                android:id="@+id/btnEdit"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_edit"
-                android:padding="12dp"
-                app:tint="#9B5CFF"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Favorite"
+                    android:textColor="#9E9E9E"
+                    android:textSize="10sp"
+                    android:layout_marginTop="6dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="20dp">
+
+                <ImageView
+                    android:id="@+id/btnShare"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_icon_purple"
+                    android:src="@drawable/ic_share"
+                    android:padding="14dp"
+                    app:tint="#9B5CFF"
+                    android:contentDescription="Share"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Share"
+                    android:textColor="#9E9E9E"
+                    android:textSize="10sp"
+                    android:layout_marginTop="6dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/btnEdit"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_icon_purple"
+                    android:src="@drawable/ic_edit"
+                    android:padding="14dp"
+                    app:tint="#9B5CFF"
+                    android:contentDescription="Edit"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit"
+                    android:textColor="#9E9E9E"
+                    android:textSize="10sp"
+                    android:layout_marginTop="6dp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- MAP CARD - Full edge to edge in rounded container -->
+        <!-- SECTION LABEL: Location -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Location"
-            android:textColor="#212121"
-            android:textSize="14sp"
+            android:text="LOCATION"
+            android:textColor="#9B5CFF"
+            android:textSize="11sp"
             android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"/>
+            android:letterSpacing="0.08"
+            android:layout_marginBottom="10dp"/>
 
+        <!-- GOOGLE MAPS CARD -->
+        <!-- NOTE: SupportMapFragment cannot be nested inside a ScrollView directly.
+             Use a FrameLayout as a container and add the fragment programmatically
+             in your Activity/Fragment using getSupportFragmentManager().
+             See MomentDetailActivity.java for the fragment transaction. -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="20dp"
-            app:cardElevation="0dp">
+            app:cardElevation="0dp"
+            app:strokeColor="#F0EEF9"
+            app:strokeWidth="1dp">
 
+            <!-- This FrameLayout is the container for SupportMapFragment.
+                 In your Activity, call:
+                 SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+                 getSupportFragmentManager()
+                     .beginTransaction()
+                     .replace(R.id.mapContainer, mapFragment)
+                     .commit();
+                 mapFragment.getMapAsync(this); -->
             <FrameLayout
+                android:id="@+id/mapContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"/>
 
-                <!-- Map placeholder - shows pin location -->
-                <ImageView
-                    android:id="@+id/ivMap"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:background="#F5F5F5"
-                    android:src="@drawable/ic_location"
-                    android:padding="48dp"
-                    app:tint="#757575"/>
-
-                <!-- Pin overlay -->
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_location"
-                    app:tint="#212121"/>
-
-                <TextView
-                    android:id="@+id/tvAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_marginBottom="16dp"
-                    android:text="Address"
-                    android:textColor="#212121"
-                    android:textSize="12sp"
-                    android:background="#FFFFFF"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp"/>
-            </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- SECTION LABEL - Bare outside -->
+        <!-- Address pill shown below the map -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_badge_purple"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:layout_marginBottom="24dp">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_location"
+                app:tint="#7C3AED"
+                android:layout_marginEnd="6dp"
+                android:contentDescription="Location pin"/>
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textColor="#7C3AED"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <!-- SECTION LABEL: Description -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Description"
-            android:textColor="#212121"
-            android:textSize="14sp"
+            android:text="DESCRIPTION"
+            android:textColor="#9B5CFF"
+            android:textSize="11sp"
             android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"/>
+            android:letterSpacing="0.08"
+            android:layout_marginBottom="10dp"/>
 
-        <!-- TIME PILLS GRID - 3-column layout -->
-        <TextView
-            android:id="@+id/tvDescription"
+        <!-- DESCRIPTION CARD -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="No description"
-            android:textColor="#212121"
-            android:textSize="14sp"
-            android:lineSpacingMultiplier="1.4"/>
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:strokeColor="#F0EEF9"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No description available."
+                android:textColor="#424242"
+                android:textSize="13sp"
+                android:lineSpacingMultiplier="1.6"
+                android:padding="16dp"/>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
+
 </androidx.core.widget.NestedScrollView>
