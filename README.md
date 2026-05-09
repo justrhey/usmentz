@@ -26,7 +26,7 @@ A mobile application for organizing and tracking your special moments and experi
 ### Data & Architecture
 | Feature | Description |
 |---|---|
-| [icon] Room Database v16 | SQLite persistence with automatic schema migration |
+| [icon] Room Database v17 | SQLite persistence with automatic schema migration |
 | [icon] MVVM + Repository Pattern | Clean separation of UI, logic, and data layers |
 | [icon] LiveData Observers | Reactive UI updates across all screens |
 | [icon] Groovy DSL Build Scripts | Traditional .gradle format instead of Kotlin DSL |

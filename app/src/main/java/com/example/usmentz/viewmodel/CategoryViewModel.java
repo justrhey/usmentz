@@ -34,4 +34,8 @@ public class CategoryViewModel extends AndroidViewModel {
     public void delete(Category category) {
         repository.delete(category);
     }
+
+    public void syncFromFirestore(Runnable onComplete) {
+        repository.syncFromFirestore(onComplete);
+    }
 }

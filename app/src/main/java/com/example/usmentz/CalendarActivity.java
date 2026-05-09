@@ -33,12 +33,16 @@ public class CalendarActivity extends AppCompatActivity {
 
     private DateViewModel dateViewModel;
 
-    private TextView tvMonth, tvYear, tvSelectedDate, tvDayTotal;
-    private TextView tvNoMomentsDay, tvCalendarHint;
+    private TextView tvMonth, tvYear, tvNavLabel;
+    private TextView tvSelectedDate, tvDayTotal;
+    private TextView tvNoMomentsDay;
     private RecyclerView rvCalendar, rvDayMoments;
-    private View cardDayEvents, fabAdd;
+    private View cardDayEvents, cardGrid;
+    private View fabAdd;
     private View navHome, navCategories, navReviews;
-    private ImageButton btnProfile;
+    private View btnPrevMonth, btnNextMonth, btnAdd;
+    private View segList, segGrid, segBoard, segCalendar;
+    private ImageButton btnFilter, btnSort, btnAnalytics;
 
     private CalendarAdapter calendarAdapter;
     private DateAdapter momentsAdapter;
@@ -47,11 +51,14 @@ public class CalendarActivity extends AppCompatActivity {
     private CalendarDay selectedDay = null;
 
     private final SimpleDateFormat monthFmt = new SimpleDateFormat("MMMM", Locale.getDefault());
+    private final SimpleDateFormat yearFmt = new SimpleDateFormat("yyyy", Locale.getDefault());
+    private final SimpleDateFormat navFmt = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     private final SimpleDateFormat dayFmt = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
     private final SimpleDateFormat keyFmt = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     private List<DateLocation> allMoments = new ArrayList<>();
     private boolean dataLoaded = false;
+    private int currentViewMode = 3; // Calendar = 3
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +76,25 @@ public class CalendarActivity extends AppCompatActivity {
     private void initViews() {
         tvMonth = findViewById(R.id.tvMonth);
         tvYear = findViewById(R.id.tvYear);
+        tvNavLabel = findViewById(R.id.tvNavLabel);
         tvSelectedDate = findViewById(R.id.tvSelectedDate);
         tvDayTotal = findViewById(R.id.tvDayTotal);
         tvNoMomentsDay = findViewById(R.id.tvNoMomentsDay);
-        tvCalendarHint = findViewById(R.id.tvCalendarHint);
         cardDayEvents = findViewById(R.id.cardDayEvents);
+        cardGrid = findViewById(R.id.cardGrid);
         rvCalendar = findViewById(R.id.rvCalendar);
         rvDayMoments = findViewById(R.id.rvDayMoments);
         fabAdd = findViewById(R.id.fabAdd);
+        btnPrevMonth = findViewById(R.id.btnPrevMonth);
+        btnNextMonth = findViewById(R.id.btnNextMonth);
+        btnAdd = findViewById(R.id.btnAdd);
+        btnFilter = findViewById(R.id.btnFilter);
+        btnSort = findViewById(R.id.btnSort);
+        btnAnalytics = findViewById(R.id.btnAnalytics);
+        segList = findViewById(R.id.segList);
+        segGrid = findViewById(R.id.segGrid);
+        segBoard = findViewById(R.id.segBoard);
+        segCalendar = findViewById(R.id.segCalendar);
     }
 
     private void setupCalendar() {
@@ -93,10 +111,9 @@ public class CalendarActivity extends AppCompatActivity {
         rvDayMoments.setLayoutManager(new LinearLayoutManager(this));
         rvDayMoments.setAdapter(momentsAdapter);
 
-        // Day click
         calendarAdapter.setOnDayClickListener(day -> {
-            if (day.getDay() == 0) return; // Empty cell
-            
+            if (day.getDay() == 0) return;
+
             if (selectedDay != null) selectedDay.setSelected(false);
             day.setSelected(true);
             selectedDay = day;
@@ -109,19 +126,17 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         // Month navigation
-        findViewById(R.id.btnPrevMonth).setOnClickListener(v -> {
+        btnPrevMonth.setOnClickListener(v -> {
             currentMonth.add(Calendar.MONTH, -1);
             selectedDay = null;
-            cardDayEvents.setVisibility(View.GONE);
-            tvCalendarHint.setVisibility(View.VISIBLE);
+            hideDayEvents();
             updateCalendarDisplay();
         });
 
-        findViewById(R.id.btnNextMonth).setOnClickListener(v -> {
+        btnNextMonth.setOnClickListener(v -> {
             currentMonth.add(Calendar.MONTH, 1);
             selectedDay = null;
-            cardDayEvents.setVisibility(View.GONE);
-            tvCalendarHint.setVisibility(View.VISIBLE);
+            hideDayEvents();
             updateCalendarDisplay();
         });
 
@@ -129,21 +144,45 @@ public class CalendarActivity extends AppCompatActivity {
         ((Button) findViewById(R.id.btnToday)).setOnClickListener(v -> {
             currentMonth.setTimeInMillis(System.currentTimeMillis());
             selectedDay = null;
-            cardDayEvents.setVisibility(View.GONE);
-            tvCalendarHint.setVisibility(View.VISIBLE);
+            hideDayEvents();
             updateCalendarDisplay();
         });
+
+        // Add button
+        btnAdd.setOnClickListener(v -> showAddMomentDialog());
 
         // FAB
         if (fabAdd != null) {
             fabAdd.setOnClickListener(v -> showAddMomentDialog());
         }
 
+        // Segmented control - view modes
+        segList.setOnClickListener(v -> switchViewMode(0));
+        segGrid.setOnClickListener(v -> switchViewMode(1));
+        segBoard.setOnClickListener(v -> switchViewMode(2));
+        segCalendar.setOnClickListener(v -> switchViewMode(3));
+
+        // Filter, Sort, Analytics buttons
+        if (btnFilter != null) {
+            btnFilter.setOnClickListener(v -> {
+                // TODO: Filter action
+            });
+        }
+        if (btnSort != null) {
+            btnSort.setOnClickListener(v -> {
+                // TODO: Sort action
+            });
+        }
+        if (btnAnalytics != null) {
+            btnAnalytics.setOnClickListener(v -> {
+                // TODO: Analytics action
+            });
+        }
+
         // Navbar
         navHome = findViewById(R.id.navHome);
         navCategories = findViewById(R.id.navCategories);
         navReviews = findViewById(R.id.navReviews);
-        btnProfile = findViewById(R.id.btnProfile);
 
         if (navHome != null) {
             navHome.setOnClickListener(v -> {
@@ -163,18 +202,43 @@ public class CalendarActivity extends AppCompatActivity {
                 finish();
             });
         }
+    }
 
-        if (btnProfile != null) {
-            btnProfile.setOnClickListener(v -> {
-                startActivity(new Intent(this, ProfileActivity.class));
-                finish();
-            });
+    private void switchViewMode(int mode) {
+        currentViewMode = mode;
+        updateSegmentedControl();
+    }
+
+    private void updateSegmentedControl() {
+        // Reset all to inactive
+        segList.setBackgroundResource(R.drawable.bg_segment_item);
+        segGrid.setBackgroundResource(R.drawable.bg_segment_item);
+        segBoard.setBackgroundResource(R.drawable.bg_segment_item);
+        segCalendar.setBackgroundResource(R.drawable.bg_segment_item);
+
+        ((TextView) segList).setTextColor(getColor(R.color.text_secondary));
+        ((TextView) segGrid).setTextColor(getColor(R.color.text_secondary));
+        ((TextView) segBoard).setTextColor(getColor(R.color.text_secondary));
+        ((TextView) segCalendar).setTextColor(getColor(R.color.text_secondary));
+
+        // Set active
+        View activeTab;
+        switch (currentViewMode) {
+            case 0: activeTab = segList; break;
+            case 1: activeTab = segGrid; break;
+            case 2: activeTab = segBoard; break;
+            default: activeTab = segCalendar; break;
         }
+        activeTab.setBackgroundResource(R.drawable.bg_segment_item_active);
+        ((TextView) activeTab).setTextColor(getColor(android.R.color.white));
+    }
+
+    private void hideDayEvents() {
+        if (cardDayEvents != null) cardDayEvents.setVisibility(View.GONE);
     }
 
     private void showAddMomentDialog() {
         AddMomentDialog dialog = AddMomentDialog.newInstance(() -> {
-            // Refresh data
             loadData();
         });
         dialog.show(getSupportFragmentManager(), "AddMomentDialog");
@@ -192,11 +256,14 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void updateCalendarDisplay() {
         tvMonth.setText(monthFmt.format(currentMonth.getTime()));
-        tvYear.setText(String.valueOf(currentMonth.get(Calendar.YEAR)));
+        tvYear.setText(yearFmt.format(currentMonth.getTime()));
+        tvNavLabel.setText(navFmt.format(currentMonth.getTime()));
 
         if (dataLoaded) {
             buildGrid();
         }
+
+        updateSegmentedControl();
     }
 
     private void buildGrid() {
@@ -209,33 +276,30 @@ public class CalendarActivity extends AppCompatActivity {
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         String todayStr = keyFmt.format(Calendar.getInstance().getTime());
 
-        // Build moment dates map
-        Map<String, Boolean> momentDateMap = new HashMap<>();
+        // Build moment dates map - only track moments, not full objects
+        Map<String, String> momentLabelMap = new HashMap<>();
         for (DateLocation moment : allMoments) {
             if (moment.getDate() != null) {
-                momentDateMap.put(keyFmt.format(moment.getDate()), true);
+                momentLabelMap.put(keyFmt.format(moment.getDate()), moment.getName());
             }
         }
 
         List<CalendarDay> days = new ArrayList<>();
 
-        // Empty cells before first day
         for (int i = 0; i < leadingDays; i++) {
             days.add(new CalendarDay(0, null));
         }
 
-        // Actual days
         for (int d = 1; d <= daysInMonth; d++) {
             Calendar dayCal = (Calendar) currentMonth.clone();
             dayCal.set(Calendar.DAY_OF_MONTH, d);
-
             String key = keyFmt.format(dayCal.getTime());
 
             CalendarDay cd = new CalendarDay(d, dayCal);
-            cd.setHasMoment(momentDateMap.containsKey(key));
+            cd.setHasMoment(momentLabelMap.containsKey(key));
+            cd.setMomentLabel(momentLabelMap.get(key));
             cd.setToday(key.equals(todayStr));
 
-            // Check if this was previously selected
             if (selectedDay != null && selectedDay.getDay() == d &&
                     selectedDay.getDate() != null &&
                     selectedDay.getDate().get(Calendar.MONTH) == currentMonth.get(Calendar.MONTH) &&
@@ -255,7 +319,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         tvSelectedDate.setText(dayFmt.format(day.getDate().getTime()));
         cardDayEvents.setVisibility(View.VISIBLE);
-        tvCalendarHint.setVisibility(View.GONE);
 
         String dayKey = keyFmt.format(day.getDate().getTime());
 
@@ -271,12 +334,10 @@ public class CalendarActivity extends AppCompatActivity {
         if (dayMoments.isEmpty()) {
             tvNoMomentsDay.setVisibility(View.VISIBLE);
             rvDayMoments.setVisibility(View.GONE);
-            tvDayTotal.setText("₱0.00");
+            tvDayTotal.setText("0 moments");
         } else {
             tvNoMomentsDay.setVisibility(View.GONE);
             rvDayMoments.setVisibility(View.VISIBLE);
-
-            // Calculate total (simplified)
             tvDayTotal.setText(dayMoments.size() + " moment" + (dayMoments.size() > 1 ? "s" : ""));
         }
     }
@@ -284,8 +345,6 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Calendar data auto-refreshes via LiveData observer
-        // Just rebuild the grid to update any date indicators
         if (dataLoaded) {
             updateCalendarDisplay();
         }

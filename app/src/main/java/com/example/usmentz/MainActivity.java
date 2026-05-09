@@ -369,15 +369,14 @@ public class MainActivity extends AppCompatActivity {
         
         categoriesRecyclerView.setVisibility(View.GONE);
         btnAddCategory.setVisibility(View.GONE);
-        fabAdd.setVisibility(View.VISIBLE);
+        if (fabAdd != null) fabAdd.setVisibility(View.VISIBLE);
         hideEmptyState();
 
         dateViewModel.setCurrentCategory(currentCategoryId);
 
         // Update the custom title TextView — NOT toolbar.setTitle()
         if (tvToolbarTitle != null) tvToolbarTitle.setText(category.getName());
-        toolbar.setNavigationIcon(getDrawable(R.drawable.ic_back));
-        fabAdd.setVisibility(View.VISIBLE);
+        if (toolbar != null) toolbar.setNavigationIcon(getDrawable(R.drawable.ic_back));
     }
 
     private void switchToCategoriesView() {
@@ -389,8 +388,8 @@ public class MainActivity extends AppCompatActivity {
         momentsRecyclerView.setVisibility(View.GONE);
         categoriesRecyclerView.setVisibility(View.VISIBLE);
         btnAddCategory.setVisibility(View.VISIBLE);
-        fabAdd.setVisibility(View.VISIBLE);
-        toolbar.setNavigationIcon(null);
+        if (fabAdd != null) fabAdd.setVisibility(View.VISIBLE);
+        if (toolbar != null) toolbar.setNavigationIcon(null);
 
         // Restore custom title to "Usmentz"
         if (tvToolbarTitle != null) tvToolbarTitle.setText("Usmentz");
@@ -430,15 +429,15 @@ public class MainActivity extends AppCompatActivity {
         // Show header back
         if (appBarLayout != null) appBarLayout.setVisibility(View.VISIBLE);
         if (momentsHeader != null) momentsHeader.setVisibility(View.GONE);
-        
+
         momentsRecyclerView.setVisibility(View.GONE);
         categoriesRecyclerView.setVisibility(View.VISIBLE);
         btnAddCategory.setVisibility(View.VISIBLE);
-        fabAdd.setVisibility(View.VISIBLE);
+        if (fabAdd != null) fabAdd.setVisibility(View.VISIBLE);
         isInMomentsMode= false;
         currentView    = VIEW_CATEGORIES;
 
-        toolbar.setNavigationIcon(null);
+        if (toolbar != null) toolbar.setNavigationIcon(null);
         // Restore custom title — NOT toolbar.setTitle()
         if (tvToolbarTitle != null) tvToolbarTitle.setText("Usmentz");
 
@@ -595,11 +594,11 @@ public class MainActivity extends AppCompatActivity {
 
             categoriesRecyclerView.setVisibility(View.GONE);
             btnAddCategory.setVisibility(View.GONE);
-            fabAdd.setVisibility(View.VISIBLE);
+            if (fabAdd != null) fabAdd.setVisibility(View.VISIBLE);
 
             // Update custom title — NOT toolbar.setTitle()
             if (tvToolbarTitle != null) tvToolbarTitle.setText(savedName);
-            toolbar.setNavigationIcon(getDrawable(R.drawable.ic_back));
+            if (toolbar != null) toolbar.setNavigationIcon(getDrawable(R.drawable.ic_back));
         } else {
             switchToCategoriesView();
         }

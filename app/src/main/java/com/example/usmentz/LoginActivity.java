@@ -70,24 +70,28 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
     }
 
-    private void setupBottomSheet() {
+private void setupBottomSheet() {
         View slideCard = findViewById(R.id.slideCard);
         bottomSheetBehavior = BottomSheetBehavior.from(slideCard);
 
-        // Start fully expanded so the full form is visible
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        // Peek at header area only (180dp) - shows the drag handle and "Welcome Back"
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
+        // Cannot be fully hidden - sheet always stays visible
+        bottomSheetBehavior.setHideable(false);
+
+        // Drag down to minimize, drag up to expand full form
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                    finish();
-                }
+                // STATE_COLLAPSED = showing header only (180dp)
+                // STATE_EXPANDED = showing full form
+                // Never hidden - always visible at minimum
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                // Natural slide - no backdrop needed since background stays visible
+                // Natural slide - no extra effects
             }
         });
     }
@@ -138,15 +142,6 @@ public class LoginActivity extends AppCompatActivity {
         tvForgotPassword.setOnClickListener(v -> {
             showForgotPasswordDialog();
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     private void showForgotPasswordDialog() {

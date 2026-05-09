@@ -9,6 +9,7 @@ public class CalendarDay {
     private boolean hasExpense;
     private boolean isSelected;
     private boolean isToday;
+    private String momentLabel;
 
     public CalendarDay(int day, Calendar date) {
         this.day  = day;
@@ -26,4 +27,6 @@ public class CalendarDay {
     public void setHasExpense(boolean v) { hasExpense = v; }
     public void setSelected(boolean v)   { isSelected = v; }
     public void setToday(boolean v)      { isToday    = v; }
+    public void setMomentLabel(String v) { momentLabel = v; }
+    public String getMomentLabel()        { return momentLabel; }
 }

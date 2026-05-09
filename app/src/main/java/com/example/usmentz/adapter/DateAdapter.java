@@ -174,7 +174,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         private RatingBar ratingBar;
         private ImageView tvReview;
         private ImageView btnDelete;
-        private View cardView; // Now a LinearLayout wrapper
 
         public DateViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -186,7 +185,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
             ratingBar = itemView.findViewById(R.id.ratingBar);
             tvReview = itemView.findViewById(R.id.tvReview);
             btnDelete = itemView.findViewById(R.id.btnDelete);
-            cardView = itemView; // Now the root LinearLayout
 
             // Item click listener
             itemView.setOnClickListener(v -> {

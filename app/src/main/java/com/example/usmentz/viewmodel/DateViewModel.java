@@ -57,15 +57,15 @@ public class DateViewModel extends AndroidViewModel {
         repository.updateCategoryForMoments(oldCategoryId, newCategoryId);
     }
 
-    // Add this method for ReviewActivity
     public LiveData<DateLocation> getDateById(int dateId) {
         return repository.getDateById(dateId);
     }
 
-
-
-    // Add this method for ReviewActivity
     public void updateReview(int dateId, String review, float rating, String photoPath) {
         repository.updateReview(dateId, review, rating, photoPath);
+    }
+
+    public void syncFromFirestore(Runnable onComplete) {
+        repository.syncFromFirestore(onComplete);
     }
 }

@@ -150,6 +150,10 @@ public class HomeActivity extends AppCompatActivity {
         dateViewModel = new ViewModelProvider(this).get(DateViewModel.class);
         expenseViewModel = new ViewModelProvider(this).get(ExpenseViewModel.class);
 
+        // Sync data from Firestore on login (Room stays source of truth, Firestore adds cloud backup)
+        categoryViewModel.syncFromFirestore(null);
+        dateViewModel.syncFromFirestore(null);
+
         // Observe all moments for recent activity
         dateViewModel.getAllMoments().observe(this, dates -> {
             if (dates != null && recentAdapter != null) {

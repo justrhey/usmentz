@@ -29,7 +29,7 @@ public interface CategoryDao {
     LiveData<Category> getCategoryById(int id);
 
     @Query("SELECT * FROM categories WHERE id = :id")
-    Category getCategorySync(int id);
+    Category getCategoryByIdSync(int id);
 
     @Query("UPDATE categories SET itemCount = :count WHERE id = :categoryId")
     void updateItemCount(int categoryId, int count);

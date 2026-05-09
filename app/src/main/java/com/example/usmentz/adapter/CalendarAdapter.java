@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.usmentz.R;
@@ -25,9 +26,37 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
 
     public void setOnDayClickListener(OnDayClickListener l) { this.listener = l; }
 
-    public void setDays(List<CalendarDay> days) {
-        this.days = days != null ? days : new ArrayList<>();
-        notifyDataSetChanged();
+    public void setDays(List<CalendarDay> newDays) {
+        if (newDays == null) newDays = new ArrayList<>();
+        final List<CalendarDay> finalNewDays = newDays;
+
+        DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() { return days.size(); }
+
+            @Override
+            public int getNewListSize() { return finalNewDays.size(); }
+
+            @Override
+            public boolean areItemsTheSame(int oldPos, int newPos) {
+                CalendarDay oldDay = days.get(oldPos);
+                CalendarDay newDay = finalNewDays.get(newPos);
+                return oldDay.getDay() == newDay.getDay()
+                        && oldDay.getDate() == newDay.getDate();
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldPos, int newPos) {
+                CalendarDay oldDay = days.get(oldPos);
+                CalendarDay newDay = finalNewDays.get(newPos);
+                return oldDay.isSelected() == newDay.isSelected()
+                        && oldDay.isToday() == newDay.isToday()
+                        && oldDay.hasMoment() == newDay.hasMoment();
+            }
+        });
+
+        days = new ArrayList<>(newDays);
+        diff.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -43,34 +72,38 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
         CalendarDay day = days.get(position);
 
         if (day.getDay() == 0) {
-            // Empty cell
             h.tvDay.setText("");
+            h.viewTodayCircle.setVisibility(View.GONE);
+            h.viewSelectedCircle.setVisibility(View.GONE);
+            h.strip1.setVisibility(View.GONE);
             h.itemView.setClickable(false);
+            h.itemView.setOnClickListener(null);
             return;
         }
 
-        // Day number
         h.tvDay.setText(String.valueOf(day.getDay()));
-
-        // Selected state - show/hide selected circle
-        if (day.isSelected()) {
-            h.viewSelectedCircle.setVisibility(View.VISIBLE);
-        } else {
-            h.viewSelectedCircle.setVisibility(View.GONE);
+        h.viewTodayCircle.setVisibility(day.isToday() ? View.VISIBLE : View.GONE);
+        h.viewSelectedCircle.setVisibility(day.isSelected() ? View.VISIBLE : View.GONE);
+        h.strip1.setVisibility(day.hasMoment() ? View.VISIBLE : View.GONE);
+        if (day.hasMoment()) {
+            String label = day.getMomentLabel();
+            h.strip1.setText(label != null && !label.isEmpty() ? label : "");
         }
 
-        // Today state - show/hide today circle
-        if (day.isToday()) {
-            h.viewTodayCircle.setVisibility(View.VISIBLE);
-        } else {
-            h.viewTodayCircle.setVisibility(View.GONE);
-        }
+        h.itemView.setClickable(true);
+        h.itemView.setTag(day);
+    }
 
-        // Event dot indicator
-        h.viewEventDot.setVisibility(day.hasMoment() ? View.VISIBLE : View.GONE);
-
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder h) {
+        super.onViewAttachedToWindow(h);
         h.itemView.setOnClickListener(v -> {
-            if (listener != null) listener.onDayClick(day);
+            if (listener != null) {
+                Object tag = v.getTag();
+                if (tag instanceof CalendarDay) {
+                    listener.onDayClick((CalendarDay) tag);
+                }
+            }
         });
     }
 
@@ -79,16 +112,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvDay;
-        View viewEventDot;
         View viewTodayCircle;
         View viewSelectedCircle;
+        TextView strip1;
 
         ViewHolder(@NonNull View v) {
             super(v);
             tvDay = v.findViewById(R.id.tvDay);
-            viewEventDot = v.findViewById(R.id.viewEventDot);
             viewTodayCircle = v.findViewById(R.id.viewTodayCircle);
             viewSelectedCircle = v.findViewById(R.id.viewSelectedCircle);
+            strip1 = v.findViewById(R.id.strip1);
         }
     }
 }

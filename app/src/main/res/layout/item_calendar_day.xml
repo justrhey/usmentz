@@ -4,35 +4,35 @@
     android:layout_height="wrap_content"
     android:padding="2dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:orientation="vertical"
+    <!-- Base: day number centered -->
+    <TextView
+        android:id="@+id/tvDay"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:background="?attr/selectableItemBackground">
+        android:text="24"
+        android:textColor="#212121"
+        android:textSize="14sp"
+        android:textStyle="bold"/>
 
-        <!-- Day number -->
-        <TextView
-            android:id="@+id/tvDay"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:gravity="center"
-            android:text="24"
-            android:textColor="#212121"
-            android:textSize="14sp"
-            android:textStyle="bold"/>
+    <!-- Event strip 1 - bottom overlay -->
+    <TextView
+        android:id="@+id/strip1"
+        android:layout_width="match_parent"
+        android:layout_height="14dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:textSize="8sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:paddingHorizontal="2dp"
+        android:background="@drawable/bg_strip"
+        android:visibility="gone"/>
 
-        <!-- Event dot indicator -->
-        <View
-            android:id="@+id/viewEventDot"
-            android:layout_width="6dp"
-            android:layout_height="6dp"
-            android:background="@drawable/bg_timeline_dot"
-            android:visibility="gone"/>
-
-    </LinearLayout>
-
-    <!-- Today circle overlay (hidden by default) -->
+    <!-- Today circle - centered overlay -->
     <View
         android:id="@+id/viewTodayCircle"
         android:layout_width="36dp"
@@ -41,7 +41,7 @@
         android:background="@drawable/bg_day_today"
         android:visibility="gone"/>
 
-    <!-- Selected circle overlay (hidden by default) -->
+    <!-- Selected circle - centered overlay -->
     <View
         android:id="@+id/viewSelectedCircle"
         android:layout_width="36dp"

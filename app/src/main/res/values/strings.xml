@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">usmentz</string>
 
-    <!-- Google Sign-In - Replace with your Web Client ID from Firebase Console -->
-    <!-- Get this from: Firebase Console > Project Settings > Your apps > Web app > OAuth client ID -->
+    <!-- Google Sign-In Web Client ID from Firebase Console > Project Settings > Your apps > Web app -->
     <string name="default_web_client_id">YOUR_WEB_CLIENT_ID.apps.googleusercontent.com</string>
+    <!-- Google Maps API Key from Google Cloud Console > APIs & Services > Credentials -->
+    <string name="google_maps_key">AIzaSyBYCy37HjmtYGqK8RdtGx3qDLE89QwtTsk</string>
 </resources>

@@ -9,13 +9,30 @@ build
 *.iws
 .DS_Store
 
+# Firebase - API keys and credentials
+google-services.json
+google-services (local copy files)
+*.json
+firebase*.json
+
 # Local configuration - API keys
 local.properties
 api-keys.properties
 secrets.properties
 *.properties
+MAPS_API_KEY
 
 # Build outputs
 /captures
 .externalNativeBuild
 .cxx
+
+# Keystore files - NEVER commit production keystores
+*.jks
+*.keystore
+debug.keystore
+
+# Environment / credentials files
+.env
+credentials.json
+*.key
