@@ -39,17 +39,45 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
 
-    // Shared across inner fragments via static — safe be cause only one DetailActivity at a time
-    static DateLocation moment;
-    static DateViewModel dateVm;
-    static ExpenseViewModel expenseVm;
-    static String photoPath;
+    private DateLocation moment;
+    private DateViewModel dateVm;
+    private ExpenseViewModel expenseVm;
+    private String photoPath;
+
+    // Static holder for fragments (also static inner classes) to access outer fields
+    private static WeakReference<DetailActivity> instanceRef;
+
+    private static DateViewModel getDateVm() {
+        DetailActivity a = instanceRef != null ? instanceRef.get() : null;
+        return a != null ? a.dateVm : null;
+    }
+
+    private static ExpenseViewModel getExpenseVm() {
+        DetailActivity a = instanceRef != null ? instanceRef.get() : null;
+        return a != null ? a.expenseVm : null;
+    }
+
+    private static String getPhotoPath() {
+        DetailActivity a = instanceRef != null ? instanceRef.get() : null;
+        return a != null ? a.photoPath : null;
+    }
+
+    private static void setPhotoPath(String path) {
+        DetailActivity a = instanceRef != null ? instanceRef.get() : null;
+        if (a != null) a.photoPath = path;
+    }
+
+    private static DateLocation getMomentRef() {
+        DetailActivity a = instanceRef != null ? instanceRef.get() : null;
+        return a != null ? a.moment : null;
+    }
 
     private ViewPager2 viewPager;
 
@@ -64,7 +92,7 @@ public class DetailActivity extends AppCompatActivity {
                         photoPath = savedPath;
                         // Notify fragment to refresh
                         Fragment f = getSupportFragmentManager().findFragmentByTag("f2");
-                        if (f instanceof ReviewFragment) {
+                        if (f != null && f instanceof ReviewFragment) {
                             ((ReviewFragment) f).refreshPhoto();
                         }
                     }
@@ -85,6 +113,7 @@ public class DetailActivity extends AppCompatActivity {
 
         dateVm = new ViewModelProvider(this).get(DateViewModel.class);
         expenseVm = new ViewModelProvider(this).get(ExpenseViewModel.class);
+        instanceRef = new WeakReference<>(this);
 
         // Toolbar
         com.google.android.material.appbar.MaterialToolbar toolbar = findViewById(R.id.toolbar);
@@ -253,7 +282,8 @@ public class DetailActivity extends AppCompatActivity {
             moment.setAddress(addr);
             moment.setDescription(etDesc.getText().toString().trim());
             moment.setDate(cal.getTime());
-            dateVm.update(moment);
+            DateViewModel vm = getDateVm();
+            if (vm != null) vm.update(moment);
             if (getSupportActionBar() != null) getSupportActionBar().setTitle(name);
             dialog.dismiss();
             Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
@@ -341,8 +371,9 @@ public class DetailActivity extends AppCompatActivity {
                 paymentMethod = "Cash";
             }
 
-            Expense expense = new Expense(desc, amount, moment.getId(), selectedType, paymentMethod);
-            expenseVm.insert(expense);
+            Expense expense = new Expense(desc, amount, getMomentRef().getId(), selectedType, paymentMethod);
+            ExpenseViewModel evm = getExpenseVm();
+            if (evm != null) evm.insert(expense);
             Toast.makeText(this, "Transaction added", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
@@ -431,14 +462,15 @@ public class DetailActivity extends AppCompatActivity {
 
             if (btnShare != null) {
                 btnShare.setOnClickListener(v -> {
-                    if (moment != null) {
+                    DateLocation m = getMomentRef();
+                    if (m != null) {
                         Intent shareIntent = new Intent(Intent.ACTION_SEND);
                         shareIntent.setType("text/plain");
-                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, moment.getName());
+                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, m.getName());
                         shareIntent.putExtra(Intent.EXTRA_TEXT,
-                            moment.getName() + "\n" +
-                            moment.getAddress() + "\n" +
-                            "Rated: " + moment.getRating() + "/5");
+                            m.getName() + "\n" +
+                            m.getAddress() + "\n" +
+                            "Rated: " + m.getRating() + "/5");
                         startActivity(Intent.createChooser(shareIntent, "Share via"));
                     }
                 });
@@ -454,9 +486,11 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         private void observeExpenseData() {
-            if (expenseVm != null && moment != null) {
+            DateLocation m = getMomentRef();
+            ExpenseViewModel evm = getExpenseVm();
+            if (evm != null && m != null) {
                 // Observe expenses for this moment
-                expenseVm.getExpensesForMoment(moment.getId()).observe(getViewLifecycleOwner(), expenses -> {
+                evm.getExpensesForMoment(m.getId()).observe(getViewLifecycleOwner(), expenses -> {
                     if (expenses != null) {
                         totalExpensesForMoment = 0;
                         totalFundsForMoment = 0;
@@ -480,7 +514,7 @@ public class DetailActivity extends AppCompatActivity {
                 });
 
                 // Observe total spent for this moment
-                expenseVm.getTotalSpentForMoment(moment.getId()).observe(getViewLifecycleOwner(), total -> {
+                evm.getTotalSpentForMoment(m.getId()).observe(getViewLifecycleOwner(), total -> {
                     // This gives total of all expenses (type = expenses)
                     // We use the per-type calculation above instead
                 });
@@ -573,7 +607,10 @@ public class DetailActivity extends AppCompatActivity {
             rv.setLayoutManager(new LinearLayoutManager(getContext()));
             rv.setAdapter(adapter);
 
-            adapter.setOnExpenseDeleteListener(expense -> expenseVm.delete(expense));
+            adapter.setOnExpenseDeleteListener(expense -> {
+                ExpenseViewModel evm = getExpenseVm();
+                if (evm != null) evm.delete(expense);
+            });
 
             // Sort button
             if (btnSort != null) {
@@ -597,40 +634,46 @@ public class DetailActivity extends AppCompatActivity {
 
             if (btnAddExpense != null) {
                 btnAddExpense.setOnClickListener(v -> {
-                    AddExpenseOnlyDialog dialog = AddExpenseOnlyDialog.newInstance(moment.getId(), () -> {
-                        // Refresh handled by LiveData observer
-                    });
-                    dialog.setViewModel(expenseVm);
-                    dialog.show(getParentFragmentManager(), "AddExpenseOnly");
+                    DateLocation m = getMomentRef();
+                    if (m != null) {
+                        AddExpenseOnlyDialog dialog = AddExpenseOnlyDialog.newInstance(m.getId(), () -> {});
+                        dialog.setViewModel(getExpenseVm());
+                        dialog.show(getParentFragmentManager(), "AddExpenseOnly");
+                    }
                 });
             }
             if (btnAddFunds != null) {
                 btnAddFunds.setOnClickListener(v -> {
-                    AddFundsOnlyDialog dialog = AddFundsOnlyDialog.newInstance(moment.getId(), () -> {
-                        // Refresh handled by LiveData observer
-                    });
-                    dialog.setViewModel(expenseVm);
-                    dialog.show(getParentFragmentManager(), "AddFundsOnly");
+                    DateLocation m = getMomentRef();
+                    if (m != null) {
+                        AddFundsOnlyDialog dialog = AddFundsOnlyDialog.newInstance(m.getId(), () -> {});
+                        dialog.setViewModel(getExpenseVm());
+                        dialog.show(getParentFragmentManager(), "AddFundsOnly");
+                    }
                 });
             }
             if (btnAddSavings != null) {
                 btnAddSavings.setOnClickListener(v -> {
-                    AddSavingsOnlyDialog dialog = AddSavingsOnlyDialog.newInstance(moment.getId(), () -> {
-                        // Refresh handled by LiveData observer
-                    });
-                    dialog.setViewModel(expenseVm);
-                    dialog.show(getParentFragmentManager(), "AddSavingsOnly");
+                    DateLocation m = getMomentRef();
+                    if (m != null) {
+                        AddSavingsOnlyDialog dialog = AddSavingsOnlyDialog.newInstance(m.getId(), () -> {});
+                        dialog.setViewModel(getExpenseVm());
+                        dialog.show(getParentFragmentManager(), "AddSavingsOnly");
+                    }
                 });
             }
 
             // Observe expenses
-            expenseVm.getExpensesForMoment(moment.getId())
-                    .observe(getViewLifecycleOwner(), expenses -> {
-                        adapter.setExpenses(expenses);
-                        tvNoExpenses.setVisibility(expenses == null || expenses.isEmpty()
-                                ? View.VISIBLE : View.GONE);
-                        rv.setVisibility(expenses == null || expenses.isEmpty()
-                                ? View.GONE : View.VISIBLE);
+            ExpenseViewModel evm = getExpenseVm();
+            DateLocation m = getMomentRef();
+            if (evm != null && m != null) {
+                evm.getExpensesForMoment(m.getId())
+                        .observe(getViewLifecycleOwner(), expenses -> {
+                            adapter.setExpenses(expenses);
+                            tvNoExpenses.setVisibility(expenses == null || expenses.isEmpty()
+                                    ? View.VISIBLE : View.GONE);
+                            rv.setVisibility(expenses == null || expenses.isEmpty()
+                                    ? View.GONE : View.VISIBLE);
 
                         // Calculate totals
                         if (expenses != null) {
@@ -645,22 +688,18 @@ public class DetailActivity extends AppCompatActivity {
                             }
 
                             if (tvIncome != null) {
-                                tvIncome.setText("+₱" + String.format("%.0f", incomeTotal));
+                                tvIncome.setText("+P" + String.format("%.0f", incomeTotal));
                             }
                             if (tvExpensesLabel != null) {
-                                tvExpensesLabel.setText("-₱" + String.format("%.0f", expenseTotal));
+                                tvExpensesLabel.setText("-P" + String.format("%.0f", expenseTotal));
                             }
-                            if (tvTotal != null) {
-                                tvTotal.setText("₱" + String.format("%.0f", incomeTotal - expenseTotal));
+                            if (tvBalanceLabel != null) {
+                                double balance = incomeTotal - expenseTotal;
+                                tvBalanceLabel.setText("P" + String.format("%.0f", Math.abs(balance)));
                             }
                         }
                     });
-
-            // Observe total spent (for legacy compatibility)
-            expenseVm.getTotalSpentForMoment(moment.getId())
-                    .observe(getViewLifecycleOwner(), total -> {
-                        // Already handled above with per-type calculation
-                    });
+            }
         }
     }
 
@@ -697,14 +736,15 @@ public class DetailActivity extends AppCompatActivity {
 
 
                 // Load existing data
-                if (moment != null) {
-                    if (etReview != null && !TextUtils.isEmpty(moment.getReview())) {
-                        etReview.setText(moment.getReview());
+                DateLocation m = getMomentRef();
+                if (m != null) {
+                    if (etReview != null && !TextUtils.isEmpty(m.getReview())) {
+                        etReview.setText(m.getReview());
                     }
 
                     if (ratingBarReview != null) {
-                        ratingBarReview.setRating(moment.getRating());
-                        updateRatingLabel(moment.getRating());
+                        ratingBarReview.setRating(m.getRating());
+                        updateRatingLabel(m.getRating());
                     }
                 }
 
@@ -730,16 +770,18 @@ public class DetailActivity extends AppCompatActivity {
                 View btnSaveReview = view.findViewById(R.id.btnSaveReview);
                 if (btnSaveReview != null) {
                     btnSaveReview.setOnClickListener(v -> {
-                        if (moment == null) return;
+                        DateLocation m = getMomentRef();
+                        if (m == null) return;
 
                         if (etReview != null) {
-                            moment.setReview(etReview.getText().toString().trim());
+                            m.setReview(etReview.getText().toString().trim());
                         }
-                        moment.setPhotoPath(photoPath);
+                        m.setPhotoPath(getPhotoPath());
                         if (ratingBarReview != null) {
-                            moment.setRating(ratingBarReview.getRating());
+                            m.setRating(ratingBarReview.getRating());
                         }
-                        dateVm.update(moment);
+                        DateViewModel vm = getDateVm();
+                        if (vm != null) vm.update(m);
                         Toast.makeText(getContext(), "Review saved", Toast.LENGTH_SHORT).show();
                     });
                 }
@@ -762,17 +804,18 @@ public class DetailActivity extends AppCompatActivity {
 
         private void loadPhoto() {
             try {
-                if (!TextUtils.isEmpty(photoPath) && ivPhoto != null) {
+                String path = getPhotoPath();
+                if (!TextUtils.isEmpty(path) && ivPhoto != null) {
                     // Show photo, hide placeholder
                     ivPhoto.setVisibility(View.VISIBLE);
                     if (noPhotoPlaceholder != null) noPhotoPlaceholder.setVisibility(View.GONE);
-                    
+
                     // Load image
-                    File imgFile = new File(photoPath);
+                    File imgFile = new File(path);
                     if (imgFile.exists()) {
                         Glide.with(this).load(imgFile).centerCrop().into(ivPhoto);
                     } else {
-                        Glide.with(this).load(photoPath).centerCrop().into(ivPhoto);
+                        Glide.with(this).load(path).centerCrop().into(ivPhoto);
                     }
                 } else {
                     // Hide photo, show placeholder

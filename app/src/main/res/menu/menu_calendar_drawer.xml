@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Section: View Modes -->
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_list"
+            android:title="List View"
+            android:icon="@drawable/ic_list"/>
+        <item
+            android:id="@+id/nav_grid"
+            android:title="Grid View"
+            android:icon="@drawable/ic_grid"/>
+        <item
+            android:id="@+id/nav_board"
+            android:title="Board View"
+            android:icon="@drawable/ic_board"/>
+        <item
+            android:id="@+id/nav_calendar"
+            android:title="Calendar View"
+            android:icon="@drawable/ic_calendar"
+            android:checked="true"/>
+    </group>
+
+    <item android:title="---">
+        <!-- divider -->
+    </item>
+
+    <!-- Section: Filter -->
+    <item
+        android:id="@+id/nav_filter"
+        android:title="Filter by Category"
+        android:icon="@drawable/ic_filter"/>
+
+    <!-- Section: Sort -->
+    <item
+        android:id="@+id/nav_sort"
+        android:title="Sort By"
+        android:icon="@drawable/ic_sort">
+        <menu>
+            <item android:id="@+id/nav_sort_date" android:title="Date"/>
+            <item android:id="@+id/nav_sort_name" android:title="Name"/>
+            <item android:id="@+id/nav_sort_amount" android:title="Amount"/>
+        </menu>
+    </item>
+
+    <!-- Section: Analytics -->
+    <item
+        android:id="@+id/nav_analytics"
+        android:title="Analytics"
+        android:icon="@drawable/ic_analytics"/>
+
+</menu>

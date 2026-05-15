@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Objects;
+
 import com.example.usmentz.R;
 import com.example.usmentz.model.CalendarDay;
 
@@ -33,25 +35,22 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
         DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffUtil.Callback() {
             @Override
             public int getOldListSize() { return days.size(); }
-
             @Override
             public int getNewListSize() { return finalNewDays.size(); }
-
             @Override
             public boolean areItemsTheSame(int oldPos, int newPos) {
                 CalendarDay oldDay = days.get(oldPos);
                 CalendarDay newDay = finalNewDays.get(newPos);
                 return oldDay.getDay() == newDay.getDay()
-                        && oldDay.getDate() == newDay.getDate();
+                        && Objects.equals(oldDay.getDate(), newDay.getDate());
             }
-
             @Override
             public boolean areContentsTheSame(int oldPos, int newPos) {
                 CalendarDay oldDay = days.get(oldPos);
                 CalendarDay newDay = finalNewDays.get(newPos);
                 return oldDay.isSelected() == newDay.isSelected()
                         && oldDay.isToday() == newDay.isToday()
-                        && oldDay.hasMoment() == newDay.hasMoment();
+                        && oldDay.getMomentCount() == newDay.getMomentCount();
             }
         });
 
@@ -68,26 +67,54 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder h, int position) {
-        CalendarDay day = days.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder h, int pos) {
+        CalendarDay day = days.get(pos);
 
         if (day.getDay() == 0) {
             h.tvDay.setText("");
+            h.tvDay.setBackground(null);
             h.viewTodayCircle.setVisibility(View.GONE);
             h.viewSelectedCircle.setVisibility(View.GONE);
             h.strip1.setVisibility(View.GONE);
+            h.strip2.setVisibility(View.GONE);
+            h.strip3.setVisibility(View.GONE);
+            h.tvMoreIndicator.setVisibility(View.GONE);
             h.itemView.setClickable(false);
             h.itemView.setOnClickListener(null);
             return;
         }
 
         h.tvDay.setText(String.valueOf(day.getDay()));
+        h.tvDay.setBackground(null);
         h.viewTodayCircle.setVisibility(day.isToday() ? View.VISIBLE : View.GONE);
         h.viewSelectedCircle.setVisibility(day.isSelected() ? View.VISIBLE : View.GONE);
-        h.strip1.setVisibility(day.hasMoment() ? View.VISIBLE : View.GONE);
-        if (day.hasMoment()) {
-            String label = day.getMomentLabel();
-            h.strip1.setText(label != null && !label.isEmpty() ? label : "");
+
+        // Sticky note strips
+        List<String> labels = day.getMomentLabels();
+        int count = day.getMomentCount();
+
+        h.strip1.setVisibility(View.GONE);
+        h.strip2.setVisibility(View.GONE);
+        h.strip3.setVisibility(View.GONE);
+        h.tvMoreIndicator.setVisibility(View.GONE);
+
+        if (count > 0 && labels != null) {
+            if (count >= 1 && !labels.get(0).isEmpty()) {
+                h.strip1.setText(labels.get(0));
+                h.strip1.setVisibility(View.VISIBLE);
+            }
+            if (count >= 2 && labels.size() > 1 && !labels.get(1).isEmpty()) {
+                h.strip2.setText(labels.get(1));
+                h.strip2.setVisibility(View.VISIBLE);
+            }
+            if (count >= 3 && labels.size() > 2 && !labels.get(2).isEmpty()) {
+                h.strip3.setText(labels.get(2));
+                h.strip3.setVisibility(View.VISIBLE);
+            }
+            if (count > 3) {
+                h.tvMoreIndicator.setText("+" + (count - 3) + " more");
+                h.tvMoreIndicator.setVisibility(View.VISIBLE);
+            }
         }
 
         h.itemView.setClickable(true);
@@ -114,7 +141,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
         TextView tvDay;
         View viewTodayCircle;
         View viewSelectedCircle;
-        TextView strip1;
+        TextView strip1, strip2, strip3;
+        TextView tvMoreIndicator;
 
         ViewHolder(@NonNull View v) {
             super(v);
@@ -122,6 +150,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
             viewTodayCircle = v.findViewById(R.id.viewTodayCircle);
             viewSelectedCircle = v.findViewById(R.id.viewSelectedCircle);
             strip1 = v.findViewById(R.id.strip1);
+            strip2 = v.findViewById(R.id.strip2);
+            strip3 = v.findViewById(R.id.strip3);
+            tvMoreIndicator = v.findViewById(R.id.tvMoreIndicator);
         }
     }
 }

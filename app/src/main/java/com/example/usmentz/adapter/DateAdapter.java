@@ -204,6 +204,8 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
 
             // Completion checkbox listener
             checkComplete.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                // Only respond to user taps, not programmatic setChecked calls
+                if (!buttonView.isPressed()) return;
                 int position = getAdapterPosition();
                 if (completeListener != null && position != RecyclerView.NO_POSITION) {
                     DateLocation date = dates.get(position);

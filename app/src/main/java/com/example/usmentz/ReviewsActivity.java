@@ -60,7 +60,8 @@ public class ReviewsActivity extends AppCompatActivity {
         // Click listener to go to detail
         reviewAdapter.setOnReviewClickListener(review -> {
             // Find the DateLocation for this review and open detail
-            dateViewModel.getDateById(review.getMomentId()).observe(this, moment -> {
+            // Use SingleLiveEvent-style: observe with a guard so it only fires once
+            dateViewModel.getDateById(review.getMomentId()).observe(ReviewsActivity.this, moment -> {
                 if (moment != null) {
                     Intent intent = new Intent(ReviewsActivity.this, DetailActivity.class);
                     intent.putExtra("date_location", moment);

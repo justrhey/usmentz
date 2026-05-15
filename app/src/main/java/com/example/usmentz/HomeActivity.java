@@ -1,7 +1,6 @@
 package com.example.usmentz;
 
 import android.content.Intent;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -23,6 +22,7 @@ import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.example.usmentz.viewmodel.ExpenseViewModel;
 import com.example.usmentz.adapter.DateAdapter;
+import com.example.usmentz.adapter.CategoryHomeAdapter;
 import com.example.usmentz.fina.Expense;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -65,6 +65,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // Adapters
     private DateAdapter recentAdapter;
+    private CategoryHomeAdapter categoryAdapter;
 
     // State
     private Calendar calendar;
@@ -257,7 +258,7 @@ public class HomeActivity extends AppCompatActivity {
     private void updateChart(List<Expense> expenses) {
         if (barChart == null) return;
 
-        // Calculate daily totals for the past 7 days
+        // Always draw chart, even with zero data
         Calendar cal = Calendar.getInstance();
         double[] dailyTotals = new double[7];
         String[] dayLabels = new String[7];
@@ -270,26 +271,32 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         // Sum expenses per day
-        for (Expense expense : expenses) {
-            if (expense.getType().equals(Expense.TYPE_EXPENSES)) {
-                Calendar expCal = Calendar.getInstance();
-                expCal.setTimeInMillis(expense.getCreatedAt());
+        if (expenses != null) {
+            for (Expense expense : expenses) {
+                if (expense.getType().equals(Expense.TYPE_EXPENSES)) {
+                    long expenseTime = expense.getCreatedAt();
+                    if (expenseTime <= 0) continue;
 
-                for (int i = 0; i < 7; i++) {
-                    Calendar dayStart = Calendar.getInstance();
-                    dayStart.add(Calendar.DAY_OF_YEAR, -6 + i);
-                    dayStart.set(Calendar.HOUR_OF_DAY, 0);
-                    dayStart.set(Calendar.MINUTE, 0);
-                    dayStart.set(Calendar.SECOND, 0);
+                    long today = System.currentTimeMillis();
+                    long sevenDaysAgo = today - (6L * 24 * 60 * 60 * 1000);
 
-                    Calendar dayEnd = Calendar.getInstance();
-                    dayEnd.add(Calendar.DAY_OF_YEAR, -6 + i);
-                    dayEnd.set(Calendar.HOUR_OF_DAY, 23);
-                    dayEnd.set(Calendar.MINUTE, 59);
-                    dayEnd.set(Calendar.SECOND, 59);
+                    if (expenseTime < sevenDaysAgo) continue;
 
-                    if (expCal.after(dayStart) && expCal.before(dayEnd)) {
-                        dailyTotals[i] += expense.getAmount();
+                    // Normalize to start of day
+                    Calendar expCal = Calendar.getInstance();
+                    expCal.setTimeInMillis(expenseTime);
+                    int expDayOfYear = expCal.get(Calendar.DAY_OF_YEAR);
+                    int expYear = expCal.get(Calendar.YEAR);
+
+                    Calendar todayCal = Calendar.getInstance();
+                    int todayDayOfYear = todayCal.get(Calendar.DAY_OF_YEAR);
+                    int todayYear = todayCal.get(Calendar.YEAR);
+
+                    int dayOffset = (expYear - todayYear) * 365
+                            + (expDayOfYear - todayDayOfYear);
+
+                    if (dayOffset >= 0 && dayOffset < 7) {
+                        dailyTotals[6 - dayOffset] += expense.getAmount();
                     }
                 }
             }
@@ -307,20 +314,24 @@ public class HomeActivity extends AppCompatActivity {
 
         if (tvChartPeak != null && maxTotal > 0) {
             tvChartPeak.setText("Highest: " + dayLabels[peakDay] + " " + formatCurrency(maxTotal));
+            tvChartPeak.setVisibility(View.VISIBLE);
+        } else if (tvChartPeak != null) {
+            tvChartPeak.setVisibility(View.GONE);
         }
 
-        // Create chart entries
+        // Always build chart entries (even if all zero)
         ArrayList<BarEntry> entries = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             entries.add(new BarEntry(i, (float) dailyTotals[i]));
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "Spending");
-        dataSet.setColor(0xFF9B5CFF); // Purple color
+        dataSet.setColor(0xFF9B5CFF);
         dataSet.setDrawValues(false);
+        dataSet.setHighLightColor(0x00FFFFFF);
 
         BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.6f);
+        barData.setBarWidth(0.5f);
 
         barChart.setData(barData);
         barChart.getDescription().setEnabled(false);
@@ -330,7 +341,8 @@ public class HomeActivity extends AppCompatActivity {
         barChart.getAxisLeft().setEnabled(false);
         barChart.getXAxis().setEnabled(false);
         barChart.setTouchEnabled(false);
-        barChart.animateY(1000);
+        barChart.setDrawValueAboveBar(false);
+        barChart.setFitBars(true);
         barChart.invalidate();
     }
 
@@ -343,10 +355,30 @@ public class HomeActivity extends AppCompatActivity {
             barChart.getXAxis().setEnabled(false);
             barChart.setTouchEnabled(false);
             barChart.setDrawBarShadow(false);
+            barChart.setFitBars(true);
         }
     }
 
     private void setupRecyclerViews() {
+        // Categories horizontal carousel
+        categoryAdapter = new CategoryHomeAdapter();
+        RecyclerView rvCategories = findViewById(R.id.rvCategories);
+        rvCategories.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvCategories.setAdapter(categoryAdapter);
+
+        categoryAdapter.setOnCategoryClickListener(cat -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("category_id", cat.getId());
+            startActivity(intent);
+        });
+
+        categoryViewModel.getAllCategories().observe(this, categories -> {
+            if (categories != null) {
+                categoryAdapter.setCategories(categories);
+            }
+        });
+
+        // Recent activity list
         recentAdapter = new DateAdapter();
         rvRecentActivity.setLayoutManager(new LinearLayoutManager(this));
         rvRecentActivity.setAdapter(recentAdapter);
@@ -461,11 +493,10 @@ public class HomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateDateTime();
-        if (timeHandler != null) {
-            timeHandler.post(timeRunnable);
+        if (timeHandler != null && timeRunnable != null) {
+            timeHandler.removeCallbacks(timeRunnable);
         }
-        // Refresh data - ViewModels will automatically notify observers
-        // since they query LiveData from Room database
+        startLiveTime();
     }
 
     @Override

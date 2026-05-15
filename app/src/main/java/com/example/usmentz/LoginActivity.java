@@ -134,7 +134,6 @@ private void setupBottomSheet() {
 
         // Sign Up link
         tvSignUp.setOnClickListener(v -> {
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             startActivity(new Intent(this, RegisterActivity.class));
         });
 
