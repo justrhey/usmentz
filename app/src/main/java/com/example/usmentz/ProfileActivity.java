@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.example.usmentz.database.DateDatabase;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -178,24 +179,31 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        // Sign out from Firebase
-        FirebaseAuth.getInstance().signOut();
+        // Clear Room database first (wait for it to complete before navigating)
+        new Thread(() -> {
+            DateDatabase db = DateDatabase.getDatabase(getApplicationContext());
+            db.clearAllTables();
+            runOnUiThread(() -> {
+                // Sign out from Firebase
+                FirebaseAuth.getInstance().signOut();
 
-        // Google Sign Out
-        com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this,
-                new com.google.android.gms.auth.api.signin.GoogleSignInOptions.Builder(
-                        com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestEmail()
-                        .build()
-        ).signOut();
+                // Google Sign Out
+                com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this,
+                        new com.google.android.gms.auth.api.signin.GoogleSignInOptions.Builder(
+                                com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                .requestEmail()
+                                .build()
+                ).signOut();
 
-        // Clear SharedPreferences
-        sharedPreferences.edit().clear().apply();
+                // Clear SharedPreferences
+                sharedPreferences.edit().clear().apply();
 
-        // Navigate to Login
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+                // Navigate to Login
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
+        }).start();
     }
 }

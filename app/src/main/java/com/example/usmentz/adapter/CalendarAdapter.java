@@ -22,6 +22,15 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
     private List<CalendarDay> days = new ArrayList<>();
     private OnDayClickListener listener;
 
+    public CalendarAdapter() {
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     public interface OnDayClickListener {
         void onDayClick(CalendarDay day);
     }
@@ -98,7 +107,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewHo
         h.strip3.setVisibility(View.GONE);
         h.tvMoreIndicator.setVisibility(View.GONE);
 
-        if (count > 0 && labels != null) {
+        if (count > 0 && labels != null && !labels.isEmpty()) {
             if (count >= 1 && !labels.get(0).isEmpty()) {
                 h.strip1.setText(labels.get(0));
                 h.strip1.setVisibility(View.VISIBLE);

@@ -33,4 +33,7 @@ public interface CategoryDao {
 
     @Query("UPDATE categories SET itemCount = :count WHERE id = :categoryId")
     void updateItemCount(int categoryId, int count);
+
+    @Query("DELETE FROM categories")
+    void deleteAll();
 }

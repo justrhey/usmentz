@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Completed state: filled purple -->
+    <item android:state_selected="true">
+        <shape android:shape="oval">
+            <solid android:color="#9B5CFF" />
+        </shape>
+    </item>
+    <!-- Default state: empty circle with grey border -->
+    <item>
+        <shape android:shape="oval">
+            <stroke android:width="1.5dp" android:color="#D0D0D0" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+</selector>

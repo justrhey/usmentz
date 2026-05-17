@@ -45,8 +45,16 @@ public class DateRepository {
     public void insert(DateLocation dateLocation) {
         executorService.execute(() -> {
             try {
-                // Keep local ID for Room
-                dateLocationDao.insert(dateLocation);
+                // Check if object already has a valid ID - if so, use update instead
+                // This prevents UNIQUE constraint failures when syncing from Firestore
+                if (dateLocation.getId() > 0) {
+                    // Object already has an ID from Firestore - update instead of insert
+                    dateLocationDao.update(dateLocation);
+                    Log.d(TAG, "DateLocation with ID " + dateLocation.getId() + " already exists, using update");
+                } else {
+                    // No ID yet - insert with generated ID
+                    dateLocationDao.insert(dateLocation);
+                }
 
                 // Update category count
                 updateCategoryCount(dateLocation.getCategoryId());
@@ -197,24 +205,12 @@ public class DateRepository {
             public void onSuccess(List<DateLocation> moments) {
                 executorService.execute(() -> {
                     try {
-                        // Upsert each Firestore moment into Room
+                        // Clear old data first so no previous user's data leaks through
+                        dateLocationDao.deleteAll();
+
+                        // Insert all Firestore moments into Room
                         for (DateLocation moment : moments) {
-                            DateLocation existing = dateLocationDao.getDateLocationByIdSync(moment.getId());
-                            if (existing == null) {
-                                dateLocationDao.insert(moment);
-                            } else {
-                                existing.setName(moment.getName());
-                                existing.setAddress(moment.getAddress());
-                                existing.setDescription(moment.getDescription());
-                                existing.setDate(moment.getDate());
-                                existing.setRating(moment.getRating());
-                                existing.setReview(moment.getReview());
-                                existing.setPhotoPath(moment.getPhotoPath());
-                                existing.setCompleted(moment.isCompleted());
-                                existing.setCategoryId(moment.getCategoryId());
-                                existing.setPosition(moment.getPosition());
-                                dateLocationDao.update(existing);
-                            }
+                            dateLocationDao.insert(moment);
                         }
                         if (onComplete != null) onComplete.run();
                     } catch (Exception e) {

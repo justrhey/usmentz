@@ -1,8 +1,12 @@
 package com.example.usmentz.adapter;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,44 +45,84 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder h, int pos) {
         Category cat = categories.get(pos);
+        Context ctx = h.itemView.getContext();
 
         h.tvCategoryName.setText(cat.getName());
         h.tvItemCount.setText(cat.getItemCount() + " moment" + (cat.getItemCount() != 1 ? "s" : ""));
 
-        // Show icon name as emoji/text
-        String icon = cat.getIconName();
-        h.tvIcon.setText(icon != null && !icon.isEmpty() ? icon : "✦");
+        // Load icon drawable by name
+        int iconRes = getDrawableResId(ctx, cat.getIconName());
+        h.ivIcon.setImageResource(iconRes);
 
-        // Amount placeholder - could be linked to expense totals later
-        h.tvAmount.setText("");
+        // Icon circle background with category color
+        int color = cat.getColor() != 0 ? cat.getColor() : 0xFF9B5CFF;
+        GradientDrawable circleBg = new GradientDrawable();
+        circleBg.setShape(GradientDrawable.OVAL);
+        circleBg.setColor(adjustAlpha(color, 0.15f));
+        h.viewIconBg.setBackground(circleBg);
 
-        // Icon background color from category color
-        if (cat.getColor() != 0) {
-            h.viewIconBg.getBackground().setTint(cat.getColor());
-        }
+        // Tint icon with category color
+        h.ivIcon.setColorFilter(color);
+
+        // Top strip with category color
+        GradientDrawable stripBg = new GradientDrawable();
+        stripBg.setCornerRadii(new float[]{
+                dpToPx(20), dpToPx(20), dpToPx(20), dpToPx(20),
+                0, 0, 0, 0
+        });
+        stripBg.setColor(color);
+        h.topStrip.setBackground(stripBg);
 
         h.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onCategoryClick(cat);
         });
     }
 
+    private int getDrawableResId(Context ctx, String iconName) {
+        if (iconName == null || iconName.isEmpty()) return R.drawable.folder;
+        switch (iconName) {
+            case "heart":     return R.drawable.heart;
+            case "star":      return R.drawable.star;
+            case "food":      return R.drawable.food;
+            case "travel":    return R.drawable.travel;
+            case "movie":     return R.drawable.movie;
+            case "music":     return R.drawable.music;
+            case "book":      return R.drawable.book;
+            case "gift":      return R.drawable.gift;
+            case "folder":    return R.drawable.folder;
+            default:          return R.drawable.folder;
+        }
+    }
+
+    private int adjustAlpha(int color, float factor) {
+        int alpha = Math.round(Color.alpha(color) * factor);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        return Color.argb(alpha, red, green, blue);
+    }
+
+    private int dpToPx(float dp) {
+        return (int) (dp * android.content.res.Resources.getSystem().getDisplayMetrics().density);
+    }
+
     @Override
     public int getItemCount() { return categories.size(); }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        View topStrip;
         View viewIconBg;
-        TextView tvIcon;
+        ImageView ivIcon;
         TextView tvCategoryName;
         TextView tvItemCount;
-        TextView tvAmount;
 
         ViewHolder(@NonNull View v) {
             super(v);
+            topStrip = v.findViewById(R.id.topStrip);
             viewIconBg = v.findViewById(R.id.viewIconBg);
-            tvIcon = v.findViewById(R.id.tvIcon);
+            ivIcon = v.findViewById(R.id.ivIcon);
             tvCategoryName = v.findViewById(R.id.tvCategoryName);
             tvItemCount = v.findViewById(R.id.tvItemCount);
-            tvAmount = v.findViewById(R.id.tvAmount);
         }
     }
 }

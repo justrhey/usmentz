@@ -56,12 +56,12 @@ public class DetailActivity extends AppCompatActivity {
 
     private static DateViewModel getDateVm() {
         DetailActivity a = instanceRef != null ? instanceRef.get() : null;
-        return a != null ? a.dateVm : null;
+        return a != null && a.dateVm != null ? a.dateVm : null;
     }
 
     private static ExpenseViewModel getExpenseVm() {
         DetailActivity a = instanceRef != null ? instanceRef.get() : null;
-        return a != null ? a.expenseVm : null;
+        return a != null && a.expenseVm != null ? a.expenseVm : null;
     }
 
     private static String getPhotoPath() {
@@ -114,6 +114,8 @@ public class DetailActivity extends AppCompatActivity {
         dateVm = new ViewModelProvider(this).get(DateViewModel.class);
         expenseVm = new ViewModelProvider(this).get(ExpenseViewModel.class);
         instanceRef = new WeakReference<>(this);
+        if (dateVm != null) dateVm.syncFromFirestore(null);
+        if (expenseVm != null) expenseVm.syncFromFirestore(null);
 
         // Toolbar
         com.google.android.material.appbar.MaterialToolbar toolbar = findViewById(R.id.toolbar);
@@ -134,6 +136,12 @@ public class DetailActivity extends AppCompatActivity {
 
         // Setup segmented control tabs
         setupPillTabs();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (instanceRef != null) instanceRef.clear();
     }
 
     private void setupPillTabs() {
@@ -530,7 +538,8 @@ public class DetailActivity extends AppCompatActivity {
                     .commit();
 
                 mapFragment.getMapAsync(googleMap -> {
-                    if (moment != null && !TextUtils.isEmpty(moment.getAddress())) {
+                    DateLocation momentRef = getMomentRef();
+                    if (momentRef != null && !TextUtils.isEmpty(momentRef.getAddress())) {
                         // Default location (Boracay) - you can geocode the address
                         double lat = 11.9674;
                         double lng = 121.9248;
@@ -540,7 +549,7 @@ public class DetailActivity extends AppCompatActivity {
 
                         googleMap.addMarker(new com.google.android.gms.maps.model.MarkerOptions()
                             .position(location)
-                            .title(moment.getName())
+                            .title(momentRef.getName())
                             .icon(com.google.android.gms.maps.model.BitmapDescriptorFactory
                                 .defaultMarker(com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_VIOLET)));
 
@@ -561,15 +570,20 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         void refresh() {
-            if (moment == null) return;
-            if (tvName != null) tvName.setText(moment.getName());
-            if (tvAddress != null) tvAddress.setText(!TextUtils.isEmpty(moment.getAddress()) ? moment.getAddress() : "—");
-            if (tvDescription != null) tvDescription.setText(!TextUtils.isEmpty(moment.getDescription())
-                    ? moment.getDescription() : "No description");
-            if (tvDate != null && moment.getDate() != null) tvDate.setText(fmt.format(moment.getDate()));
+            DateLocation momentRef = getMomentRef();
+            if (momentRef == null) return;
+            if (tvName != null) tvName.setText(momentRef.getName());
+            if (tvAddress != null) tvAddress.setText(!TextUtils.isEmpty(momentRef.getAddress()) ? momentRef.getAddress() : "—");
+            if (tvDescription != null) tvDescription.setText(!TextUtils.isEmpty(momentRef.getDescription())
+                    ? momentRef.getDescription() : "No description");
+            if (tvDate != null && momentRef.getDate() != null) tvDate.setText(fmt.format(momentRef.getDate()));
             // RatingBar is only in fragment_detail_review.xml, not fragment_detail_info.xml
-            if (tvRatingNumber != null) tvRatingNumber.setText(String.valueOf(moment.getRating()));
-            if (tvExperience != null) tvExperience.setText(String.valueOf((int) moment.getRating()));
+            // Guard against null ratingBar - it doesn't exist in fragment_detail_info.xml
+            if (ratingBar != null) {
+                ratingBar.setRating(momentRef.getRating());
+            }
+            if (tvRatingNumber != null) tvRatingNumber.setText(String.valueOf(momentRef.getRating()));
+            if (tvExperience != null) tvExperience.setText(String.valueOf((int) momentRef.getRating()));
 
             // Show real calculated values (will be updated by LiveData observer)
             if (tvFees != null) tvFees.setText(formatCurrency(totalExpensesForMoment));
@@ -693,10 +707,6 @@ public class DetailActivity extends AppCompatActivity {
                             if (tvExpensesLabel != null) {
                                 tvExpensesLabel.setText("-P" + String.format("%.0f", expenseTotal));
                             }
-                            if (tvBalanceLabel != null) {
-                                double balance = incomeTotal - expenseTotal;
-                                tvBalanceLabel.setText("P" + String.format("%.0f", Math.abs(balance)));
-                            }
                         }
                     });
             }
@@ -770,18 +780,18 @@ public class DetailActivity extends AppCompatActivity {
                 View btnSaveReview = view.findViewById(R.id.btnSaveReview);
                 if (btnSaveReview != null) {
                     btnSaveReview.setOnClickListener(v -> {
-                        DateLocation m = getMomentRef();
-                        if (m == null) return;
+                        DateLocation momentToSave = getMomentRef();
+                        if (momentToSave == null) return;
 
                         if (etReview != null) {
-                            m.setReview(etReview.getText().toString().trim());
+                            momentToSave.setReview(etReview.getText().toString().trim());
                         }
-                        m.setPhotoPath(getPhotoPath());
+                        momentToSave.setPhotoPath(getPhotoPath());
                         if (ratingBarReview != null) {
-                            m.setRating(ratingBarReview.getRating());
+                            momentToSave.setRating(ratingBarReview.getRating());
                         }
                         DateViewModel vm = getDateVm();
-                        if (vm != null) vm.update(m);
+                        if (vm != null) vm.update(momentToSave);
                         Toast.makeText(getContext(), "Review saved", Toast.LENGTH_SHORT).show();
                     });
                 }

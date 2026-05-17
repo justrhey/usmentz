@@ -3,6 +3,7 @@ package com.example.usmentz.dao;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 import androidx.lifecycle.LiveData;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Dao
 public interface DateLocationDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(DateLocation dateLocation);
 
     @Update
@@ -39,4 +40,7 @@ public interface DateLocationDao {
 
     @Query("SELECT * FROM date_locations WHERE id = :id")
     DateLocation getDateLocationByIdSync(int id);
+
+    @Query("DELETE FROM date_locations")
+    void deleteAll();
 }

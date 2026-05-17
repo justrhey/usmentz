@@ -6,11 +6,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,6 +28,7 @@ import com.example.usmentz.adapter.CategoryHomeAdapter;
 import com.example.usmentz.fina.Expense;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.usmentz.widget.DonutChartView;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -49,9 +52,10 @@ public class HomeActivity extends AppCompatActivity {
     private DateViewModel dateViewModel;
     private ExpenseViewModel expenseViewModel;
 
-// Views
+    // Views
     private TextView tvTime, tvDate, tvGreeting;
     private TextView tvTotalBalance, tvIncome, tvExpenses, tvSavings;
+    private DonutChartView donutBudget;
     private TextView tvBudgetPercent, tvThisMonth;
     private TextView tvUpcomingCount, tvFavoritesCount, tvChartPeak;
     private BarChart barChart;
@@ -63,13 +67,14 @@ public class HomeActivity extends AppCompatActivity {
     private View cardQuickAdd, cardUpcoming, cardFavorites;
     private com.google.android.material.appbar.MaterialToolbar toolbar;
 
+    // FAB scroll state
+    private boolean isFabVisible = true;
+
     // Adapters
     private DateAdapter recentAdapter;
     private CategoryHomeAdapter categoryAdapter;
 
     // State
-    private Calendar calendar;
-    private SimpleDateFormat dateFormat;
     private Handler timeHandler;
     private Runnable timeRunnable;
 
@@ -81,22 +86,23 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(Window.FEATURE_NO_TITLE, Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         getWindow().setBackgroundDrawableResource(android.R.color.white);
 
         try {
-            calendar = Calendar.getInstance();
-            dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat dateFmt = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
 
             initViews();
             setupViewModels();
             setupRecyclerViews();
             setupClickListeners();
             setupChart();
-            updateDateTime();
+            updateDateTime(cal);
             startLiveTime();
 
         } catch (Exception e) {
@@ -117,6 +123,7 @@ public class HomeActivity extends AppCompatActivity {
         tvSavings = findViewById(R.id.tvSavings);
 
         // Stat cards
+        donutBudget = findViewById(R.id.donutBudget);
         tvBudgetPercent = findViewById(R.id.tvBudgetPercent);
         tvThisMonth = findViewById(R.id.tvThisMonth);
         tvChartPeak = findViewById(R.id.tvChartPeak);
@@ -152,8 +159,10 @@ public class HomeActivity extends AppCompatActivity {
         expenseViewModel = new ViewModelProvider(this).get(ExpenseViewModel.class);
 
         // Sync data from Firestore on login (Room stays source of truth, Firestore adds cloud backup)
+        // This ensures data persists across app reinstalls
         categoryViewModel.syncFromFirestore(null);
         dateViewModel.syncFromFirestore(null);
+        expenseViewModel.syncFromFirestore(null);
 
         // Observe all moments for recent activity
         dateViewModel.getAllMoments().observe(this, dates -> {
@@ -222,15 +231,13 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         // Calculate budget percentage
-        if (totalFunds > 0) {
-            int percent = (int) ((totalExpenses / totalFunds) * 100);
-            if (tvBudgetPercent != null) {
-                tvBudgetPercent.setText(percent + "%");
-            }
-        } else {
-            if (tvBudgetPercent != null) {
-                tvBudgetPercent.setText("0%");
-            }
+        float budgetFraction = totalFunds > 0 ? (float) (totalExpenses / totalFunds) : 0f;
+        int percent = (int) (budgetFraction * 100);
+        if (tvBudgetPercent != null) {
+            tvBudgetPercent.setText(percent + "%");
+        }
+        if (donutBudget != null) {
+            donutBudget.setProgress(budgetFraction);
         }
     }
 
@@ -259,7 +266,6 @@ public class HomeActivity extends AppCompatActivity {
         if (barChart == null) return;
 
         // Always draw chart, even with zero data
-        Calendar cal = Calendar.getInstance();
         double[] dailyTotals = new double[7];
         String[] dayLabels = new String[7];
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEE", Locale.getDefault());
@@ -281,22 +287,26 @@ public class HomeActivity extends AppCompatActivity {
                     long sevenDaysAgo = today - (6L * 24 * 60 * 60 * 1000);
 
                     if (expenseTime < sevenDaysAgo) continue;
-
-                    // Normalize to start of day
+                    // Calculate days ago using time difference (fixed calculation)
                     Calendar expCal = Calendar.getInstance();
                     expCal.setTimeInMillis(expenseTime);
-                    int expDayOfYear = expCal.get(Calendar.DAY_OF_YEAR);
-                    int expYear = expCal.get(Calendar.YEAR);
+                    // Normalize both to start of day for accurate day calculation
+                    expCal.set(Calendar.HOUR_OF_DAY, 0);
+                    expCal.set(Calendar.MINUTE, 0);
+                    expCal.set(Calendar.SECOND, 0);
+                    expCal.set(Calendar.MILLISECOND, 0);
 
                     Calendar todayCal = Calendar.getInstance();
-                    int todayDayOfYear = todayCal.get(Calendar.DAY_OF_YEAR);
-                    int todayYear = todayCal.get(Calendar.YEAR);
+                    todayCal.set(Calendar.HOUR_OF_DAY, 0);
+                    todayCal.set(Calendar.MINUTE, 0);
+                    todayCal.set(Calendar.SECOND, 0);
+                    todayCal.set(Calendar.MILLISECOND, 0);
 
-                    int dayOffset = (expYear - todayYear) * 365
-                            + (expDayOfYear - todayDayOfYear);
+                    long diffInMillis = todayCal.getTimeInMillis() - expCal.getTimeInMillis();
+                    int daysAgo = (int) (diffInMillis / (24 * 60 * 60 * 1000));
 
-                    if (dayOffset >= 0 && dayOffset < 7) {
-                        dailyTotals[6 - dayOffset] += expense.getAmount();
+                    if (daysAgo >= 0 && daysAgo < 7) {
+                        dailyTotals[6 - daysAgo] += expense.getAmount();
                     }
                 }
             }
@@ -400,10 +410,30 @@ public class HomeActivity extends AppCompatActivity {
             dateViewModel.update(dateLocation);
         });
 
-        // Rating change listener
-        recentAdapter.setOnRatingChangeListener((dateLocation, rating) -> {
-            dateViewModel.update(dateLocation);
-        });
+        // Note: setOnRatingChangeListener exists but is not connected to any UI in DateAdapter
+        // This was a pre-existing unused callback in the code
+
+        // FAB auto-hide on scroll
+        RecyclerView rvRecent = findViewById(R.id.rvRecentActivity);
+        if (rvRecent != null) {
+            rvRecent.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0 && isFabVisible) {
+                        isFabVisible = false;
+                        if (fabAdd != null) {
+                            fabAdd.animate().alpha(0f).setDuration(200).withEndAction(() -> fabAdd.setVisibility(View.GONE)).start();
+                        }
+                    } else if (dy < 0 && !isFabVisible) {
+                        isFabVisible = true;
+                        if (fabAdd != null) {
+                            fabAdd.setVisibility(View.VISIBLE);
+                            fabAdd.animate().alpha(1f).setDuration(200).start();
+                        }
+                    }
+                }
+            });
+        }
     }
 
     private void setupClickListeners() {
@@ -465,14 +495,15 @@ public class HomeActivity extends AppCompatActivity {
         timeRunnable = new Runnable() {
             @Override
             public void run() {
-                updateDateTime();
+                Calendar cal = Calendar.getInstance();
+                updateDateTime(cal);
                 timeHandler.postDelayed(this, 60000); // Update every minute
             }
         };
         timeHandler.post(timeRunnable);
     }
 
-    private void updateDateTime() {
+    private void updateDateTime(Calendar cal) {
         if (tvTime != null) {
             SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
             tvTime.setText(timeFormat.format(new Date()));
@@ -480,19 +511,20 @@ public class HomeActivity extends AppCompatActivity {
 
         if (tvDate != null) {
             SimpleDateFormat dateFormatNew = new SimpleDateFormat("EEEE, MMMM d", Locale.getDefault());
-            tvDate.setText(dateFormatNew.format(calendar.getTime()));
+            tvDate.setText(dateFormatNew.format(cal.getTime()));
         }
 
         if (tvGreeting != null) {
             SimpleDateFormat greetingTimeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
-            tvGreeting.setText(greetingTimeFormat.format(calendar.getTime()));
+            tvGreeting.setText(greetingTimeFormat.format(cal.getTime()));
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateDateTime();
+        Calendar cal = Calendar.getInstance();
+        updateDateTime(cal);
         if (timeHandler != null && timeRunnable != null) {
             timeHandler.removeCallbacks(timeRunnable);
         }
@@ -508,7 +540,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void showAddMomentDialog() {
-        AddMomentDialog dialog = AddMomentDialog.newInstance(() -> {
+        AddMomentDialog dialog = AddMomentDialog.newInstance(moment -> {
             // Refresh data - observers will handle it
         });
         dialog.show(getSupportFragmentManager(), "AddMomentDialog");

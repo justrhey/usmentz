@@ -112,17 +112,12 @@ public class CategoryRepository {
             public void onSuccess(List<Category> categories) {
                 executorService.execute(() -> {
                     try {
+                        // Clear old data first so no previous user's data leaks through
+                        categoryDao.deleteAll();
+
+                        // Insert all Firestore categories into Room
                         for (Category cat : categories) {
-                            Category existing = categoryDao.getCategoryByIdSync(cat.getId());
-                            if (existing == null) {
-                                categoryDao.insert(cat);
-                            } else {
-                                existing.setName(cat.getName());
-                                existing.setIconName(cat.getIconName());
-                                existing.setColor(cat.getColor());
-                                existing.setItemCount(cat.getItemCount());
-                                categoryDao.update(existing);
-                            }
+                            categoryDao.insert(cat);
                         }
                         if (onComplete != null) onComplete.run();
                     } catch (Exception e) {

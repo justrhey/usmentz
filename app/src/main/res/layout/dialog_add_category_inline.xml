@@ -22,7 +22,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Moment"
+        android:text="New Category"
         android:textColor="#212121"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -30,17 +30,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="What was this place?"
+        android:text="Organize your moments"
         android:textColor="#9E9E9E"
         android:textSize="13sp"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="16dp" />
 
-    <!-- Name field — the ONE required field -->
+    <!-- Name field -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Place name"
+        android:hint="Category name"
         app:hintTextColor="#9E9E9E"
         app:boxStrokeColor="#9B5CFF"
         app:boxStrokeWidth="1dp"
@@ -52,93 +52,79 @@
         android:layout_marginBottom="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etName"
+            android:id="@+id/etCategoryName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#212121"
             android:textSize="16sp"
             android:inputType="textCapWords"
             android:singleLine="true"
-            android:imeOptions="actionNext" />
+            android:imeOptions="actionDone" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Recent suggestions -->
+    <!-- Color label -->
     <TextView
-        android:id="@+id/tvRecentLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recent"
+        android:text="Color"
         android:textColor="#9E9E9E"
         android:textSize="12sp"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        android:layout_marginBottom="10dp" />
 
+    <!-- Color picker -->
     <LinearLayout
-        android:id="@+id/recentContainer"
+        android:id="@+id/colorPickerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone" />
+        android:gravity="center"
+        android:layout_marginBottom="24dp">
 
-    <!-- Category label -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Category"
-        android:textColor="#9E9E9E"
-        android:textSize="12sp"
-        android:layout_marginBottom="8dp" />
+        <View
+            android:id="@+id/colorPurple"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_gradient_purple" />
 
-    <!-- Category chip selector -->
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:layout_marginBottom="20dp">
+        <View
+            android:id="@+id/colorRed"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_gradient_red" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <View
+            android:id="@+id/colorBlue"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_gradient_blue" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroupCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:singleSelection="true"
-                app:selectionRequired="true" />
+        <View
+            android:id="@+id/colorGreen"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_gradient_green" />
 
-            <!-- Inline "Add Category" chip -->
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAddCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+ New"
-                android:textColor="#9B5CFF"
-                android:textSize="13sp"
-                app:chipBackgroundColor="@android:color/transparent"
-                app:chipStrokeColor="#9B5CFF"
-                app:chipStrokeWidth="1.5dp"
-                app:chipCornerRadius="20dp"
-                app:checkedIconVisible="false"
-                android:layout_marginStart="4dp" />
+        <View
+            android:id="@+id/colorOrange"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_gradient_orange" />
 
-        </LinearLayout>
+        <View
+            android:id="@+id/colorPink"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/bg_gradient_pink" />
 
-    </HorizontalScrollView>
+    </LinearLayout>
 
-    <!-- Hint -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date, location, and details can be added after"
-        android:textColor="#BDBDBD"
-        android:textSize="12sp"
-        android:layout_marginBottom="20dp" />
-
-    <!-- Action buttons -->
+    <!-- Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -157,11 +143,11 @@
             app:cornerRadius="12dp" />
 
         <Button
-            android:id="@+id/btnSave"
+            android:id="@+id/btnCreate"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:text="Add"
+            android:text="Create"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"

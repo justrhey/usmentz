@@ -24,6 +24,15 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     private List<Review> reviews = new ArrayList<>();
     private OnReviewClickListener listener;
 
+    public ReviewAdapter() {
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     public interface OnReviewClickListener {
         void onReviewClick(Review review);
     }

@@ -20,6 +20,15 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     private List<Expense> expenses = new ArrayList<>();
     private OnExpenseDeleteListener deleteListener;
 
+    public ExpenseAdapter() {
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return expenses.get(position).getId();
+    }
+
     public interface OnExpenseDeleteListener {
         void onDelete(Expense expense);
     }
@@ -101,15 +110,17 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                     iconRes = R.drawable.paymaya_logo;
                     break;
                 case "Cash":
-                    iconRes = R.drawable.cash_logo;
-                    break;
                 default:
                     iconRes = R.drawable.cash_logo;
             }
         } else {
             iconRes = R.drawable.cash_logo;
         }
-        holder.ivPaymentIcon.setImageResource(iconRes);
+        try {
+            holder.ivPaymentIcon.setImageResource(iconRes);
+        } catch (Exception e) {
+            holder.ivPaymentIcon.setImageResource(R.drawable.cash_logo);
+        }
         
         // Format amount with sign based on type
         String amountStr;

@@ -55,4 +55,12 @@ public class ExpenseViewModel extends AndroidViewModel {
     public void deleteAllExpensesForMoment(int momentId) {
         repository.deleteAllForMoment(momentId);
     }
+
+    /**
+     * Sync expenses from Firestore to Room database.
+     * Called when user logs in to restore data from cloud.
+     */
+    public void syncFromFirestore(Runnable onComplete) {
+        repository.syncFromFirestore(onComplete);
+    }
 }

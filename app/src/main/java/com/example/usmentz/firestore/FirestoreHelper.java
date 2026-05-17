@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.example.usmentz.category.Category;
 import com.example.usmentz.date.DateLocation;
+import com.example.usmentz.fina.Expense;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -46,6 +47,9 @@ public class FirestoreHelper {
     @Nullable
     private String getUserId() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Log.w(TAG, "getUserId: No user currently authenticated");
+        }
         return user != null ? user.getUid() : null;
     }
 
@@ -303,6 +307,131 @@ public class FirestoreHelper {
     }
 
     // ─────────────────────────────────────────────
+    // Expenses - NEW: Sync expenses to Firestore
+    // ─────────────────────────────────────────────
+
+    public void saveExpense(Expense expense, SyncCallback callback) {
+        String userId = getUserId();
+        if (userId == null) {
+            if (callback != null) callback.onFailure(new Exception("Not logged in"));
+            return;
+        }
+
+        Map<String, Object> data = expenseToMap(expense);
+        data.put("userId", userId);
+
+        if (expense.getId() > 0) {
+            // Update: find by localId
+            db.collection(COL_EXPENSES)
+                    .whereEqualTo("userId", userId)
+                    .whereEqualTo("localId", expense.getId())
+                    .get()
+                    .addOnSuccessListener(snap -> {
+                        if (snap != null && !snap.isEmpty()) {
+                            String docId = snap.getDocuments().get(0).getId();
+                            db.collection(COL_EXPENSES).document(docId).set(data)
+                                    .addOnSuccessListener(v -> {
+                                        Log.d(TAG, "Expense updated in Firestore, localId: " + expense.getId());
+                                        if (callback != null) callback.onSuccess();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e(TAG, "saveExpense update failed", e);
+                                        if (callback != null) callback.onFailure(e);
+                                    });
+                        } else {
+                            // Not found, create new
+                            db.collection(COL_EXPENSES).add(data)
+                                    .addOnSuccessListener(v -> {
+                                        Log.d(TAG, "Expense added to Firestore, localId: " + expense.getId());
+                                        if (callback != null) callback.onSuccess();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e(TAG, "saveExpense add failed", e);
+                                        if (callback != null) callback.onFailure(e);
+                                    });
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "saveExpense query failed", e);
+                        if (callback != null) callback.onFailure(e);
+                    });
+        } else {
+            // New expense
+            db.collection(COL_EXPENSES).add(data)
+                    .addOnSuccessListener(v -> {
+                        Log.d(TAG, "New expense added to Firestore");
+                        if (callback != null) callback.onSuccess();
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "saveExpense new failed", e);
+                        if (callback != null) callback.onFailure(e);
+                    });
+        }
+    }
+
+    public void deleteExpense(int localId, SyncCallback callback) {
+        String userId = getUserId();
+        if (userId == null) {
+            if (callback != null) callback.onFailure(new Exception("Not logged in"));
+            return;
+        }
+
+        db.collection(COL_EXPENSES)
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("localId", localId)
+                .get()
+                .addOnSuccessListener(snap -> {
+                    if (snap != null && !snap.isEmpty()) {
+                        String docId = snap.getDocuments().get(0).getId();
+                        db.collection(COL_EXPENSES).document(docId).delete()
+                                .addOnSuccessListener(v -> {
+                                    Log.d(TAG, "Expense deleted from Firestore, localId: " + localId);
+                                    if (callback != null) callback.onSuccess();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.e(TAG, "deleteExpense failed", e);
+                                    if (callback != null) callback.onFailure(e);
+                                });
+                    } else {
+                        // Not found, consider success
+                        Log.d(TAG, "Expense not found in Firestore for deletion, localId: " + localId);
+                        if (callback != null) callback.onSuccess();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "deleteExpense query failed", e);
+                    if (callback != null) callback.onFailure(e);
+                });
+    }
+
+    public void loadExpenses(SyncListCallback<Expense> callback) {
+        String userId = getUserId();
+        if (userId == null) {
+            if (callback != null) callback.onFailure(new Exception("Not logged in"));
+            return;
+        }
+
+        db.collection(COL_EXPENSES)
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener(snap -> {
+                    List<Expense> list = new ArrayList<>();
+                    if (snap != null) {
+                        for (DocumentSnapshot doc : snap.getDocuments()) {
+                            Expense exp = mapToExpense(doc);
+                            if (exp != null) list.add(exp);
+                        }
+                    }
+                    Log.d(TAG, "Loaded " + list.size() + " expenses from Firestore");
+                    if (callback != null) callback.onSuccess(list);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "loadExpenses failed", e);
+                    if (callback != null) callback.onFailure(e);
+                });
+    }
+
+    // ─────────────────────────────────────────────
     // Map conversions
     // ─────────────────────────────────────────────
 
@@ -321,6 +450,18 @@ public class FirestoreHelper {
         if (moment.getDate() != null) {
             m.put("date", moment.getDate().getTime());
         }
+        return m;
+    }
+
+    private Map<String, Object> expenseToMap(Expense expense) {
+        Map<String, Object> m = new HashMap<>();
+        m.put("localId", expense.getId());
+        m.put("description", expense.getDescription());
+        m.put("amount", expense.getAmount());
+        m.put("momentId", expense.getMomentId());
+        m.put("createdAt", expense.getCreatedAt());
+        m.put("type", expense.getType());
+        m.put("paymentMethod", expense.getPaymentMethod());
         return m;
     }
 
@@ -362,6 +503,25 @@ public class FirestoreHelper {
             return m;
         } catch (Exception e) {
             Log.e(TAG, "mapToMoment", e);
+            return null;
+        }
+    }
+
+    @Nullable
+    private Expense mapToExpense(DocumentSnapshot doc) {
+        try {
+            Expense exp = new Expense();
+            exp.setId(doc.getLong("localId") != null ? doc.getLong("localId").intValue() : 0);
+            exp.setDescription(doc.getString("description"));
+            Double amountVal = doc.getDouble("amount");
+            exp.setAmount(amountVal != null ? amountVal : 0.0);
+            exp.setMomentId(doc.getLong("momentId") != null ? doc.getLong("momentId").intValue() : 0);
+            exp.setCreatedAt(doc.getLong("createdAt") != null ? doc.getLong("createdAt") : System.currentTimeMillis());
+            exp.setType(doc.getString("type") != null ? doc.getString("type") : Expense.TYPE_EXPENSES);
+            exp.setPaymentMethod(doc.getString("paymentMethod") != null ? doc.getString("paymentMethod") : "Cash");
+            return exp;
+        } catch (Exception e) {
+            Log.e(TAG, "mapToExpense", e);
             return null;
         }
     }

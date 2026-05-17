@@ -78,30 +78,28 @@
 
         </LinearLayout>
 
-        <!-- ─────────────────────────────────────────
-             SECTION LABEL: Overview
-        ───────────────────────────────────────── -->
+<!-- ─────────────────────────────────────────
+             OVERVIEW HEADER (big black text)
+         ───────────────────────────────────────── -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OVERVIEW"
-            android:textColor="#9B5CFF"
-            android:textSize="11sp"
+            android:text="Overview"
+            android:textColor="#1A1A1A"
+            android:textSize="28sp"
             android:textStyle="bold"
-android:letterSpacing="0.08"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="4dp"/>
 
-        <!-- ─────────────────────────────────────────
-             0. CATEGORY CAROUSEL (Pill + Horizontal Cards)
-        ───────────────────────────────────────── -->
+<!-- ─────────────────────────────────────────
+             1. CATEGORIES CAROUSEL
+         ───────────────────────────────────────── -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CATEGORIES"
-            android:textColor="#9B5CFF"
-            android:textSize="11sp"
+            android:text="Your Categories"
+            android:textColor="#1A1A1A"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:letterSpacing="0.08"
             android:layout_marginBottom="8dp"/>
 
         <HorizontalScrollView
@@ -302,19 +300,18 @@ android:letterSpacing="0.08"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp"/>
 
-                    <com.google.android.material.progressindicator.LinearProgressIndicator
-                        android:id="@+id/progressBudget"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                    <com.example.usmentz.widget.DonutChartView
+                        android:id="@+id/donutBudget"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:layout_gravity="center"
                         android:layout_marginTop="8dp"
-                        android:progress="64"
-                        app:trackColor="#F3EDFF"
-                        app:indicatorColor="#9B5CFF"
-                        app:trackCornerRadius="4dp"/>
+                        android:layout_marginBottom="6dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="On track"
                         android:textColor="#27AE60"
                         android:textSize="9sp"
@@ -324,7 +321,7 @@ android:letterSpacing="0.08"
                         android:paddingEnd="7dp"
                         android:paddingTop="2dp"
                         android:paddingBottom="2dp"
-                        android:layout_marginTop="6dp"/>
+                        android:layout_marginTop="4dp"/>
 
                 </LinearLayout>
 

@@ -285,7 +285,10 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void showAddMomentDialog() {
-        AddMomentDialog dialog = AddMomentDialog.newInstance(this::loadData);
+        AddMomentDialog dialog = AddMomentDialog.newInstance(moment -> {
+            loadData();
+            // Optionally navigate to detail
+        });
         dialog.show(getSupportFragmentManager(), "AddMomentDialog");
     }
 

@@ -16,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.usmentz.AddMomentDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,6 +51,8 @@ public class MomentsActivity extends AppCompatActivity {
     private String categoryName;
     private String categoryEmoji;
     private int categoryColor;
+    private FloatingActionButton fabAdd;
+    private boolean isFabVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +160,7 @@ public class MomentsActivity extends AppCompatActivity {
         });
 
         // FAB to add new moment
-        FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
+        fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v -> showAddDialog());
     }
 
@@ -202,73 +206,32 @@ public class MomentsActivity extends AppCompatActivity {
                 });
 
         dragHelper.attachToRecyclerView(recyclerView);
+
+        // FAB auto-hide on scroll
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 && isFabVisible) {
+                    isFabVisible = false;
+                    if (fabAdd != null) {
+                        fabAdd.animate().alpha(0f).setDuration(200).withEndAction(() -> fabAdd.setVisibility(View.GONE)).start();
+                    }
+                } else if (dy < 0 && !isFabVisible) {
+                    isFabVisible = true;
+                    if (fabAdd != null) {
+                        fabAdd.setVisibility(View.VISIBLE);
+                        fabAdd.animate().alpha(1f).setDuration(200).start();
+                    }
+                }
+            }
+        });
     }
 
     private void showAddDialog() {
-        try {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            LayoutInflater inflater = getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.dialog_add_date_simple, null);
-            builder.setView(dialogView);
-
-            EditText etName = dialogView.findViewById(R.id.etName);
-            EditText etAddress = dialogView.findViewById(R.id.etAddress);
-            EditText etDescription = dialogView.findViewById(R.id.etDescription);
-            Button btnDate = dialogView.findViewById(R.id.btnSelectDate);
-            TextView tvSelectedDate = dialogView.findViewById(R.id.tvSelectedDate);
-            Button btnCancel = dialogView.findViewById(R.id.btnCancel);
-            Button btnSave = dialogView.findViewById(R.id.btnSave);
-
-            tvSelectedDate.setText(dateFormat.format(selectedDate));
-
-            btnDate.setOnClickListener(v -> {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        MomentsActivity.this,
-                        (view, year, month, dayOfMonth) -> {
-                            calendar.set(Calendar.YEAR, year);
-                            calendar.set(Calendar.MONTH, month);
-                            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                            selectedDate = calendar.getTime();
-                            tvSelectedDate.setText(dateFormat.format(selectedDate));
-                        },
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)
-                );
-                datePickerDialog.show();
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            btnCancel.setOnClickListener(v -> dialog.dismiss());
-
-            btnSave.setOnClickListener(v -> {
-                String name = etName.getText().toString().trim();
-                String address = etAddress.getText().toString().trim();
-                String description = etDescription.getText().toString().trim();
-
-                if (TextUtils.isEmpty(name)) {
-                    etName.setError("Name is required");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(address)) {
-                    etAddress.setError("Address is required");
-                    return;
-                }
-
-                if (dateViewModel != null) {
-                    DateLocation newDate = new DateLocation(name, address, description, selectedDate);
-                    newDate.setCategoryId(categoryId);
-                    dateViewModel.insert(newDate);
-                    Toast.makeText(MomentsActivity.this, "Moment added to " + categoryName, Toast.LENGTH_SHORT).show();
-                }
-                dialog.dismiss();
-            });
-        } catch (Exception e) {
-            Log.e(TAG, "Error in showAddDialog", e);
-        }
+        AddMomentDialog dialog = AddMomentDialog.newInstance(moment -> {
+            Toast.makeText(this, "Moment added", Toast.LENGTH_SHORT).show();
+        });
+        dialog.show(getSupportFragmentManager(), "AddMomentDialog");
     }
 
     private void deleteDateLocation(DateLocation dateLocation) {

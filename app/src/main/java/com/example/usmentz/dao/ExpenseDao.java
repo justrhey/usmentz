@@ -26,6 +26,10 @@ public interface ExpenseDao {
     @Query("SELECT * FROM expenses WHERE momentId = :momentId ORDER BY id ASC")
     LiveData<List<Expense>> getExpensesByMoment(int momentId);
 
+    // Synchronous version for use in background threads
+    @Query("SELECT * FROM expenses WHERE momentId = :momentId ORDER BY id ASC")
+    List<Expense> getExpensesForMomentSync(int momentId);
+
     @Query("SELECT SUM(amount) FROM expenses WHERE momentId = :momentId AND type = 'expenses'")
     LiveData<Double> getTotalByMoment(int momentId);
 
@@ -40,4 +44,8 @@ public interface ExpenseDao {
 
     @Query("DELETE FROM expenses WHERE momentId = :momentId")
     void deleteAllForMoment(int momentId);
+
+    // Delete all expenses (for sync)
+    @Query("DELETE FROM expenses")
+    void deleteAll();
 }

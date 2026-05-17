@@ -7,8 +7,8 @@
     android:background="#FFFFFF"
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
-    android:paddingTop="28dp"
-    android:paddingBottom="24dp">
+    android:paddingTop="24dp"
+    android:paddingBottom="28dp">
 
     <!-- Title -->
     <TextView
@@ -16,17 +16,41 @@
         android:layout_height="wrap_content"
         android:text="New Category"
         android:textColor="#212121"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Organise your moments"
+        android:text="Organize your moments"
         android:textColor="#9E9E9E"
-        android:textSize="14sp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="24dp" />
+        android:textSize="13sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Icon row -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Icon"
+        android:textColor="#9E9E9E"
+        android:textSize="12sp"
+        android:layout_marginBottom="8dp" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_marginBottom="20dp">
+
+        <LinearLayout
+            android:id="@+id/iconRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical" />
+
+    </HorizontalScrollView>
 
     <!-- Name field -->
     <com.google.android.material.textfield.TextInputLayout
@@ -49,140 +73,26 @@
             android:layout_height="wrap_content"
             android:textColor="#212121"
             android:textSize="16sp"
-            android:inputType="textCapSentences"
+            android:inputType="textCapWords"
             android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Icon row -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp">
-
-        <ImageView
-            android:id="@+id/ivIconPreview"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/folder"
-            android:scaleType="centerInside"
-            android:background="@drawable/bg_icon_preview"
-            android:padding="8dp" />
-
-        <TextView
-            android:id="@+id/tvIconPreview"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Folder"
-            android:textColor="#9B5CFF"
-            android:textSize="14sp"
-            android:layout_marginStart="12dp" />
-
-        <Button
-            android:id="@+id/btnIconDropdown"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:text="Change"
-            android:textColor="#9B5CFF"
-            android:textSize="12sp"
-            android:backgroundTint="#F3E5F5"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp" />
-
-    </LinearLayout>
-
+    <!-- Color wheel -->
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tap Change to cycle through icons"
+        android:text="Pick color"
         android:textColor="#9E9E9E"
         android:textSize="12sp"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="8dp" />
 
-    <!-- Color picker - beautiful gradient circles -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="COLOR"
-        android:textColor="#9E9E9E"
-        android:textSize="12sp"
-        android:layout_marginBottom="12dp" />
-
-    <!-- Color circles row with gradients -->
-    <LinearLayout
-        android:id="@+id/colorPickerContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginBottom="24dp">
-
-        <!-- Purple -->
-        <View
-            android:id="@+id/colorPurple"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/bg_gradient_purple"
-            android:tag="#9B5CFF"/>
-
-        <!-- Red -->
-        <View
-            android:id="@+id/colorRed"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/bg_gradient_red"
-            android:tag="#FF5252"/>
-
-        <!-- Blue -->
-        <View
-            android:id="@+id/colorBlue"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/bg_gradient_blue"
-            android:tag="#2196F3"/>
-
-        <!-- Green -->
-        <View
-            android:id="@+id/colorGreen"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/bg_gradient_green"
-            android:tag="#4CAF50"/>
-
-        <!-- Orange -->
-        <View
-            android:id="@+id/colorOrange"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/bg_gradient_orange"
-            android:tag="#FF9800"/>
-
-        <!-- Pink -->
-        <View
-            android:id="@+id/colorPink"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="@drawable/bg_gradient_pink"
-            android:tag="#E91E63"/>
-
-    </LinearLayout>
-
-    <!-- Hidden spinner still for Java compatibility -->
-    <Spinner
-        android:id="@+id/spinnerColor"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone" />
+    <com.example.usmentz.widget.ColorWheelView
+        android:id="@+id/colorWheel"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp" />
 
     <!-- Buttons -->
     <LinearLayout

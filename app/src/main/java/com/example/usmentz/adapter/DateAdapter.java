@@ -21,6 +21,8 @@ import java.util.Locale;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.graphics.Paint;
+
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder> {
     private List<DateLocation> dates = new ArrayList<>();
     private OnItemClickListener listener;
@@ -30,6 +32,15 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
     private OnRatingChangeListener ratingChangeListener;
     private OnReviewClickListener reviewClickListener;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+
+    public DateAdapter() {
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return dates.get(position).getId();
+    }
 
     public interface OnItemClickListener {
         void onItemClick(DateLocation dateLocation);
@@ -56,7 +67,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
     }
 
     // No-arg constructor
-    public DateAdapter() {}
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
@@ -120,21 +130,26 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         holder.tvName.setText(currentDate.getName());
         holder.tvAddress.setText(currentDate.getAddress());
 
-        // Set completion checkbox
-        holder.checkComplete.setChecked(currentDate.isCompleted());
+        // Completion circle — always visible, toggles unicode symbol
+        holder.completionDot.setText(currentDate.isCompleted() ? "●" : "○");
 
-        // Show/hide rating container based on completion
+        // Name strikethrough when done
         if (currentDate.isCompleted()) {
-            holder.ratingContainer.setVisibility(View.VISIBLE);
-            holder.ratingBar.setRating(currentDate.getRating());
-
-            if (currentDate.getReview() != null && !currentDate.getReview().isEmpty()) {
-                holder.tvReview.setVisibility(View.VISIBLE);
-            } else {
-                holder.tvReview.setVisibility(View.GONE);
-            }
+            holder.tvName.setPaintFlags(holder.tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
-            holder.ratingContainer.setVisibility(View.GONE);
+            holder.tvName.setPaintFlags(holder.tvName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
+
+        // Star + rating when completed and has rating/review
+        boolean hasReview = currentDate.getReview() != null && !currentDate.getReview().isEmpty();
+        boolean hasRating = currentDate.getRating() > 0;
+        if (currentDate.isCompleted() && (hasReview || hasRating)) {
+            holder.tvReview.setVisibility(View.VISIBLE);
+            holder.tvRating.setVisibility(View.VISIBLE);
+            holder.tvRating.setText(String.valueOf((int) currentDate.getRating()));
+        } else {
+            holder.tvReview.setVisibility(View.GONE);
+            holder.tvRating.setVisibility(View.GONE);
         }
     }
 
@@ -174,17 +189,42 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         private RatingBar ratingBar;
         private ImageView tvReview;
         private ImageView btnDelete;
+        private TextView completionDot;
+        private TextView tvRating;
 
         public DateViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvName);
             tvAddress = itemView.findViewById(R.id.tvAddress);
             tvDate = itemView.findViewById(R.id.tvDate);
+            tvRating = itemView.findViewById(R.id.tvRating);
+            completionDot = itemView.findViewById(R.id.completionDot);
+            // Hidden compatibility views
             checkComplete = itemView.findViewById(R.id.checkComplete);
             ratingContainer = itemView.findViewById(R.id.ratingContainer);
             ratingBar = itemView.findViewById(R.id.ratingBar);
             tvReview = itemView.findViewById(R.id.tvReview);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+
+            // Completion toggle
+            completionDot.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    DateLocation date = dates.get(position);
+                    boolean newState = !date.isCompleted();
+                    date.setCompleted(newState);
+                    // Toggle unicode circle
+                    completionDot.setText(newState ? "●" : "○");
+                    if (newState) {
+                        tvName.setPaintFlags(tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    } else {
+                        tvName.setPaintFlags(tvName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    }
+                    if (completeListener != null) {
+                        completeListener.onItemComplete(date, newState);
+                    }
+                }
+            });
 
             // Item click listener
             itemView.setOnClickListener(v -> {
@@ -199,34 +239,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
                 int position = getAdapterPosition();
                 if (deleteListener != null && position != RecyclerView.NO_POSITION) {
                     deleteListener.onItemDelete(dates.get(position));
-                }
-            });
-
-            // Completion checkbox listener
-            checkComplete.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                // Only respond to user taps, not programmatic setChecked calls
-                if (!buttonView.isPressed()) return;
-                int position = getAdapterPosition();
-                if (completeListener != null && position != RecyclerView.NO_POSITION) {
-                    DateLocation date = dates.get(position);
-                    date.setCompleted(isChecked);
-                    completeListener.onItemComplete(date, isChecked);
-
-                    if (isChecked) {
-                        ratingContainer.setVisibility(View.VISIBLE);
-                    } else {
-                        ratingContainer.setVisibility(View.GONE);
-                    }
-                }
-            });
-
-            // Rating bar change listener
-            ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-                int position = getAdapterPosition();
-                if (fromUser && ratingChangeListener != null && position != RecyclerView.NO_POSITION) {
-                    DateLocation date = dates.get(position);
-                    date.setRating(rating);
-                    ratingChangeListener.onRatingChange(date, rating);
                 }
             });
 
