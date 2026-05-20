@@ -19,6 +19,7 @@ public class SplashActivity extends AppCompatActivity {
     private static final String TAG = "SplashActivity";
     private static final int SPLASH_DELAY = 1500; // 1.5 seconds
     private static final String PREFS_NAME = "UsmentzPrefs";
+    private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
     
     private SharedPreferences sharedPreferences;
 
@@ -38,9 +39,14 @@ public class SplashActivity extends AppCompatActivity {
         Button btnGetStarted = findViewById(R.id.btnGetStarted);
         Button btnLogin = findViewById(R.id.btnLogin);
 
-        // Get Started -> Go to Onboarding
+        // Get Started -> Go to Onboarding (skip if already completed)
         btnGetStarted.setOnClickListener(v -> {
-            startActivity(new Intent(this, OnboardingActivity.class));
+            boolean onboardingDone = sharedPreferences.getBoolean(KEY_ONBOARDING_COMPLETE, false);
+            if (onboardingDone) {
+                startActivity(new Intent(this, RegisterActivity.class));
+            } else {
+                startActivity(new Intent(this, OnboardingActivity.class));
+            }
         });
 
         // Already have account -> Go to Login
