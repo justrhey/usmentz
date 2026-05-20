@@ -448,11 +448,7 @@ public class HomeActivity extends AppCompatActivity {
             });
         }
 
-        if (navReviews != null) {
-            navReviews.setOnClickListener(v -> {
-                startActivity(new Intent(this, ReviewsActivity.class));
-            });
-        }
+        // navReviews removed - reviews are now private diary entries inside moments
 
         if (navCalendar != null) {
             navCalendar.setOnClickListener(v -> {

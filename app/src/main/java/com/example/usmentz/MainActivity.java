@@ -256,7 +256,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupBottomNavigation() {
         setNavClick(navHome, HomeActivity.class);
         setNavClick(navCalendar, CalendarActivity.class);
-        setNavClick(navReviews, ReviewsActivity.class);
         setNavClick(navFavorites, FavoritesActivity.class);
 
         if (navCategories != null) {

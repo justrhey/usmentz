@@ -261,12 +261,7 @@ public class CalendarActivity extends AppCompatActivity {
                 finish();
             });
         }
-        if (navReviews != null) {
-            navReviews.setOnClickListener(v -> {
-                startActivity(new Intent(this, ReviewsActivity.class));
-                finish();
-            });
-        }
+        // navReviews removed - reviews are now private diary entries inside moments
     }
 
     private void switchViewMode(int mode) {

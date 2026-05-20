@@ -77,11 +77,6 @@
             android:exported="false"
             android:theme="@style/Theme.Usmentz" />
 
-        <activity
-            android:name=".ReviewsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Usmentz" />
-
         <activity android:name=".SettingsActivity" android:exported="false" />
 
         <!-- Profile Activity -->

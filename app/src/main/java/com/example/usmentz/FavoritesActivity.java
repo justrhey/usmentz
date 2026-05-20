@@ -112,13 +112,7 @@ public class FavoritesActivity extends AppCompatActivity {
             });
         }
 
-        // Reviews - navigate to ReviewsActivity
-        if (navReviews != null) {
-            navReviews.setOnClickListener(v -> {
-                startActivity(new Intent(this, ReviewsActivity.class));
-                finish();
-            });
-        }
+        // navReviews removed - reviews are now private diary entries inside moments
 
         // Favorites - stay on current activity
         if (navFavorites != null) {
