@@ -444,7 +444,7 @@ public class FirestoreHelper {
         m.put("categoryId", moment.getCategoryId());
         m.put("isCompleted", moment.isCompleted());
         m.put("rating", moment.getRating());
-        m.put("review", moment.getReview());
+        m.put("reviewNotes", moment.getReviewNotes());
         m.put("photoPath", moment.getPhotoPath());
         m.put("position", moment.getPosition());
         // New fields for scrapbook vision

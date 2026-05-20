@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +28,12 @@ public class FavoritesActivity extends AppCompatActivity {
     private TextView tvEmptyTitle, tvEmptySubtitle;
     private ImageView ivEmpty;
 
-    // Floating navbar clickable areas
-    private LinearLayout navHome, navCalendar, navReviews;
+    // Expanding pill navbar
+    private View navItemHome, navItemCategories, navItemCalendar;
+    private View navHomeActive, navHomeInactive;
+    private View navCategoriesActive, navCategoriesInactive;
+    private View navCalendarActive, navCalendarInactive;
+    private int activeNavSlot = 1; // Categories active by default (came from categories)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +67,20 @@ public class FavoritesActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Floating navbar clickable areas
-        navHome       = findViewById(R.id.navHome);
-        navCalendar   = findViewById(R.id.navCalendar);
-        navReviews   = findViewById(R.id.navReviews);
+        // Expanding pill navbar
+        navItemHome = findViewById(R.id.navItemHome);
+        navItemCategories = findViewById(R.id.navItemCategories);
+        navItemCalendar = findViewById(R.id.navItemCalendar);
+        navHomeActive = findViewById(R.id.navHomeActive);
+        navHomeInactive = findViewById(R.id.navHomeInactive);
+        navCategoriesActive = findViewById(R.id.navCategoriesActive);
+        navCategoriesInactive = findViewById(R.id.navCategoriesInactive);
+        navCalendarActive = findViewById(R.id.navCalendarActive);
+        navCalendarInactive = findViewById(R.id.navCalendarInactive);
+        setActiveNavSlot(1); // Categories active by default
 
         // Setup click listeners for navbar
-        setupFloatingNavbar();
+        setupNavigation();
 
         // Observe - show moments marked as "do again"
         dateViewModel.getAllMoments().observe(this, moments -> {
@@ -93,24 +103,33 @@ public class FavoritesActivity extends AppCompatActivity {
         });
     }
 
-    // ── Floating navbar click listeners ───────────────────────────────────
-    private void setupFloatingNavbar() {
-        // Home - navigate to MainActivity
-        if (navHome != null) {
-            navHome.setOnClickListener(v -> {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-            });
-        }
+    private void setupNavigation() {
+        navItemHome.setOnClickListener(v -> {
+            setActiveNavSlot(0);
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+        });
 
-        // Calendar - navigate to CalendarActivity
-        if (navCalendar != null) {
-            navCalendar.setOnClickListener(v -> {
-                startActivity(new Intent(this, CalendarActivity.class));
-                finish();
-            });
-        }
+        navItemCategories.setOnClickListener(v -> {
+            setActiveNavSlot(1);
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
 
-        // navReviews removed - reviews are now private diary entries inside moments
+        navItemCalendar.setOnClickListener(v -> {
+            setActiveNavSlot(2);
+            startActivity(new Intent(this, CalendarActivity.class));
+            finish();
+        });
+    }
+
+    private void setActiveNavSlot(int slotIndex) {
+        activeNavSlot = slotIndex;
+        navHomeActive.setVisibility(slotIndex == 0 ? View.VISIBLE : View.GONE);
+        navHomeInactive.setVisibility(slotIndex == 0 ? View.GONE : View.VISIBLE);
+        navCategoriesActive.setVisibility(slotIndex == 1 ? View.VISIBLE : View.GONE);
+        navCategoriesInactive.setVisibility(slotIndex == 1 ? View.GONE : View.VISIBLE);
+        navCalendarActive.setVisibility(slotIndex == 2 ? View.VISIBLE : View.GONE);
+        navCalendarInactive.setVisibility(slotIndex == 2 ? View.GONE : View.VISIBLE);
     }
 }

@@ -34,9 +34,9 @@
         <item name="android:textColorSecondary">@color/text_secondary</item>
         <item name="android:textColorHint">@color/text_hint</item>
 
-        <!-- NO animations - instant transitions -->
-        <item name="android:windowAnimationStyle">@null</item>
-        <item name="android:windowContentTransitions">false</item>
+        <!-- Smooth animations -->
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+        <item name="android:windowContentTransitions">true</item>
 
         <!-- Default shape appearances - CURVED -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Usmentz.Small</item>
@@ -104,6 +104,8 @@
         <item name="android:navigationBarColor">#F8F7FF</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">#F8F7FF</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
     </style>
 
     <!-- Splash Theme -->
@@ -112,6 +114,14 @@
         <item name="android:windowBackground">@drawable/splash_background</item>
         <item name="android:statusBarColor">@color/black_pure</item>
         <item name="android:navigationBarColor">@color/black_pure</item>
+    </style>
+
+    <!-- Window Animation Transition -->
+    <style name="WindowAnimationTransition">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 
     <!-- Card Style - CURVED -->
@@ -172,6 +182,12 @@
     <style name="CircleImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- Rounded Corners 16dp for photo preview -->
+    <style name="RoundedCorners16" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
     </style>
 
 </resources>

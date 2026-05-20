@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Capsule shape with fully rounded ends -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#9B5CFF" />
+    <corners android:radius="14dp" />
+</shape>

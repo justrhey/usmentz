@@ -1,7 +1,6 @@
 package com.example.usmentz.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,28 +53,31 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
         int iconRes = getDrawableResId(ctx, cat.getIconName());
         h.ivIcon.setImageResource(iconRes);
 
-        // Icon circle background with category color
-        int color = cat.getColor() != 0 ? cat.getColor() : 0xFF9B5CFF;
-        GradientDrawable circleBg = new GradientDrawable();
-        circleBg.setShape(GradientDrawable.OVAL);
-        circleBg.setColor(adjustAlpha(color, 0.15f));
-        h.viewIconBg.setBackground(circleBg);
-
-        // Tint icon with category color
-        h.ivIcon.setColorFilter(color);
+        // Icon circle background with gradient drawable
+        int gradientRes = getGradientDrawable(cat.getColor());
+        h.viewIconBg.setBackgroundResource(gradientRes);
 
         // Top strip with category color
         GradientDrawable stripBg = new GradientDrawable();
         stripBg.setCornerRadii(new float[]{
-                dpToPx(20), dpToPx(20), dpToPx(20), dpToPx(20),
-                0, 0, 0, 0
+                dpToPx(18), dpToPx(18), 0, 0, 0, 0, 0, 0
         });
-        stripBg.setColor(color);
+        stripBg.setColor(cat.getColor() != 0 ? cat.getColor() : 0xFF9B5CFF);
         h.topStrip.setBackground(stripBg);
 
         h.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onCategoryClick(cat);
         });
+    }
+
+    private int getGradientDrawable(int color) {
+        if (color == 0xFF9B5CFF) return R.drawable.bg_gradient_purple;
+        else if (color == 0xFFFF5252) return R.drawable.bg_gradient_red;
+        else if (color == 0xFF2196F3) return R.drawable.bg_gradient_blue;
+        else if (color == 0xFF4CAF50) return R.drawable.bg_gradient_green;
+        else if (color == 0xFFFF9800) return R.drawable.bg_gradient_orange;
+        else if (color == 0xFFE91E63) return R.drawable.bg_gradient_pink;
+        else return R.drawable.bg_gradient_purple;
     }
 
     private int getDrawableResId(Context ctx, String iconName) {
@@ -92,14 +94,6 @@ public class CategoryHomeAdapter extends RecyclerView.Adapter<CategoryHomeAdapte
             case "folder":    return R.drawable.folder;
             default:          return R.drawable.folder;
         }
-    }
-
-    private int adjustAlpha(int color, float factor) {
-        int alpha = Math.round(Color.alpha(color) * factor);
-        int red = Color.red(color);
-        int green = Color.green(color);
-        int blue = Color.blue(color);
-        return Color.argb(alpha, red, green, blue);
     }
 
     private int dpToPx(float dp) {

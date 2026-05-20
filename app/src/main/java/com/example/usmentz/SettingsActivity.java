@@ -113,6 +113,12 @@ public class SettingsActivity extends AppCompatActivity {
         // Load preferences
         boolean notificationsEnabled = sharedPreferences.getBoolean("notifications", true);
         switchNotifications.setChecked(notificationsEnabled);
+
+        // Set listener AFTER loading to prevent firing on restore
+        switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPreferences.edit().putBoolean("notifications", isChecked).apply();
+            Toast.makeText(this, isChecked ? "Notifications enabled" : "Notifications disabled", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void setupClickListeners() {
@@ -128,11 +134,7 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-        // Notifications switch
-        switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sharedPreferences.edit().putBoolean("notifications", isChecked).apply();
-            Toast.makeText(this, isChecked ? "Notifications enabled" : "Notifications disabled", Toast.LENGTH_SHORT).show();
-        });
+        // Notifications switch - listener set in loadUserData() after setChecked()
 
         // Dark mode switch
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {

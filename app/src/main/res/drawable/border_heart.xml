@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Border: Heart - soft pink rounded frame -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#FFF0F5" />
+    <corners android:radius="20dp" />
+    <stroke android:width="2dp" android:color="#F8B4C8" />
+</shape>

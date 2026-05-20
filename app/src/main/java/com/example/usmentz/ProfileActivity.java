@@ -125,7 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
             if (moments != null) {
                 int reviewCount = 0;
                 for (var moment : moments) {
-                    if (moment.getReview() != null && !moment.getReview().isEmpty()) {
+                    if (moment.getReviewNotes() != null && !moment.getReviewNotes().isEmpty()) {
                         reviewCount++;
                     }
                 }

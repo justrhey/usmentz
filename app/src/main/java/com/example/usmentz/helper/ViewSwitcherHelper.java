@@ -125,6 +125,9 @@ public class ViewSwitcherHelper {
         if (floatingNavbarContainer != null) floatingNavbarContainer.setVisibility(View.GONE);
         if (oldNavbarContainer != null) oldNavbarContainer.setVisibility(View.VISIBLE);
 
+        // Clear saved category so next launch starts fresh
+        categoryStateHelper.clearCategory();
+
         if (modeChangeListener != null) {
             modeChangeListener.onExitMomentsMode();
         }

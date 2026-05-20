@@ -17,7 +17,7 @@ import com.example.usmentz.dao.ExpenseDao;
 
 @Database(
         entities = {DateLocation.class, Category.class, Expense.class},
-        version = 20,
+        version = 21,
         exportSchema = false
     )
 @TypeConverters({Converters.class})
@@ -59,13 +59,21 @@ public abstract class DateDatabase extends RoomDatabase {
         }
     };
 
+    // Migration from 20 to 21: Add borderStyle to DateLocation
+    static final Migration MIGRATION_20_21 = new Migration(20, 21) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE date_locations ADD COLUMN borderStyle TEXT DEFAULT 'clean'");
+        }
+    };
+
     public static DateDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (DateDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     DateDatabase.class, "usmentz_database")
-                            .addMigrations(MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20)
+                            .addMigrations(MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20, MIGRATION_20_21)
                             .fallbackToDestructiveMigration()
                             .build();
                 }

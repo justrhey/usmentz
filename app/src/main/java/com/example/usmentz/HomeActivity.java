@@ -41,13 +41,18 @@ public class HomeActivity extends AppCompatActivity {
 
     // Views
     private TextView tvDate, tvGreeting;
-    private TextView tvTotalMoments, tvCategoryCount;
     private RecyclerView rvCategories, rvRecentActivity;
-    private View navHome, navCategories, navCalendar;
     private FloatingActionButton fabAdd;
     private ImageButton btnNotifications, btnProfile;
     private View suggestionCardContainer;
     private TextView tvSuggestionTitle, tvSuggestionText;
+
+    // Expanding pill navbar
+    private View navItemHome, navItemCategories, navItemCalendar;
+    private View navHomeActive, navHomeInactive;
+    private View navCategoriesActive, navCategoriesInactive;
+    private View navCalendarActive, navCalendarInactive;
+    private int activeNavSlot = 0; // Home is active by default
 
     // FAB scroll state
     private boolean isFabVisible = true;
@@ -63,9 +68,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         getWindow().setBackgroundDrawableResource(android.R.color.white);
@@ -86,8 +88,6 @@ public class HomeActivity extends AppCompatActivity {
     private void initViews() {
         tvDate = findViewById(R.id.tvDate);
         tvGreeting = findViewById(R.id.tvGreeting);
-        tvTotalMoments = findViewById(R.id.tvTotalMoments);
-        tvCategoryCount = findViewById(R.id.tvCategoryCount);
 
         rvCategories = findViewById(R.id.rvCategories);
         rvRecentActivity = findViewById(R.id.rvRecentActivity);
@@ -95,9 +95,17 @@ public class HomeActivity extends AppCompatActivity {
         btnNotifications = findViewById(R.id.btnNotifications);
         btnProfile = findViewById(R.id.btnProfile);
 
-        navHome = findViewById(R.id.navHome);
-        navCategories = findViewById(R.id.navCategories);
-        navCalendar = findViewById(R.id.navCalendar);
+        // Expanding pill navbar
+        navItemHome = findViewById(R.id.navItemHome);
+        navItemCategories = findViewById(R.id.navItemCategories);
+        navItemCalendar = findViewById(R.id.navItemCalendar);
+        navHomeActive = findViewById(R.id.navHomeActive);
+        navHomeInactive = findViewById(R.id.navHomeInactive);
+        navCategoriesActive = findViewById(R.id.navCategoriesActive);
+        navCategoriesInactive = findViewById(R.id.navCategoriesInactive);
+        navCalendarActive = findViewById(R.id.navCalendarActive);
+        navCalendarInactive = findViewById(R.id.navCalendarInactive);
+        setActiveNavSlot(0); // Home active by default
 
         fabAdd = findViewById(R.id.fabAdd);
 
@@ -126,19 +134,13 @@ public class HomeActivity extends AppCompatActivity {
             if (moments != null && recentAdapter != null) {
                 recentAdapter.setDates(moments);
                 updateSuggestion(moments);
-                if (tvTotalMoments != null) {
-                    tvTotalMoments.setText(String.valueOf(moments.size()));
-                }
             }
         });
 
-        // Observe categories for count
+        // Observe categories for adapter
         categoryViewModel.getAllCategories().observe(this, categories -> {
             if (categories != null) {
                 categoryAdapter.setCategories(categories);
-                if (tvCategoryCount != null) {
-                    tvCategoryCount.setText(String.valueOf(categories.size()));
-                }
             }
         });
     }
@@ -188,21 +190,17 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        if (navHome != null) {
-            navHome.setOnClickListener(v -> {}); // Already on home
-        }
+        navItemHome.setOnClickListener(v -> setActiveNavSlot(0));
 
-        if (navCategories != null) {
-            navCategories.setOnClickListener(v -> {
-                startActivity(new Intent(this, MainActivity.class));
-            });
-        }
+        navItemCategories.setOnClickListener(v -> {
+            setActiveNavSlot(1);
+            startActivity(new Intent(this, MainActivity.class));
+        });
 
-        if (navCalendar != null) {
-            navCalendar.setOnClickListener(v -> {
-                startActivity(new Intent(this, CalendarActivity.class));
-            });
-        }
+        navItemCalendar.setOnClickListener(v -> {
+            setActiveNavSlot(2);
+            startActivity(new Intent(this, CalendarActivity.class));
+        });
 
         if (btnProfile != null) {
             btnProfile.setOnClickListener(v -> {
@@ -213,6 +211,16 @@ public class HomeActivity extends AppCompatActivity {
         if (fabAdd != null) {
             fabAdd.setOnClickListener(v -> showAddMomentDialog());
         }
+    }
+
+    private void setActiveNavSlot(int slotIndex) {
+        activeNavSlot = slotIndex;
+        navHomeActive.setVisibility(slotIndex == 0 ? View.VISIBLE : View.GONE);
+        navHomeInactive.setVisibility(slotIndex == 0 ? View.GONE : View.VISIBLE);
+        navCategoriesActive.setVisibility(slotIndex == 1 ? View.VISIBLE : View.GONE);
+        navCategoriesInactive.setVisibility(slotIndex == 1 ? View.GONE : View.VISIBLE);
+        navCalendarActive.setVisibility(slotIndex == 2 ? View.VISIBLE : View.GONE);
+        navCalendarInactive.setVisibility(slotIndex == 2 ? View.GONE : View.VISIBLE);
     }
 
     private void updateSuggestion(List<DateLocation> moments) {

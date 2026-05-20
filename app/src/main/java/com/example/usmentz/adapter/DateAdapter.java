@@ -27,6 +27,12 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
     private OnItemDeleteListener deleteListener;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+    private final Calendar todayCal = Calendar.getInstance();
+    private final Calendar yesterdayCal;
+    {
+        yesterdayCal = Calendar.getInstance();
+        yesterdayCal.add(Calendar.DAY_OF_YEAR, -1);
+    }
 
     // Feeling colors for badge backgrounds (all purple tones)
     private static final int FEELING_COLOR_DEFAULT = 0xFF9B5CFF;
@@ -73,13 +79,10 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         if (current.getDate() != null) {
             Calendar dateCal = Calendar.getInstance();
             dateCal.setTime(current.getDate());
-            Calendar today = Calendar.getInstance();
-            Calendar yesterday = Calendar.getInstance();
-            yesterday.add(Calendar.DAY_OF_YEAR, -1);
 
-            if (isSameDay(dateCal, today)) {
+            if (isSameDay(dateCal, todayCal)) {
                 holder.tvDate.setText("Today");
-            } else if (isSameDay(dateCal, yesterday)) {
+            } else if (isSameDay(dateCal, yesterdayCal)) {
                 holder.tvDate.setText("Yesterday");
             } else {
                 holder.tvDate.setText(dateFormat.format(current.getDate()));
@@ -119,7 +122,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         // Cost
         float cost = current.getCost();
         if (cost > 0) {
-            holder.tvCost.setText(String.format(Locale.getDefault(), "$%.0f", cost));
+            holder.tvCost.setText(String.format(Locale.getDefault(), "₱%.0f", cost));
             holder.tvCost.setVisibility(View.VISIBLE);
         } else {
             holder.tvCost.setVisibility(View.GONE);

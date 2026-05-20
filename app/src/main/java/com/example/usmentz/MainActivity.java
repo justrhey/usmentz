@@ -5,8 +5,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,19 +23,17 @@ import com.example.usmentz.category.CategoryAdapter;
 import com.example.usmentz.category.CategoryDialog;
 import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.helper.CategoryStateHelper;
-import com.example.usmentz.helper.EmptyStateHelper;
-import com.example.usmentz.helper.NavbarAutoHideHelper;
 import com.example.usmentz.helper.SuggestionHelper;
 import com.example.usmentz.helper.SuggestionHelper.Suggestion;
-import com.example.usmentz.helper.ViewSwitcherHelper;
 import com.example.usmentz.viewmodel.CategoryViewModel;
 import com.example.usmentz.viewmodel.DateViewModel;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,36 +43,48 @@ public class MainActivity extends AppCompatActivity {
     private DateAdapter dateAdapter;
 
     private static final String TAG = "MainActivity";
-    private static final long HIDE_DELAY_MS = 4000;
 
     // Helpers
-    private ViewSwitcherHelper viewSwitcher;
-    private EmptyStateHelper emptyStateHelper;
-    private NavbarAutoHideHelper navbarHelper;
     private CategoryStateHelper categoryStateHelper;
 
-    // Views
-    private FloatingActionButton fabAdd;
-    private MaterialToolbar toolbar;
-    private AppBarLayout appBarLayout;
-    private TextView tvToolbarTitle;
+    // State
+    private boolean isInMomentsMode = false;
+    private Category currentCategory;
+
+    // Header views
+    private View headerContainer;
+    private View categoriesHeader;
+    private View momentsHeader;
+    private TextView tvDate, tvGreeting;
+    private TextView tvCategoryTitle, tvMomentCount;
+
+    // Content views
     private RecyclerView categoriesRecyclerView;
     private RecyclerView momentsRecyclerView;
-
-    private LinearLayout navHome, navCalendar, navReviews, navCategories;
-    private LinearLayout navDates, navExpenses;
-    private View floatingNavbarContainer;
-    private View oldNavbarContainer;
-    private View momentsHeader;
+    private View emptyStateNoCategories;
+    private View emptyStateNoMoments;
     private View suggestionCardContainer;
     private TextView tvSuggestionTitle, tvSuggestionText;
 
-    private final int[] emptyStateDrawables = { R.drawable.nocat };
+    // Navigation - slot containers
+    private View navbarContainer;
+    private View navItemHome, navItemCategories, navItemCalendar;
+    // Active states (nested pills)
+    private View navHomeActive, navCategoriesActive, navCalendarActive;
+    private ImageView navCategoriesActiveIcon;
+    private TextView navCategoriesActiveLabel;
+    // Inactive states (icons only)
+    private View navHomeInactive, navCategoriesInactive, navCalendarInactive;
+
+    // Track active nav slot (0=Home, 1=Categories, 2=Calendar)
+    private int activeNavSlot = 1; // Default: Categories active
+
+    // FAB
+    private FloatingActionButton fabAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(Window.FEATURE_NO_TITLE, Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_categories);
         getWindow().setBackgroundDrawableResource(android.R.color.white);
@@ -81,11 +92,10 @@ public class MainActivity extends AppCompatActivity {
         try {
             initViews();
             initHelpers();
-            setupToolbar();
             setupViewModels();
             setupRecyclerViews();
             setupClickListeners();
-            setupBottomNavigation();
+            setupDateHeader();
             restoreLastCategory();
         } catch (Exception e) {
             Log.e(TAG, "Error in onCreate", e);
@@ -94,26 +104,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        toolbar               = findViewById(R.id.toolbar);
-        appBarLayout           = findViewById(R.id.appBarLayout);
-        categoriesRecyclerView= findViewById(R.id.categoriesRecyclerView);
-        momentsRecyclerView   = findViewById(R.id.momentsRecyclerView);
-        fabAdd                = findViewById(R.id.fabAdd);
-        LinearLayout emptyStateLayout = findViewById(R.id.emptyStateLayout);
-        Button btnAddCategory = findViewById(R.id.btnAddCategory);
+        // Header
+        headerContainer = findViewById(R.id.headerContainer);
+        categoriesHeader = findViewById(R.id.categoriesHeader);
+        momentsHeader = findViewById(R.id.momentsHeader);
+        tvDate = findViewById(R.id.tvDate);
+        tvGreeting = findViewById(R.id.tvGreeting);
+        tvCategoryTitle = findViewById(R.id.tvCategoryTitle);
+        tvMomentCount = findViewById(R.id.tvMomentCount);
 
-        navHome       = findViewById(R.id.navHome);
-        navCalendar   = findViewById(R.id.navCalendar);
-        navReviews    = findViewById(R.id.navReviews);
-        navCategories = findViewById(R.id.navCategories);
-        navDates      = findViewById(R.id.navDates);
-        navExpenses   = findViewById(R.id.navExpenses);
-        floatingNavbarContainer = findViewById(R.id.floatingNavbarContainer);
-        oldNavbarContainer      = findViewById(R.id.oldNavbarContainer);
-        momentsHeader           = findViewById(R.id.momentsHeader);
-        TextView tvCategoryTitle = findViewById(R.id.tvCategoryTitle);
+        // Content
+        categoriesRecyclerView = findViewById(R.id.categoriesRecyclerView);
+        momentsRecyclerView = findViewById(R.id.momentsRecyclerView);
+        emptyStateNoCategories = findViewById(R.id.emptyStateNoCategories);
+        emptyStateNoMoments = findViewById(R.id.emptyStateNoMoments);
+        fabAdd = findViewById(R.id.fabAdd);
 
-        // Suggestion card views
+        // Suggestion card
         suggestionCardContainer = findViewById(R.id.suggestionCardContainer);
         if (suggestionCardContainer != null) {
             tvSuggestionTitle = suggestionCardContainer.findViewById(R.id.tvSuggestionTitle);
@@ -124,83 +131,59 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (toolbar != null) {
-            tvToolbarTitle = toolbar.findViewById(R.id.tvToolbarTitle);
-        }
+        // Navbar - slot containers
+        navbarContainer = findViewById(R.id.navbarContainer);
+        navItemHome = findViewById(R.id.navItemHome);
+        navItemCategories = findViewById(R.id.navItemCategories);
+        navItemCalendar = findViewById(R.id.navItemCalendar);
+
+        // Active states (nested pills)
+        navHomeActive = findViewById(R.id.navHomeActive);
+        navCategoriesActive = findViewById(R.id.navCategoriesActive);
+        navCalendarActive = findViewById(R.id.navCalendarActive);
+        navCategoriesActiveIcon = findViewById(R.id.navCategoriesActiveIcon);
+        navCategoriesActiveLabel = findViewById(R.id.navCategoriesActiveLabel);
+
+        // Inactive states (icons only)
+        navHomeInactive = findViewById(R.id.navHomeInactive);
+        navCategoriesInactive = findViewById(R.id.navCategoriesInactive);
+        navCalendarInactive = findViewById(R.id.navCalendarInactive);
 
         // Default visibility
-        if (categoriesRecyclerView != null) categoriesRecyclerView.setVisibility(View.VISIBLE);
-        if (momentsRecyclerView != null) momentsRecyclerView.setVisibility(View.GONE);
-        if (emptyStateLayout != null) emptyStateLayout.setVisibility(View.GONE);
-        if (fabAdd != null) fabAdd.setVisibility(View.VISIBLE);
-        if (btnAddCategory != null) btnAddCategory.setVisibility(View.VISIBLE);
-        if (oldNavbarContainer != null) oldNavbarContainer.setVisibility(View.VISIBLE);
-        if (floatingNavbarContainer != null) floatingNavbarContainer.setVisibility(View.GONE);
+        categoriesRecyclerView.setVisibility(View.VISIBLE);
+        momentsRecyclerView.setVisibility(View.GONE);
+        emptyStateNoCategories.setVisibility(View.GONE);
+        emptyStateNoMoments.setVisibility(View.GONE);
+        categoriesHeader.setVisibility(View.VISIBLE);
+        momentsHeader.setVisibility(View.GONE);
 
-        // Store references for helpers via tags or keep as fields
-        // We'll pass them directly to helpers
+        // Set initial navbar state (Categories active by default)
+        setActiveNavSlot(1);
     }
 
     private void initHelpers() {
-        LinearLayout emptyStateLayout = findViewById(R.id.emptyStateLayout);
-        Button btnAddCategory = findViewById(R.id.btnAddCategory);
-        TextView tvCategoryTitle = findViewById(R.id.tvCategoryTitle);
-
-        emptyStateHelper = new EmptyStateHelper(emptyStateLayout, emptyStateDrawables);
-        navbarHelper = new NavbarAutoHideHelper(floatingNavbarContainer, momentsHeader, HIDE_DELAY_MS);
         categoryStateHelper = new CategoryStateHelper(this);
-
-        viewSwitcher = new ViewSwitcherHelper(
-                categoriesRecyclerView,
-                momentsRecyclerView,
-                btnAddCategory,
-                momentsHeader,
-                tvCategoryTitle,
-                floatingNavbarContainer,
-                oldNavbarContainer,
-                emptyStateHelper,
-                navbarHelper,
-                categoryStateHelper
-        );
-
-        viewSwitcher.setModeChangeListener(new ViewSwitcherHelper.OnModeChangeListener() {
-            @Override
-            public void onEnterMomentsMode(Category category) {
-                if (dateViewModel != null && category.getId() > 0) {
-                    dateViewModel.setCurrentCategory(category.getId());
-                }
-            }
-
-            @Override
-            public void onExitMomentsMode() {
-                if (dateViewModel != null) {
-                    dateViewModel.setCurrentCategory(-1);
-                }
-            }
-        });
     }
 
-    private void setupToolbar() {
-        if (toolbar != null) {
-            toolbar.setNavigationOnClickListener(v -> {
-                if (viewSwitcher.isInMomentsMode()) viewSwitcher.exitMomentsMode();
-                else finish();
-            });
-        }
+    private void setupDateHeader() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d", Locale.getDefault());
+        tvDate.setText(dateFormat.format(new Date()));
     }
 
     private void setupViewModels() {
-        dateViewModel     = new ViewModelProvider(this).get(DateViewModel.class);
+        dateViewModel = new ViewModelProvider(this).get(DateViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
     }
 
     private void setupRecyclerViews() {
+        // Categories grid
         categoriesRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         categoriesRecyclerView.setHasFixedSize(true);
         categoriesRecyclerView.setItemAnimator(null);
         categoryAdapter = new CategoryAdapter();
         categoriesRecyclerView.setAdapter(categoryAdapter);
 
+        // Moments list
         momentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         momentsRecyclerView.setHasFixedSize(true);
         momentsRecyclerView.setItemAnimator(null);
@@ -210,26 +193,33 @@ public class MainActivity extends AppCompatActivity {
         // Observe categories
         categoryViewModel.getAllCategories().observe(this, categories -> {
             if (categories != null) categoryAdapter.setCategories(categories);
-            if (viewSwitcher.isInMomentsMode()) return;
-            if (categories == null || categories.isEmpty()) {
-                categoriesRecyclerView.setVisibility(View.GONE);
-                emptyStateHelper.show("Start your story together", "Create your first category to begin capturing moments");
-                findViewById(R.id.btnAddCategory).setVisibility(View.VISIBLE);
-            } else {
-                categoriesRecyclerView.setVisibility(View.VISIBLE);
-                emptyStateHelper.hide();
-            }
+            if (isInMomentsMode) return;
+            updateCategoriesView(categories);
         });
 
         // Observe moments
         dateViewModel.getMoments().observe(this, moments -> {
-            if (!viewSwitcher.isInMomentsMode() || viewSwitcher.getCurrentCategory() == null) return;
+            if (!isInMomentsMode || currentCategory == null) return;
             if (dateAdapter != null) dateAdapter.setDates(moments);
             updateMomentsView(moments);
             updateSuggestion(moments);
+            if (tvMomentCount != null) {
+                int count = moments != null ? moments.size() : 0;
+                tvMomentCount.setText(count + " moment" + (count != 1 ? "s" : ""));
+            }
         });
 
-        categoryAdapter.setOnCategoryClickListener(viewSwitcher::enterMomentsMode);
+        categoryAdapter.setOnCategoryClickListener(this::enterMomentsMode);
+
+        // Moments item click → open detail
+        dateAdapter.setOnItemClickListener(dateLocation -> {
+            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+            intent.putExtra("date_location", dateLocation);
+            startActivity(intent);
+        });
+
+        // Moments item delete → undo snackbar
+        dateAdapter.setOnItemDeleteListener(this::deleteDateLocation);
 
         // FAB auto-hide on scroll
         momentsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -246,45 +236,214 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setupClickListeners() {
-        if (fabAdd != null) {
-            fabAdd.setOnClickListener(v -> {
-                if (viewSwitcher.isInMomentsMode() && viewSwitcher.getCurrentCategory() != null) {
-                    showAddMomentDialog();
-                } else {
-                    showAddCategoryDialog();
-                }
-            });
+    private void updateCategoriesView(List<Category> categories) {
+        if (categories == null || categories.isEmpty()) {
+            categoriesRecyclerView.setVisibility(View.GONE);
+            emptyStateNoCategories.setVisibility(View.VISIBLE);
+            emptyStateNoMoments.setVisibility(View.GONE);
+        } else {
+            categoriesRecyclerView.setVisibility(View.VISIBLE);
+            emptyStateNoCategories.setVisibility(View.GONE);
+            emptyStateNoMoments.setVisibility(View.GONE);
         }
+    }
 
+    private void updateMomentsView(List<DateLocation> moments) {
+        if (moments == null || moments.isEmpty()) {
+            momentsRecyclerView.setVisibility(View.GONE);
+            emptyStateNoMoments.setVisibility(View.VISIBLE);
+        } else {
+            momentsRecyclerView.setVisibility(View.VISIBLE);
+            emptyStateNoMoments.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateSuggestion(List<DateLocation> moments) {
+        if (suggestionCardContainer == null || tvSuggestionTitle == null || tvSuggestionText == null) return;
+
+        Suggestion suggestion = SuggestionHelper.generateSuggestion(moments);
+        if (suggestion != null) {
+            tvSuggestionTitle.setText(suggestion.title);
+            tvSuggestionText.setText(suggestion.description);
+            suggestionCardContainer.setVisibility(View.VISIBLE);
+        } else {
+            suggestionCardContainer.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupClickListeners() {
+        // FAB: add category or add moment depending on mode
+        fabAdd.setOnClickListener(v -> {
+            if (isInMomentsMode && currentCategory != null) {
+                showAddMomentDialog();
+            } else {
+                showAddCategoryDialog();
+            }
+        });
+
+        // Empty state button
         Button btnAddCategory = findViewById(R.id.btnAddCategory);
         if (btnAddCategory != null) {
             btnAddCategory.setOnClickListener(v -> showAddCategoryDialog());
         }
 
+        // Back button in moments header
         View btnBack = findViewById(R.id.btnBack);
         if (btnBack != null) {
-            btnBack.setOnClickListener(v -> viewSwitcher.exitMomentsMode());
+            btnBack.setOnClickListener(v -> exitMomentsMode());
+        }
+
+        // Navbar
+        setupNavigation();
+    }
+
+    private void setupNavigation() {
+        // Home slot
+        navItemHome.setOnClickListener(v -> {
+            setActiveNavSlot(0);
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        // Calendar slot
+        navItemCalendar.setOnClickListener(v -> {
+            setActiveNavSlot(2);
+            Intent intent = new Intent(this, CalendarActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+
+        // Categories / Back slot
+        navItemCategories.setOnClickListener(v -> {
+            if (isInMomentsMode) {
+                exitMomentsMode();
+            } else {
+                setActiveNavSlot(1);
+                categoriesRecyclerView.smoothScrollToPosition(0);
+            }
+        });
+    }
+
+    /**
+     * Sets which nav slot is active (expanded pill with icon+text).
+     * All other slots show only their icon.
+     * @param slotIndex 0=Home, 1=Categories, 2=Calendar
+     */
+    private void setActiveNavSlot(int slotIndex) {
+        activeNavSlot = slotIndex;
+
+        // Home slot
+        if (slotIndex == 0) {
+            navHomeActive.setVisibility(View.VISIBLE);
+            navHomeInactive.setVisibility(View.GONE);
+        } else {
+            navHomeActive.setVisibility(View.GONE);
+            navHomeInactive.setVisibility(View.VISIBLE);
+        }
+
+        // Categories slot
+        if (slotIndex == 1) {
+            navCategoriesActive.setVisibility(View.VISIBLE);
+            navCategoriesInactive.setVisibility(View.GONE);
+        } else {
+            navCategoriesActive.setVisibility(View.GONE);
+            navCategoriesInactive.setVisibility(View.VISIBLE);
+        }
+
+        // Calendar slot
+        if (slotIndex == 2) {
+            navCalendarActive.setVisibility(View.VISIBLE);
+            navCalendarInactive.setVisibility(View.GONE);
+        } else {
+            navCalendarActive.setVisibility(View.GONE);
+            navCalendarInactive.setVisibility(View.VISIBLE);
         }
     }
 
-    private void setupBottomNavigation() {
-        setNavClick(navHome, HomeActivity.class);
-        setNavClick(navCalendar, CalendarActivity.class);
+    private void enterMomentsMode(Category category) {
+        if (category == null) return;
+        currentCategory = category;
+        isInMomentsMode = true;
 
-        if (navCategories != null) {
-            navCategories.setOnClickListener(v -> viewSwitcher.exitMomentsMode());
+        // Switch views
+        categoriesRecyclerView.setVisibility(View.GONE);
+        momentsRecyclerView.setVisibility(View.VISIBLE);
+        emptyStateNoCategories.setVisibility(View.GONE);
+        emptyStateNoMoments.setVisibility(View.GONE);
+
+        // Switch headers
+        categoriesHeader.setVisibility(View.GONE);
+        momentsHeader.setVisibility(View.VISIBLE);
+        momentsHeader.setAlpha(0f);
+        momentsHeader.animate().alpha(1f).setDuration(200).start();
+
+        // Update navbar: change Categories slot to Back
+        if (navCategoriesActiveIcon != null) {
+            navCategoriesActiveIcon.setImageResource(R.drawable.ic_back);
         }
+        if (navCategoriesActiveLabel != null) {
+            navCategoriesActiveLabel.setText("Back");
+        }
+        // Also update inactive icon
+        if (navCategoriesInactive != null) {
+            ((ImageView) navCategoriesInactive).setImageResource(R.drawable.ic_back);
+        }
+
+        // Set category title
+        if (tvCategoryTitle != null) {
+            tvCategoryTitle.setText(category.getName());
+        }
+
+        // Switch ViewModel to this category
+        if (category.getId() > 0) {
+            dateViewModel.setCurrentCategory(category.getId());
+        }
+
+        // Save state
+        categoryStateHelper.saveCategory(category);
     }
 
-    private void setNavClick(LinearLayout nav, Class<?> target) {
-        if (nav != null) {
-            nav.setOnClickListener(v -> {
-                Intent intent = new Intent(this, target);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            });
+    void exitMomentsMode() {
+        isInMomentsMode = false;
+        currentCategory = null;
+
+        // Switch views
+        momentsRecyclerView.setVisibility(View.GONE);
+        emptyStateNoMoments.setVisibility(View.GONE);
+
+        // Switch headers
+        momentsHeader.setVisibility(View.GONE);
+        categoriesHeader.setVisibility(View.VISIBLE);
+        categoriesHeader.setAlpha(0f);
+        categoriesHeader.animate().alpha(1f).setDuration(200).start();
+
+        // Restore navbar: change Back to Categories
+        if (navCategoriesActiveIcon != null) {
+            navCategoriesActiveIcon.setImageResource(R.drawable.ic_category);
         }
+        if (navCategoriesActiveLabel != null) {
+            navCategoriesActiveLabel.setText("Categories");
+        }
+        // Also update inactive icon
+        if (navCategoriesInactive != null) {
+            ((ImageView) navCategoriesInactive).setImageResource(R.drawable.ic_category);
+        }
+
+        // Switch ViewModel back to all moments
+        dateViewModel.setCurrentCategory(-1);
+
+        // Clear saved state
+        categoryStateHelper.clearCategory();
+
+        // Refresh categories view
+        categoryViewModel.getAllCategories().observe(this, categories -> {
+            if (categories != null) categoryAdapter.setCategories(categories);
+            updateCategoriesView(categories);
+        });
+
+        // Set Categories as active slot
+        setActiveNavSlot(1);
     }
 
     private void showAddCategoryDialog() {
@@ -296,7 +455,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showAddMomentDialog() {
         AddMomentDialog dialog = AddMomentDialog.newInstance(moment -> {
-            Toast.makeText(this, "Added to " + viewSwitcher.getCurrentCategory().getName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Added to " + currentCategory.getName(), Toast.LENGTH_SHORT).show();
         });
         dialog.show(getSupportFragmentManager(), "AddMomentDialog");
     }
@@ -319,42 +478,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void restoreLastCategory() {
+        // First check if we came from HomeActivity with a specific category
+        int intentCategoryId = getIntent().getIntExtra("category_id", -1);
+        if (intentCategoryId > 0) {
+            categoryViewModel.getAllCategories().observe(this, categories -> {
+                if (categories != null) {
+                    for (Category cat : categories) {
+                        if (cat.getId() == intentCategoryId) {
+                            enterMomentsMode(cat);
+                            break;
+                        }
+                    }
+                }
+            });
+            return;
+        }
+
+        // Otherwise restore from SharedPreferences
         Category saved = categoryStateHelper.restoreCategory();
         if (saved != null) {
-            viewSwitcher.enterMomentsMode(saved);
+            enterMomentsMode(saved);
         }
     }
 
-    private void updateMomentsView(List<DateLocation> moments) {
-        if (moments == null || moments.isEmpty()) {
-            emptyStateHelper.show("No moments here yet", "Tap + to capture your first memory in this category");
-            momentsRecyclerView.setVisibility(View.GONE);
+    @Override
+    public void onBackPressed() {
+        if (isInMomentsMode) {
+            exitMomentsMode();
         } else {
-            emptyStateHelper.hide();
-            momentsRecyclerView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void updateSuggestion(List<DateLocation> moments) {
-        if (suggestionCardContainer == null || tvSuggestionTitle == null || tvSuggestionText == null) return;
-        
-        Suggestion suggestion = SuggestionHelper.generateSuggestion(moments);
-        if (suggestion != null) {
-            tvSuggestionTitle.setText(suggestion.title);
-            tvSuggestionText.setText(suggestion.description);
-            suggestionCardContainer.setVisibility(View.VISIBLE);
+            super.onBackPressed();
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (viewSwitcher.isInMomentsMode()) navbarHelper.startHideTimer();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        navbarHelper.cleanup();
     }
 }

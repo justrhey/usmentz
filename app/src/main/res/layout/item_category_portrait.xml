@@ -6,9 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    app:cardBackgroundColor="#FAFAFA"
-    app:cardCornerRadius="24dp"
-    app:cardElevation="4dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="3dp"
+    app:strokeWidth="0dp"
     android:foreground="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true">
@@ -17,51 +18,51 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp"
+        android:padding="20dp"
         android:gravity="center">
 
-            <!-- Category Icon with colored circle background -->
-            <FrameLayout
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginBottom="16dp">
+        <!-- Category Icon with colored gradient circle background -->
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="14dp">
 
-                <!-- Gradient colored circle -->
-                <View
-                    android:id="@+id/categoryColorBg"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bg_gradient_purple"/>
+            <!-- Gradient colored circle -->
+            <View
+                android:id="@+id/categoryColorBg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_gradient_purple"/>
 
-                <ImageView
-                    android:id="@+id/ivCategoryIcon"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/folder"
-                    android:scaleType="centerInside"/>
+            <ImageView
+                android:id="@+id/ivCategoryIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/folder"
+                android:scaleType="centerInside"/>
 
-            </FrameLayout>
+        </FrameLayout>
 
-            <TextView
-                android:id="@+id/tvCategoryName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="#1A1A1A"
-                android:maxLines="1"
-                android:ellipsize="end" />
+        <TextView
+            android:id="@+id/tvCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#2D2640"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
-            <TextView
-                android:id="@+id/tvMomentCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0 moments"
-                android:textSize="13sp"
-                android:textColor="#9E9E9E"
-                android:layout_marginTop="6dp" />
+        <TextView
+            android:id="@+id/tvMomentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 moments"
+            android:textSize="12sp"
+            android:textColor="#8B7FA8"
+            android:layout_marginTop="4dp" />
 
     </LinearLayout>
 

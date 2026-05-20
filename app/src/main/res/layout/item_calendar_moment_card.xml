@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Calendar moment card - flat with accent line at bottom -->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Card content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp">
+
+            <!-- Primary label -->
+            <TextView
+                android:id="@+id/tvMomentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sunset dinner"
+                android:textColor="#2D2640"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-medium" />
+
+            <!-- Secondary metadata row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp">
+
+                <!-- Date icon + text -->
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="#8B7FA8" />
+
+                <TextView
+                    android:id="@+id/tvMomentDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jul 15"
+                    android:textColor="#8B7FA8"
+                    android:textSize="12sp"
+                    android:layout_marginStart="6dp" />
+
+                <!-- Location icon + text -->
+                <ImageView
+                    android:id="@+id/icLocation"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_location"
+                    app:tint="#8B7FA8"
+                    android:layout_marginStart="12dp" />
+
+                <TextView
+                    android:id="@+id/tvMomentLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pier 5"
+                    android:textColor="#8B7FA8"
+                    android:textSize="12sp"
+                    android:layout_marginStart="6dp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <!-- Trailing ellipsis -->
+                <ImageView
+                    android:id="@+id/btnMore"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_more_vert"
+                    app:tint="#BDBDBD"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:padding="2dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Thick accent line at bottom -->
+        <View
+            android:id="@+id/accentLine"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="#9B5CFF" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

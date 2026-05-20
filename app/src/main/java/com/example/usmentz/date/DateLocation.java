@@ -27,6 +27,7 @@ public class DateLocation implements Serializable {
     private boolean doAgain;       // "Would you do this again?" signal
     private float cost;            // Optional expense for this moment
     private String reviewNotes;    // Private journal entry
+    private String borderStyle;    // Photo border: "clean", "polaroid", "vintage", "heart", "film", "minimal"
 
     private int categoryId;
 
@@ -49,6 +50,7 @@ public class DateLocation implements Serializable {
         this.doAgain = false;
         this.cost = 0f;
         this.reviewNotes = "";
+        this.borderStyle = "clean";
     }
 
     // Getters and setters
@@ -101,6 +103,9 @@ public class DateLocation implements Serializable {
 
     public String getReviewNotes() { return reviewNotes; }
     public void setReviewNotes(String reviewNotes) { this.reviewNotes = reviewNotes; }
+
+    public String getBorderStyle() { return borderStyle; }
+    public void setBorderStyle(String borderStyle) { this.borderStyle = borderStyle; }
 
     // Legacy alias for backward compatibility
     @Deprecated

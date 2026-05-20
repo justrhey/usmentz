@@ -1,122 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Calendar grid cell - supports standard, circular, and capsule nodes -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="0dp">
+    android:padding="2dp">
 
-    <!-- Grid line: right border -->
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:background="#EEEEEE"/>
-
-    <!-- Grid line: bottom border -->
-    <View
+    <!-- Standard numeric node -->
+    <TextView
+        android:id="@+id/tvDay"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:background="#EEEEEE"/>
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="15"
+        android:textColor="#2D2640"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-medium" />
 
-    <!-- Main cell content -->
+    <!-- Circular container (1:1 aspect ratio) -->
+    <View
+        android:id="@+id/viewTodayCircle"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_circle_today"
+        android:visibility="gone" />
+
+    <!-- Selected circular container -->
+    <View
+        android:id="@+id/viewSelectedCircle"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_circle_selected"
+        android:visibility="gone" />
+
+    <!-- Capsule container (spans multiple columns) -->
     <LinearLayout
+        android:id="@+id/capsuleContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="4dp"
-        android:minHeight="64dp">
-
-        <!-- Day number + today/selected circle -->
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/tvDay"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:gravity="center"
-                android:text="24"
-                android:textColor="#212121"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-
-            <View
-                android:id="@+id/viewTodayCircle"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_day_today"
-                android:visibility="gone"/>
-
-            <View
-                android:id="@+id/viewSelectedCircle"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_day_selected"
-                android:visibility="gone"/>
-
-        </FrameLayout>
-
-        <!-- Sticky note strips (up to 3 moments shown) -->
-        <TextView
-            android:id="@+id/strip1"
-            android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:layout_marginTop="2dp"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="4dp"
-            android:textSize="8sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:background="@drawable/bg_sticky_1"
-            android:visibility="gone"/>
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/bg_capsule_purple"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:visibility="gone">
 
         <TextView
-            android:id="@+id/strip2"
-            android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:layout_marginTop="2dp"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="4dp"
-            android:textSize="8sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:background="@drawable/bg_sticky_2"
-            android:visibility="gone"/>
-
-        <TextView
-            android:id="@+id/strip3"
-            android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:layout_marginTop="2dp"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="4dp"
-            android:textSize="8sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:background="@drawable/bg_sticky_3"
-            android:visibility="gone"/>
-
-        <!-- More indicator if >3 moments -->
-        <TextView
-            android:id="@+id/tvMoreIndicator"
+            android:id="@+id/tvCapsuleDay"
             android:layout_width="wrap_content"
-            android:layout_height="14dp"
-            android:layout_marginTop="2dp"
-            android:gravity="center"
-            android:text="+2 more"
-            android:textColor="#9B5CFF"
-            android:textSize="8sp"
-            android:textStyle="bold"
-            android:visibility="gone"/>
+            android:layout_height="wrap_content"
+            android:text="15"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif-medium" />
+
+        <TextView
+            android:id="@+id/tvCapsuleLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:layout_marginStart="4dp"
+            android:alpha="0.9" />
 
     </LinearLayout>
 

@@ -281,10 +281,6 @@ public class DetailActivity extends AppCompatActivity {
                 etName.setError("Required");
                 return;
             }
-            if (TextUtils.isEmpty(addr)) {
-                etAddr.setError("Required");
-                return;
-            }
 
             moment.setName(name);
             moment.setAddress(addr);
@@ -464,7 +460,15 @@ public class DetailActivity extends AppCompatActivity {
 
             if (btnFavorite != null) {
                 btnFavorite.setOnClickListener(v -> {
-                    Toast.makeText(getContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
+                    DateLocation m = getMomentRef();
+                    if (m != null) {
+                        boolean newState = !m.isDoAgain();
+                        m.setDoAgain(newState);
+                        DateViewModel vm = getDateVm();
+                        if (vm != null) vm.update(m);
+                        btnFavorite.setImageResource(newState ? R.drawable.heart : R.drawable.ic_star);
+                        Toast.makeText(getContext(), newState ? "Added to favorites" : "Removed from favorites", Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
 

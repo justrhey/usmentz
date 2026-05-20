@@ -5,381 +5,446 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#F8F7FF"
     tools:context=".MainActivity">
 
-    <!-- App Bar with Header -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <!-- ═══════════════════════════════════════════
+         SCROLLABLE CONTENT (includes header)
+    ═══════════════════════════════════════════ -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#FFFFFF"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <!-- Time and Action buttons row -->
+            <!-- Header — Purple gradient -->
+            <LinearLayout
+                android:id="@+id/headerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_purple_gradient_header"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="48dp"
+                android:paddingBottom="24dp">
+
+                <!-- Categories Mode Header -->
+                <LinearLayout
+                    android:id="@+id/categoriesHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Saturday, May 9"
+                        android:textColor="#E8D5F5"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvGreeting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Your Categories"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
+                <!-- Moments Mode Header (hidden by default) -->
+                <LinearLayout
+                    android:id="@+id/momentsHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:visibility="gone">
+
+                    <ImageButton
+                        android:id="@+id/btnBack"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_back"
+                        android:background="@drawable/bg_circle_transparent"
+                        android:contentDescription="Back"
+                        app:tint="#FFFFFF" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvCategoryTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Category"
+                            android:textColor="#FFFFFF"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvMomentCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 moments"
+                            android:textColor="#E8D5F5"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Content area -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="120dp">
 
-                <TextView android:id="@+id/tvTime" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10:30 AM" android:textColor="#212121" android:textSize="14sp"/>
+                <!-- Suggestion Card - Guide layer -->
+                <include
+                    layout="@layout/card_suggestion"
+                    android:id="@+id/suggestionCardContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Categories Grid -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/categoriesRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false" />
+
+                <!-- Moments List (hidden by default) -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/momentsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone" />
+
+                <!-- Empty State - No Categories -->
+                <LinearLayout
+                    android:id="@+id/emptyStateNoCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingTop="60dp"
+                    android:paddingBottom="60dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:src="@drawable/nocat22"
+                        android:alpha="0.5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start your story together"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#2D2640"
+                        android:layout_marginTop="24dp"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Create your first category to begin capturing moments"
+                        android:textSize="14sp"
+                        android:textColor="#8B7FA8"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center" />
+
+                    <Button
+                        android:id="@+id/btnAddCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:text="Create Category"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#9B5CFF"
+                        app:cornerRadius="12dp"
+                        android:layout_marginTop="20dp" />
+
+                </LinearLayout>
+
+                <!-- Empty State - No Moments in Category -->
+                <LinearLayout
+                    android:id="@+id/emptyStateNoMoments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingTop="60dp"
+                    android:paddingBottom="60dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/nocat22"
+                        android:alpha="0.4" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No moments here yet"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#2D2640"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tap + to capture your first memory in this category"
+                        android:textSize="14sp"
+                        android:textColor="#8B7FA8"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <!-- Date -->
-            <TextView android:id="@+id/tvDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Monday, May 4" android:textColor="#9E9E9E" android:textSize="12sp" android:layout_marginTop="4dp"/>
-
-            <!-- Greeting -->
-            <TextView android:id="@+id/tvGreeting" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Explore" android:textColor="#212121" android:textSize="28sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
-
         </LinearLayout>
 
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+    </androidx.core.widget.NestedScrollView>
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- Suggestion Card - Guide layer -->
-    <include
-        layout="@layout/card_suggestion"
-        android:id="@+id/suggestionCardContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
-
-    <!-- Moments Header - shows when in category -->
-    <LinearLayout
-        android:id="@+id/momentsHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:background="#FFFFFF"
-        android:visibility="gone">
-
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_back"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Back"
-            app:tint="#212121"/>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="12dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvCategoryTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category"
-                android:textColor="#212121"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="moments"
-                android:textColor="#9E9E9E"
-                android:textSize="12sp"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!-- RecyclerViews -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categoriesRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="14dp"
-        android:paddingBottom="100dp"
-        android:clipToPadding="false"
-        android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/momentsRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="14dp"
-        android:paddingBottom="100dp"
-        android:clipToPadding="false"
-        android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-    <!-- Empty State -->
-    <LinearLayout
-        android:id="@+id/emptyStateLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="#FFFFFF"
-        android:visibility="visible">
-
-        <ImageView android:layout_width="120dp" android:layout_height="120dp" android:src="@drawable/nocat22" android:alpha="0.5"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No moments yet" android:textSize="22sp" android:textStyle="bold" android:textColor="#212121" android:layout_marginTop="28dp"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tap + to add your first moment" android:textSize="14sp" android:textColor="#9E9E9E" android:layout_marginTop="10dp"/>
-
-    </LinearLayout>
-
-    <!-- OLD Navbar - Categories view (Home/Reviews/Favorites/Moments/Calendar) - Visible by default -->
+    <!-- ═══════════════════════════════════════════
+         EXPANDING PILL NAVBAR (Active/Inactive Pattern)
+    ═══════════════════════════════════════════ -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/oldNavbarContainer"
+        android:id="@+id/navbarContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="32dp"
-        app:cardElevation="8dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
-
-            <!-- Home -->
-            <LinearLayout
-                android:id="@+id/navHome"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_home"
-                    app:tint="#9E9E9E"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Home"
-                    android:textSize="9sp"
-                    android:textColor="#9E9E9E"/>
-            </LinearLayout>
-
-            <!-- Categories -->
-            <LinearLayout
-                android:id="@+id/navCategories"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_category"
-                    app:tint="#9B5CFF"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Categories"
-                    android:textSize="9sp"
-                    android:textColor="#9B5CFF"/>
-            </LinearLayout>
-
-            <!-- Reviews - hidden, reviews are now private diary entries -->
-            <LinearLayout
-                android:id="@+id/navReviews"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:visibility="gone">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_star"
-                    app:tint="#9E9E9E"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Reviews"
-                    android:textSize="9sp"
-                    android:textColor="#9E9E9E"/>
-            </LinearLayout>
-
-            <!-- Calendar -->
-            <LinearLayout
-                android:id="@+id/navCalendar"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_calendar"
-                    app:tint="#9E9E9E"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calendar"
-                    android:textSize="9sp"
-                    android:textColor="#9E9E9E"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- NEW Floating Navbar - Moments view (Home/Dates/Expenses/Calendar) - Hidden by default -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/floatingNavbarContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="28dp"
         app:cardBackgroundColor="#F2FFFFFF"
         app:cardCornerRadius="32dp"
-        app:cardElevation="8dp">
+        app:cardElevation="16dp"
+        app:strokeWidth="0dp">
 
         <LinearLayout
+            android:id="@+id/navbarContent"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
 
-            <!-- Home -->
+            <!-- ═══ SLOT 1: Home ═══ -->
             <LinearLayout
-                android:id="@+id/navHomeMoments"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
+                android:id="@+id/navItemHome"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minWidth="56dp"
+                android:orientation="horizontal"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true">
+
+                <!-- Active: nested pill (icon + text) -->
+                <LinearLayout
+                    android:id="@+id/navHomeActive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_nav_active_pill"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="24dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_home"
+                        app:tint="#9B5CFF" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Home"
+                        android:textSize="14sp"
+                        android:textColor="#9B5CFF"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="0.04"
+                        android:layout_marginStart="12dp" />
+                </LinearLayout>
+
+                <!-- Inactive: icon only -->
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:id="@+id/navHomeInactive"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:src="@drawable/ic_home"
-                    app:tint="#9B5CFF"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Home"
-                    android:textSize="9sp"
-                    android:textColor="#9B5CFF"/>
+                    app:tint="#8B7FA8" />
+
             </LinearLayout>
 
-            <!-- Dates (Moments) -->
+            <!-- Spacer between slots -->
+            <View
+                android:layout_width="12dp"
+                android:layout_height="0dp" />
+
+            <!-- ═══ SLOT 2: Categories / Back ═══ -->
             <LinearLayout
-                android:id="@+id/navDates"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
+                android:id="@+id/navItemCategories"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minWidth="56dp"
+                android:orientation="horizontal"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_note"
-                    app:tint="#9E9E9E"/>
-                <TextView
+
+                <!-- Active: nested pill -->
+                <LinearLayout
+                    android:id="@+id/navCategoriesActive"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dates"
-                    android:textSize="9sp"
-                    android:textColor="#9E9E9E"/>
+                    android:layout_height="44dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_nav_active_pill"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="24dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:id="@+id/navCategoriesActiveIcon"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_category"
+                        app:tint="#9B5CFF" />
+                    <TextView
+                        android:id="@+id/navCategoriesActiveLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Categories"
+                        android:textSize="14sp"
+                        android:textColor="#9B5CFF"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="0.04"
+                        android:layout_marginStart="12dp" />
+                </LinearLayout>
+
+                <!-- Inactive: icon only -->
+                <ImageView
+                    android:id="@+id/navCategoriesInactive"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_category"
+                    app:tint="#8B7FA8" />
+
             </LinearLayout>
 
-            <!-- Expenses -->
+            <!-- Spacer between slots -->
+            <View
+                android:layout_width="12dp"
+                android:layout_height="0dp" />
+
+            <!-- ═══ SLOT 3: Calendar ═══ -->
             <LinearLayout
-                android:id="@+id/navExpenses"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
+                android:id="@+id/navItemCalendar"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minWidth="56dp"
+                android:orientation="horizontal"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_star"
-                    app:tint="#9E9E9E"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Expenses"
-                    android:textSize="9sp"
-                    android:textColor="#9E9E9E"/>
-            </LinearLayout>
 
-            <!-- Calendar -->
-            <LinearLayout
-                android:id="@+id/navCalendarMoments"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
+                <!-- Active: nested pill -->
+                <LinearLayout
+                    android:id="@+id/navCalendarActive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_nav_active_pill"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="24dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="#9B5CFF" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calendar"
+                        android:textSize="14sp"
+                        android:textColor="#9B5CFF"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="0.04"
+                        android:layout_marginStart="12dp" />
+                </LinearLayout>
+
+                <!-- Inactive: icon only -->
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:id="@+id/navCalendarInactive"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:src="@drawable/ic_calendar"
-                    app:tint="#9E9E9E"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calendar"
-                    android:textSize="9sp"
-                    android:textColor="#9E9E9E"/>
+                    app:tint="#8B7FA8" />
+
             </LinearLayout>
 
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- FAB -->
+    <!-- ═══════════════════════════════════════════
+         FAB (always visible, bottom-right)
+    ═══════════════════════════════════════════ -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="28dp"
         android:src="@drawable/ic_add"
         android:contentDescription="Add"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="visible"
         app:backgroundTint="#9B5CFF"
         app:tint="#FFFFFF"
         app:fabSize="normal"
-        app:elevation="16dp"/>
-
-    <!-- Hidden for Java -->
-    <com.google.android.material.appbar.MaterialToolbar android:id="@+id/toolbar" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <TextView android:id="@+id/tvToolbarTitle" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
-    <com.google.android.material.button.MaterialButton android:id="@+id/btnAddCategory" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone"/>
+        app:elevation="12dp"
+        app:pressedTranslationZ="8dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

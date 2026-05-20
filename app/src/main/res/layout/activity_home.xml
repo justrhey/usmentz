@@ -86,71 +86,6 @@
 
                 </LinearLayout>
 
-                <!-- Stats row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="20dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:background="@drawable/bg_purple_card_transparent"
-                        android:padding="12dp"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total Moments"
-                            android:textColor="#E8D5F5"
-                            android:textSize="10sp"/>
-
-                        <TextView
-                            android:id="@+id/tvTotalMoments"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#FFFFFF"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="2dp"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:background="@drawable/bg_purple_card_transparent"
-                        android:padding="12dp"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Categories"
-                            android:textColor="#E8D5F5"
-                            android:textSize="10sp"/>
-
-                        <TextView
-                            android:id="@+id/tvCategoryCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:textColor="#FFFFFF"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="2dp"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
             </LinearLayout>
 
             <!-- ─────────────────────────────────────────
@@ -231,97 +166,182 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Floating Pill Navbar -->
+    <!-- ═══════════════════════════════════════════
+         EXPANDING PILL NAVBAR (Active/Inactive Pattern)
+    ═══════════════════════════════════════════ -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/floatingNavbarContainer"
+        android:id="@+id/navbarContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="28dp"
         app:cardBackgroundColor="#F2FFFFFF"
         app:cardCornerRadius="32dp"
-        app:cardElevation="8dp">
+        app:cardElevation="16dp"
+        app:strokeWidth="0dp">
 
         <LinearLayout
+            android:id="@+id/navbarContent"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
 
-            <!-- Home -->
+            <!-- ═══ SLOT 1: Home ═══ -->
             <LinearLayout
-                android:id="@+id/navHome"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_home"
-                    app:tint="#9B5CFF"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Home"
-                    android:textSize="9sp"
-                    android:textColor="#9B5CFF"/>
-            </LinearLayout>
-
-            <!-- Categories -->
-            <LinearLayout
-                android:id="@+id/navCategories"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_category"
-                    app:tint="#9E9E9E"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Categories"
-                    android:textSize="9sp"
-                    android:textColor="#9E9E9E"/>
-            </LinearLayout>
-
-            <!-- Reviews - hidden -->
-            <LinearLayout
-                android:id="@+id/navReviews"
+                android:id="@+id/navItemHome"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:visibility="gone"/>
-
-            <!-- Calendar -->
-            <LinearLayout
-                android:id="@+id/navCalendar"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minWidth="56dp"
+                android:orientation="horizontal"
                 android:gravity="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_calendar"
-                    app:tint="#9E9E9E"/>
-                <TextView
+
+                <LinearLayout
+                    android:id="@+id/navHomeActive"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Calendar"
-                    android:textSize="9sp"
-                    android:textColor="#9E9E9E"/>
+                    android:layout_height="44dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_nav_active_pill"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="24dp">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_home"
+                        app:tint="#9B5CFF" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Home"
+                        android:textSize="14sp"
+                        android:textColor="#9B5CFF"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="0.04"
+                        android:layout_marginStart="12dp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/navHomeInactive"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_home"
+                    app:tint="#8B7FA8"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <!-- Spacer between slots -->
+            <View
+                android:layout_width="12dp"
+                android:layout_height="0dp" />
+
+            <!-- ═══ SLOT 2: Categories ═══ -->
+            <LinearLayout
+                android:id="@+id/navItemCategories"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minWidth="56dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+
+                <LinearLayout
+                    android:id="@+id/navCategoriesActive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_nav_active_pill"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="24dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_category"
+                        app:tint="#9B5CFF" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Categories"
+                        android:textSize="14sp"
+                        android:textColor="#9B5CFF"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="0.04"
+                        android:layout_marginStart="12dp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/navCategoriesInactive"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_category"
+                    app:tint="#8B7FA8" />
+
+            </LinearLayout>
+
+            <!-- Spacer between slots -->
+            <View
+                android:layout_width="12dp"
+                android:layout_height="0dp" />
+
+            <!-- ═══ SLOT 3: Calendar ═══ -->
+            <LinearLayout
+                android:id="@+id/navItemCalendar"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:minWidth="56dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true">
+
+                <LinearLayout
+                    android:id="@+id/navCalendarActive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_nav_active_pill"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="24dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="#9B5CFF" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calendar"
+                        android:textSize="14sp"
+                        android:textColor="#9B5CFF"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:letterSpacing="0.04"
+                        android:layout_marginStart="12dp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/navCalendarInactive"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="#8B7FA8" />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -334,20 +354,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="28dp"
         android:src="@drawable/ic_add"
         android:contentDescription="Add"
         app:backgroundTint="#9B5CFF"
         app:tint="#FFFFFF"
         app:fabSize="normal"
-        app:elevation="16dp"/>
-
-    <!-- Hidden for Java compatibility -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"/>
+        app:elevation="12dp"
+        app:pressedTranslationZ="8dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -8,7 +8,7 @@
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
     android:paddingTop="20dp"
-    android:paddingBottom="28dp">
+    android:paddingBottom="24dp">
 
     <!-- Handle bar -->
     <View
@@ -18,270 +18,311 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/bg_handle" />
 
-    <!-- Title -->
-    <TextView
+    <!-- Progress dots -->
+    <LinearLayout
+        android:id="@+id/progressDots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Moment"
-        android:textColor="#212121"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+        <View android:id="@+id/dot1" android:layout_width="24dp" android:layout_height="4dp" android:background="#9B5CFF" android:layout_marginEnd="4dp"/>
+        <View android:id="@+id/dot2" android:layout_width="8dp" android:layout_height="8dp" android:background="#E8D5F5" android:layout_marginEnd="4dp" android:layout_gravity="center_vertical"/>
+        <View android:id="@+id/dot3" android:layout_width="8dp" android:layout_height="8dp" android:background="#E8D5F5" android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="What was this place?"
-        android:textColor="#9E9E9E"
-        android:textSize="13sp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Name field — the ONE required field -->
-    <com.google.android.material.textfield.TextInputLayout
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Place name"
-        app:hintTextColor="#9E9E9E"
-        app:boxStrokeColor="#9B5CFF"
-        app:boxStrokeWidth="1dp"
-        app:boxCornerRadiusTopStart="12dp"
-        app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusBottomStart="12dp"
-        app:boxCornerRadiusBottomEnd="12dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_marginBottom="12dp">
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etName"
+        <!-- STEP 1: Place -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#212121"
-            android:textSize="16sp"
-            android:inputType="textCapWords"
-            android:singleLine="true"
-            android:imeOptions="actionNext" />
+            android:orientation="vertical">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Where were you?"
+                android:textColor="#2D2640"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
 
-    <!-- Feeling mood chips -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="How did it feel?"
-        android:textColor="#9E9E9E"
-        android:textSize="12sp"
-        android:layout_marginBottom="6dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name the place or moment"
+                android:textColor="#8B7FA8"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupFeeling"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:singleSelection="true"
-        android:layout_marginBottom="12dp" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. Sunset dinner, Beach walk..."
+                app:boxStrokeColor="#9B5CFF"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="24dp">
 
-    <!-- Category label -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Category"
-        android:textColor="#9E9E9E"
-        android:textSize="12sp"
-        android:layout_marginBottom="6dp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:singleLine="true" />
 
-    <!-- Category chip selector -->
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:layout_marginBottom="12dp">
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <Button
+                android:id="@+id/btnNext1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Next"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#9B5CFF"
+                app:cornerRadius="12dp" />
+
+        </LinearLayout>
+
+        <!-- STEP 2: Vibe -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="How did it feel?"
+                android:textColor="#2D2640"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tap to select the vibe"
+                android:textColor="#8B7FA8"
+                android:textSize="14sp"
+                android:layout_marginBottom="20dp" />
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroupCategory"
-                android:layout_width="wrap_content"
+                android:id="@+id/chipGroupFeeling"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:singleSelection="true"
-                app:selectionRequired="true" />
+                android:layout_marginBottom="24dp" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAddCategory"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="+ New"
-                android:textColor="#9B5CFF"
-                android:textSize="13sp"
-                app:chipBackgroundColor="@android:color/transparent"
-                app:chipStrokeColor="#9B5CFF"
-                app:chipStrokeWidth="1.5dp"
-                app:chipCornerRadius="20dp"
-                app:checkedIconVisible="false"
-                android:layout_marginStart="4dp" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnBack2"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="Back"
+                    android:textColor="#9B5CFF"
+                    android:backgroundTint="#F3E8FF"
+                    app:cornerRadius="12dp"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnNext2"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="Next"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#9B5CFF"
+                    app:cornerRadius="12dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </HorizontalScrollView>
-
-    <!-- More details toggle -->
-    <TextView
-        android:id="@+id/tvMoreDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+ Add more details"
-        android:textColor="#9B5CFF"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:padding="8dp"
-        android:layout_marginBottom="8dp" />
-
-    <!-- Hidden details section -->
-    <LinearLayout
-        android:id="@+id/detailsSection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_marginBottom="12dp">
-
-        <!-- Photo section -->
-        <ImageView
-            android:id="@+id/ivPhotoPreview"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_scrapbook_placeholder"
-            android:visibility="gone"
-            android:layout_marginBottom="10dp" />
-
+        <!-- STEP 3: Details (Optional) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnAddPhoto"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:text="Add Photo"
-                android:textSize="12sp"
-                android:textColor="#9B5CFF"
-                android:backgroundTint="#F3E8FF"
-                app:cornerRadius="8dp"
-                android:layout_marginEnd="4dp" />
-
-            <Button
-                android:id="@+id/btnRemovePhoto"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Remove"
-                android:textSize="12sp"
-                android:textColor="#E91E63"
-                android:backgroundTint="#FCE4EC"
-                app:cornerRadius="8dp"
+                android:layout_height="wrap_content"
+                android:text="Anything else?"
+                android:textColor="#2D2640"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add photo, cost, or notes (optional)"
+                android:textColor="#8B7FA8"
+                android:textSize="14sp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Category Chips -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textColor="#2D2640"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="16dp">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true" />
+
+            </HorizontalScrollView>
+
+            <!-- Photo Preview -->
+            <ImageView
+                android:id="@+id/ivPhotoPreview"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_scrapbook_placeholder"
                 android:visibility="gone"
-                android:layout_marginStart="4dp" />
+                android:layout_marginBottom="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <Button
+                    android:id="@+id/btnAddPhoto"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="Add Photo"
+                    android:textSize="12sp"
+                    android:textColor="#9B5CFF"
+                    android:backgroundTint="#F3E8FF"
+                    app:cornerRadius="8dp" />
+
+                <Button
+                    android:id="@+id/btnRemovePhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="Remove"
+                    android:textSize="12sp"
+                    android:textColor="#E91E63"
+                    android:backgroundTint="#FCE4EC"
+                    app:cornerRadius="8dp"
+                    android:visibility="gone"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
+
+            <!-- Cost -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cost (optional)"
+                app:boxStrokeColor="#9B5CFF"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Notes -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="A quick note..."
+                app:boxStrokeColor="#9B5CFF"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginBottom="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etReviewNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:minLines="2" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Do Again -->
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchDoAgain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Would you do this again?"
+                android:textColor="#2D2640"
+                android:layout_marginBottom="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnBack3"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="Back"
+                    android:textColor="#9B5CFF"
+                    android:backgroundTint="#F3E8FF"
+                    app:cornerRadius="12dp"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="Save Memory"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#9B5CFF"
+                    app:cornerRadius="12dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Cost field -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Cost (optional)"
-            app:hintTextColor="#9E9E9E"
-            app:boxStrokeColor="#9B5CFF"
-            app:boxStrokeWidth="1dp"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_marginBottom="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etCost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#212121"
-                android:textSize="14sp"
-                android:inputType="numberDecimal"
-                android:singleLine="true" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Review notes -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="What stood out? (private journal)"
-            app:hintTextColor="#9E9E9E"
-            app:boxStrokeColor="#9B5CFF"
-            app:boxStrokeWidth="1dp"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusBottomEnd="12dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_marginBottom="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etReviewNotes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#212121"
-                android:textSize="14sp"
-                android:inputType="textMultiLine"
-                android:minLines="2"
-                android:maxLines="4" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Do again toggle -->
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchDoAgain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Would you do this again?"
-            android:textColor="#212121"
-            android:textSize="14sp" />
-
-    </LinearLayout>
-
-    <!-- Action buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="Cancel"
-            android:textColor="#757575"
-            android:textSize="14sp"
-            android:backgroundTint="#F5F5F5"
-            android:layout_marginEnd="8dp"
-            app:cornerRadius="12dp" />
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="Add"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:backgroundTint="#9B5CFF"
-            app:cornerRadius="12dp" />
-
-    </LinearLayout>
+    </ViewFlipper>
 
 </LinearLayout>
