@@ -49,7 +49,7 @@
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusBottomEnd="12dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="12dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etName"
@@ -63,24 +63,21 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Recent suggestions -->
+    <!-- Feeling mood chips -->
     <TextView
-        android:id="@+id/tvRecentLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Recent"
+        android:text="How did it feel?"
         android:textColor="#9E9E9E"
         android:textSize="12sp"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        android:layout_marginBottom="6dp" />
 
-    <LinearLayout
-        android:id="@+id/recentContainer"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupFeeling"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone" />
+        app:singleSelection="true"
+        android:layout_marginBottom="12dp" />
 
     <!-- Category label -->
     <TextView
@@ -89,14 +86,14 @@
         android:text="Category"
         android:textColor="#9E9E9E"
         android:textSize="12sp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="6dp" />
 
     <!-- Category chip selector -->
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="12dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -110,7 +107,6 @@
                 app:singleSelection="true"
                 app:selectionRequired="true" />
 
-            <!-- Inline "Add Category" chip -->
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipAddCategory"
                 android:layout_width="wrap_content"
@@ -129,14 +125,102 @@
 
     </HorizontalScrollView>
 
-    <!-- Hint -->
+    <!-- More details toggle -->
     <TextView
+        android:id="@+id/tvMoreDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date, location, and details can be added after"
-        android:textColor="#BDBDBD"
-        android:textSize="12sp"
-        android:layout_marginBottom="20dp" />
+        android:text="+ Add more details"
+        android:textColor="#9B5CFF"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Hidden details section -->
+    <LinearLayout
+        android:id="@+id/detailsSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginBottom="12dp">
+
+        <!-- Photo button -->
+        <Button
+            android:id="@+id/btnAddPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Add Photo"
+            android:textSize="12sp"
+            android:textColor="#9B5CFF"
+            android:backgroundTint="#F3E8FF"
+            app:cornerRadius="8dp"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Cost field -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cost (optional)"
+            app:hintTextColor="#9E9E9E"
+            app:boxStrokeColor="#9B5CFF"
+            app:boxStrokeWidth="1dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etCost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#212121"
+                android:textSize="14sp"
+                android:inputType="numberDecimal"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Review notes -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="What stood out? (private journal)"
+            app:hintTextColor="#9E9E9E"
+            app:boxStrokeColor="#9B5CFF"
+            app:boxStrokeWidth="1dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginBottom="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etReviewNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#212121"
+                android:textSize="14sp"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:maxLines="4" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Do again toggle -->
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchDoAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Would you do this again?"
+            android:textColor="#212121"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
     <!-- Action buttons -->
     <LinearLayout

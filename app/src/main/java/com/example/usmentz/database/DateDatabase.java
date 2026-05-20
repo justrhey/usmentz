@@ -17,7 +17,7 @@ import com.example.usmentz.dao.ExpenseDao;
 
 @Database(
         entities = {DateLocation.class, Category.class, Expense.class},
-        version = 19,
+        version = 20,
         exportSchema = false
     )
 @TypeConverters({Converters.class})
@@ -40,12 +40,22 @@ public abstract class DateDatabase extends RoomDatabase {
     static final Migration MIGRATION_18_19 = new Migration(18, 19) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            // position column may already exist, wrap in try-catch via ALTER TABLE
             try {
                 database.execSQL("ALTER TABLE date_locations ADD COLUMN position INTEGER NOT NULL DEFAULT 0");
             } catch (Exception e) {
                 // Column already exists, skip
             }
+        }
+    };
+
+    // Migration from 19 to 20: Add feeling, doAgain, cost, reviewNotes to DateLocation
+    static final Migration MIGRATION_19_20 = new Migration(19, 20) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE date_locations ADD COLUMN feeling TEXT DEFAULT ''");
+            database.execSQL("ALTER TABLE date_locations ADD COLUMN doAgain INTEGER NOT NULL DEFAULT 0");
+            database.execSQL("ALTER TABLE date_locations ADD COLUMN cost REAL DEFAULT 0.0");
+            database.execSQL("ALTER TABLE date_locations ADD COLUMN reviewNotes TEXT DEFAULT ''");
         }
     };
 
@@ -55,7 +65,7 @@ public abstract class DateDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     DateDatabase.class, "usmentz_database")
-                            .addMigrations(MIGRATION_17_18, MIGRATION_18_19)
+                            .addMigrations(MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20)
                             .fallbackToDestructiveMigration()
                             .build();
                 }

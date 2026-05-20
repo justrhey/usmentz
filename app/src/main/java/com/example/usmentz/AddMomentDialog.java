@@ -28,6 +28,7 @@ import com.example.usmentz.viewmodel.CategoryViewModel;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Calendar;
 import java.util.List;
@@ -40,6 +41,9 @@ public class AddMomentDialog extends DialogFragment {
     private OnMomentAddedListener listener;
     private OnCategoryCreatedListener categoryListener;
     private ChipGroup chipGroupCategory;
+
+    // Feeling options
+    private static final String[] FEELINGS = {"Cozy", "Romantic", "Fun", "Adventurous", "Relaxing", "Exciting"};
 
     public interface OnMomentAddedListener {
         void onMomentAdded(DateLocation moment);
@@ -73,6 +77,13 @@ public class AddMomentDialog extends DialogFragment {
         Button btnSave = view.findViewById(R.id.btnSave);
         ChipGroup chipGroupCategory = view.findViewById(R.id.chipGroupCategory);
         Chip chipAddCategory = view.findViewById(R.id.chipAddCategory);
+        ChipGroup chipGroupFeeling = view.findViewById(R.id.chipGroupFeeling);
+        TextView tvMoreDetails = view.findViewById(R.id.tvMoreDetails);
+        LinearLayout detailsSection = view.findViewById(R.id.detailsSection);
+        Button btnAddPhoto = view.findViewById(R.id.btnAddPhoto);
+        EditText etCost = view.findViewById(R.id.etCost);
+        EditText etReviewNotes = view.findViewById(R.id.etReviewNotes);
+        SwitchMaterial switchDoAgain = view.findViewById(R.id.switchDoAgain);
 
         // Make it a bottom sheet style
         Dialog dialog = new Dialog(requireContext(), R.style.BottomSheetDialog);
@@ -93,8 +104,27 @@ public class AddMomentDialog extends DialogFragment {
             dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }
 
-        // Load categories as chips — deferred to onViewCreated so getViewLifecycleOwner is valid
+        // Load categories as chips
         chipGroupCategory = view.findViewById(R.id.chipGroupCategory);
+
+        // Setup feeling chips
+        setupFeelingChips(chipGroupFeeling);
+
+        // Toggle more details
+        tvMoreDetails.setOnClickListener(v -> {
+            if (detailsSection.getVisibility() == View.GONE) {
+                detailsSection.setVisibility(View.VISIBLE);
+                tvMoreDetails.setText("- Hide details");
+            } else {
+                detailsSection.setVisibility(View.GONE);
+                tvMoreDetails.setText("+ Add more details");
+            }
+        });
+
+        // Add photo (placeholder for now)
+        btnAddPhoto.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Photo picker coming soon", Toast.LENGTH_SHORT).show();
+        });
 
         // Inline add category
         chipAddCategory.setOnClickListener(v -> {
@@ -113,18 +143,41 @@ public class AddMomentDialog extends DialogFragment {
                 return;
             }
 
-            // Default to first category if none selected
-            if (selectedCategory == null) {
-                Toast.makeText(getContext(), "Adding to Uncategorized", Toast.LENGTH_SHORT).show();
-            }
-
             int catId = selectedCategory != null ? selectedCategory.getId() : 1;
             String catName = selectedCategory != null ? selectedCategory.getName() : "Uncategorized";
 
-            // Smart defaults: today, no address, no description
             Calendar cal = Calendar.getInstance();
             DateLocation moment = new DateLocation(name, "", "", cal.getTime());
             moment.setCategoryId(catId);
+
+            // Set feeling
+            int checkedFeelingId = chipGroupFeeling.getCheckedChipId();
+            if (checkedFeelingId != View.NO_ID) {
+                Chip checkedChip = chipGroupFeeling.findViewById(checkedFeelingId);
+                if (checkedChip != null) {
+                    moment.setFeeling(checkedChip.getText().toString());
+                }
+            }
+
+            // Set cost
+            String costText = etCost.getText().toString().trim();
+            if (!TextUtils.isEmpty(costText)) {
+                try {
+                    moment.setCost(Float.parseFloat(costText));
+                } catch (NumberFormatException e) {
+                    moment.setCost(0f);
+                }
+            }
+
+            // Set review notes
+            String reviewNotes = etReviewNotes.getText().toString().trim();
+            if (!TextUtils.isEmpty(reviewNotes)) {
+                moment.setReviewNotes(reviewNotes);
+            }
+
+            // Set do again
+            moment.setDoAgain(switchDoAgain.isChecked());
+
             dateViewModel.insert(moment);
 
             Toast.makeText(getContext(), "Added to " + catName, Toast.LENGTH_SHORT).show();
@@ -138,23 +191,31 @@ public class AddMomentDialog extends DialogFragment {
         return dialog;
     }
 
+    private void setupFeelingChips(ChipGroup chipGroup) {
+        for (String feeling : FEELINGS) {
+            Chip chip = new Chip(requireContext());
+            chip.setText(feeling);
+            chip.setCheckable(true);
+            chip.setChipBackgroundColorResource(android.R.color.transparent);
+            chip.setChipStrokeWidth(1.5f);
+            chip.setChipStrokeColor(android.content.res.ColorStateList.valueOf(0xFF9B5CFF));
+            chip.setTextColor(0xFF9B5CFF);
+            chipGroup.addView(chip);
+        }
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Now that the view exists, getViewLifecycleOwner is valid
         loadCategories(chipGroupCategory);
     }
 
     private void loadCategories(ChipGroup chipGroupCategory) {
         categoryViewModel.getAllCategories().observe(getViewLifecycleOwner(), categories -> {
-            // Guard against detached fragment
-            if (!isAdded() || chipGroupCategory == null) {
-                return;
-            }
+            if (!isAdded() || chipGroupCategory == null) return;
             chipGroupCategory.removeAllViews();
 
             if (categories == null || categories.isEmpty()) {
-                // No categories — show a "Create one" chip
                 Chip chip = new Chip(requireContext());
                 chip.setText("Create your first category");
                 chip.setCheckable(true);
@@ -187,26 +248,19 @@ public class AddMomentDialog extends DialogFragment {
                     chip.setTextColor(0xFF9B5CFF);
                 }
 
-                // Auto-select first category
                 if (i == 0) {
                     chip.setChecked(true);
                     selectedCategory = cat;
                 }
 
-                chip.setOnClickListener(v -> {
-                    selectedCategory = cat;
-                });
-
+                chip.setOnClickListener(v -> selectedCategory = cat);
                 chipGroupCategory.addView(chip);
             }
         });
     }
 
     private void showAddCategoryInline() {
-        // Guard against detached fragment
-        if (!isAdded()) {
-            return;
-        }
+        if (!isAdded()) return;
 
         View inlineForm = LayoutInflater.from(requireContext())
                 .inflate(R.layout.dialog_add_category_inline, null);
@@ -226,7 +280,6 @@ public class AddMomentDialog extends DialogFragment {
         int[] colorValues = {0xFF9B5CFF, 0xFFFF5252, 0xFF2196F3, 0xFF4CAF50, 0xFFFF9800, 0xFFE91E63};
         final int[] selectedColor = {colorValues[0]};
 
-        // Highlight first color
         updateColorSelection(colorDots, 0, colorValues);
 
         for (int i = 0; i < colorDots.length; i++) {
@@ -245,10 +298,7 @@ public class AddMomentDialog extends DialogFragment {
         btnCancel.setOnClickListener(v -> catDialog.dismiss());
 
         btnCreate.setOnClickListener(v -> {
-            // Guard against detached fragment before accessing context-dependent methods
-            if (!isAdded()) {
-                return;
-            }
+            if (!isAdded()) return;
             String name = etCatName.getText().toString().trim();
             if (TextUtils.isEmpty(name)) {
                 etCatName.setError("Name required");
@@ -279,7 +329,6 @@ public class AddMomentDialog extends DialogFragment {
             params.setMargins(marginPx, 0, marginPx, 0);
             dots[i].setLayoutParams(params);
 
-            // Apply color as background and show selection ring
             GradientDrawable bg = new GradientDrawable();
             bg.setShape(GradientDrawable.OVAL);
             bg.setColor(color);
@@ -301,7 +350,6 @@ public class AddMomentDialog extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        // Show keyboard when dialog opens
         if (getDialog() != null && getDialog().getWindow() != null) {
             getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         }

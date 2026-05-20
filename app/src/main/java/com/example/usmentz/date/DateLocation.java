@@ -15,10 +15,19 @@ public class DateLocation implements Serializable {
     private String description;
     private Date date;
     private boolean isCompleted;
+
+    // Legacy fields (kept for backward compatibility)
+    @Deprecated
     private float rating;
-    private String review;
     private String photoPath;
     private int position;
+
+    // New fields for the scrapbook vision
+    private String feeling;        // Mood/emoji: "cozy", "romantic", "fun", etc.
+    private boolean doAgain;       // "Would you do this again?" signal
+    private float cost;            // Optional expense for this moment
+    private String reviewNotes;    // Private journal entry
+
     private int categoryId;
 
     // Constructor for Room (no-arg constructor)
@@ -33,10 +42,13 @@ public class DateLocation implements Serializable {
         this.date = date;
         this.isCompleted = false;
         this.rating = 0f;
-        this.review = "";
         this.photoPath = "";
         this.position = 0;
         this.categoryId = 1;
+        this.feeling = "";
+        this.doAgain = false;
+        this.cost = 0f;
+        this.reviewNotes = "";
     }
 
     // Getters and setters
@@ -58,18 +70,41 @@ public class DateLocation implements Serializable {
     public boolean isCompleted() { return isCompleted; }
     public void setCompleted(boolean completed) { isCompleted = completed; }
 
+    @Deprecated
     public float getRating() { return rating; }
+    @Deprecated
     public void setRating(float rating) { this.rating = rating; }
 
-    public String getReview() { return review; }
-    public void setReview(String review) { this.review = review; }
-
+    // Photo URI (legacy name kept for DB compatibility)
     public String getPhotoPath() { return photoPath; }
     public void setPhotoPath(String photoPath) { this.photoPath = photoPath; }
+
+    // Convenience alias for photoPath
+    public String getPhotoUri() { return photoPath; }
+    public void setPhotoUri(String photoUri) { this.photoPath = photoUri; }
 
     public int getPosition() { return position; }
     public void setPosition(int position) { this.position = position; }
 
     public int getCategoryId() { return categoryId; }
     public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
+
+    // New fields
+    public String getFeeling() { return feeling; }
+    public void setFeeling(String feeling) { this.feeling = feeling; }
+
+    public boolean isDoAgain() { return doAgain; }
+    public void setDoAgain(boolean doAgain) { this.doAgain = doAgain; }
+
+    public float getCost() { return cost; }
+    public void setCost(float cost) { this.cost = cost; }
+
+    public String getReviewNotes() { return reviewNotes; }
+    public void setReviewNotes(String reviewNotes) { this.reviewNotes = reviewNotes; }
+
+    // Legacy alias for backward compatibility
+    @Deprecated
+    public String getReview() { return reviewNotes != null ? reviewNotes : ""; }
+    @Deprecated
+    public void setReview(String review) { this.reviewNotes = review; }
 }
