@@ -405,13 +405,14 @@ public class HomeActivity extends AppCompatActivity {
             dateViewModel.delete(dateLocation);
         });
 
-        // Completion listener
-        recentAdapter.setOnItemCompleteListener((dateLocation, isCompleted) -> {
-            dateViewModel.update(dateLocation);
+        // Item click listener
+        recentAdapter.setOnItemClickListener(dateLocation -> {
+            if (dateLocation != null) {
+                Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
+                intent.putExtra("date_location", dateLocation);
+                startActivity(intent);
+            }
         });
-
-        // Note: setOnRatingChangeListener exists but is not connected to any UI in DateAdapter
-        // This was a pre-existing unused callback in the code
 
         // FAB auto-hide on scroll
         RecyclerView rvRecent = findViewById(R.id.rvRecentActivity);

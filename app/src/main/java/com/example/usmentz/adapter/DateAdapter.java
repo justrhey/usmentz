@@ -1,46 +1,39 @@
 package com.example.usmentz.adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.R;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Calendar;
-import java.util.Date;
-
-import android.graphics.Paint;
 
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder> {
     private List<DateLocation> dates = new ArrayList<>();
     private OnItemClickListener listener;
     private OnItemDeleteListener deleteListener;
-    private OnItemMoveListener moveListener;
-    private OnItemCompleteListener completeListener;
-    private OnRatingChangeListener ratingChangeListener;
-    private OnReviewClickListener reviewClickListener;
+
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
 
-    public DateAdapter() {
-        setHasStableIds(true);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return dates.get(position).getId();
-    }
+    // Feeling colors for badge backgrounds
+    private static final int FEELING_COLOR_DEFAULT = 0xFF9B5CFF;
+    private static final int FEELING_COLOR_COZY = 0xFFFF9800;
+    private static final int FEELING_COLOR_ROMANTIC = 0xFFE91E63;
+    private static final int FEELING_COLOR_FUN = 0xFF4CAF50;
+    private static final int FEELING_COLOR_ADVENTUROUS = 0xFF2196F3;
+    private static final int FEELING_COLOR_RELAXING = 0xFF00BCD4;
+    private static final int FEELING_COLOR_EXCITING = 0xFFFF5722;
 
     public interface OnItemClickListener {
         void onItemClick(DateLocation dateLocation);
@@ -50,46 +43,12 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         void onItemDelete(DateLocation dateLocation);
     }
 
-    public interface OnItemMoveListener {
-        void onItemMove(int fromPosition, int toPosition);
-    }
-
-    public interface OnItemCompleteListener {
-        void onItemComplete(DateLocation dateLocation, boolean isCompleted);
-    }
-
-    public interface OnRatingChangeListener {
-        void onRatingChange(DateLocation dateLocation, float rating);
-    }
-
-    public interface OnReviewClickListener {
-        void onReviewClick(DateLocation dateLocation);
-    }
-
-    // No-arg constructor
-
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
     public void setOnItemDeleteListener(OnItemDeleteListener listener) {
         this.deleteListener = listener;
-    }
-
-    public void setOnItemMoveListener(OnItemMoveListener listener) {
-        this.moveListener = listener;
-    }
-
-    public void setOnItemCompleteListener(OnItemCompleteListener listener) {
-        this.completeListener = listener;
-    }
-
-    public void setOnRatingChangeListener(OnRatingChangeListener listener) {
-        this.ratingChangeListener = listener;
-    }
-
-    public void setOnReviewClickListener(OnReviewClickListener listener) {
-        this.reviewClickListener = listener;
     }
 
     public List<DateLocation> getDates() {
@@ -106,50 +65,79 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull DateViewHolder holder, int position) {
-        DateLocation currentDate = dates.get(position);
-        
-        // Format date as label outside the card
-        if (currentDate.getDate() != null) {
+        DateLocation current = dates.get(position);
+
+        // Date label
+        if (current.getDate() != null) {
             Calendar dateCal = Calendar.getInstance();
-            dateCal.setTime(currentDate.getDate());
+            dateCal.setTime(current.getDate());
             Calendar today = Calendar.getInstance();
             Calendar yesterday = Calendar.getInstance();
             yesterday.add(Calendar.DAY_OF_YEAR, -1);
-            
+
             if (isSameDay(dateCal, today)) {
                 holder.tvDate.setText("Today");
             } else if (isSameDay(dateCal, yesterday)) {
                 holder.tvDate.setText("Yesterday");
             } else {
-                holder.tvDate.setText(dateFormat.format(currentDate.getDate()));
+                holder.tvDate.setText(dateFormat.format(current.getDate()));
             }
         } else {
             holder.tvDate.setText("");
         }
-        
-        holder.tvName.setText(currentDate.getName());
-        holder.tvAddress.setText(currentDate.getAddress());
 
-        // Completion circle — always visible, toggles unicode symbol
-        holder.completionDot.setText(currentDate.isCompleted() ? "●" : "○");
+        // Place name + address
+        holder.tvName.setText(current.getName());
+        holder.tvAddress.setText(current.getAddress());
 
-        // Name strikethrough when done
-        if (currentDate.isCompleted()) {
-            holder.tvName.setPaintFlags(holder.tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        // Feeling badge
+        String feeling = current.getFeeling();
+        if (feeling != null && !feeling.isEmpty()) {
+            holder.tvFeelingBadge.setText(feeling);
+            holder.tvFeelingBadge.setVisibility(View.VISIBLE);
+            int bgColor = getFeelingColor(feeling);
+            android.graphics.drawable.GradientDrawable bg = new android.graphics.drawable.GradientDrawable();
+            bg.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
+            bg.setCornerRadius(dpToPx(holder.itemView.getContext(), 20));
+            bg.setColor(bgColor);
+            holder.tvFeelingBadge.setBackground(bg);
         } else {
-            holder.tvName.setPaintFlags(holder.tvName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            holder.tvFeelingBadge.setVisibility(View.GONE);
         }
 
-        // Star + rating when completed and has rating/review
-        boolean hasReview = currentDate.getReview() != null && !currentDate.getReview().isEmpty();
-        boolean hasRating = currentDate.getRating() > 0;
-        if (currentDate.isCompleted() && (hasReview || hasRating)) {
-            holder.tvReview.setVisibility(View.VISIBLE);
-            holder.tvRating.setVisibility(View.VISIBLE);
-            holder.tvRating.setText(String.valueOf((int) currentDate.getRating()));
+        // Review snippet
+        String review = current.getReviewNotes();
+        if (review != null && !review.isEmpty()) {
+            holder.tvReviewSnippet.setText(review);
+            holder.tvReviewSnippet.setVisibility(View.VISIBLE);
         } else {
-            holder.tvReview.setVisibility(View.GONE);
-            holder.tvRating.setVisibility(View.GONE);
+            holder.tvReviewSnippet.setVisibility(View.GONE);
+        }
+
+        // Cost
+        float cost = current.getCost();
+        if (cost > 0) {
+            holder.tvCost.setText(String.format(Locale.getDefault(), "$%.0f", cost));
+            holder.tvCost.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvCost.setVisibility(View.GONE);
+        }
+
+        // Do-again heart
+        if (current.isDoAgain()) {
+            holder.ivDoAgain.setVisibility(View.VISIBLE);
+        } else {
+            holder.ivDoAgain.setVisibility(View.GONE);
+        }
+
+        // Photo placeholder (no actual photo yet)
+        if (current.getPhotoPath() != null && !current.getPhotoPath().isEmpty()) {
+            holder.ivPhoto.setVisibility(View.VISIBLE);
+            holder.photoPlaceholder.setVisibility(View.GONE);
+            // TODO: Load actual photo with Glide/Picasso
+        } else {
+            holder.ivPhoto.setVisibility(View.GONE);
+            holder.photoPlaceholder.setVisibility(View.VISIBLE);
         }
     }
 
@@ -163,108 +151,58 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
         notifyDataSetChanged();
     }
 
-    public void onItemMove(int fromPosition, int toPosition) {
-        if (fromPosition < toPosition) {
-            for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(dates, i, i + 1);
-            }
-        } else {
-            for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(dates, i, i - 1);
-            }
-        }
-        notifyItemMoved(fromPosition, toPosition);
-
-        if (moveListener != null) {
-            moveListener.onItemMove(fromPosition, toPosition);
-        }
+    private int getFeelingColor(String feeling) {
+        String lower = feeling.toLowerCase(Locale.getDefault());
+        if (lower.contains("cozy")) return FEELING_COLOR_COZY;
+        if (lower.contains("romantic")) return FEELING_COLOR_ROMANTIC;
+        if (lower.contains("fun")) return FEELING_COLOR_FUN;
+        if (lower.contains("adventur")) return FEELING_COLOR_ADVENTUROUS;
+        if (lower.contains("relax")) return FEELING_COLOR_RELAXING;
+        if (lower.contains("excit")) return FEELING_COLOR_EXCITING;
+        return FEELING_COLOR_DEFAULT;
     }
 
-    class DateViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvName;
-        private TextView tvAddress;
-        private TextView tvDate;
-        private CheckBox checkComplete;
-        private LinearLayout ratingContainer;
-        private RatingBar ratingBar;
-        private ImageView tvReview;
-        private ImageView btnDelete;
-        private TextView completionDot;
-        private TextView tvRating;
-
-        public DateViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvName = itemView.findViewById(R.id.tvName);
-            tvAddress = itemView.findViewById(R.id.tvAddress);
-            tvDate = itemView.findViewById(R.id.tvDate);
-            tvRating = itemView.findViewById(R.id.tvRating);
-            completionDot = itemView.findViewById(R.id.completionDot);
-            // Hidden compatibility views
-            checkComplete = itemView.findViewById(R.id.checkComplete);
-            ratingContainer = itemView.findViewById(R.id.ratingContainer);
-            ratingBar = itemView.findViewById(R.id.ratingBar);
-            tvReview = itemView.findViewById(R.id.tvReview);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
-
-            // Completion toggle
-            completionDot.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position == RecyclerView.NO_POSITION) return;
-                if (dates == null || position >= dates.size()) return;
-                DateLocation date = dates.get(position);
-                if (date == null) return;
-                boolean newState = !date.isCompleted();
-                date.setCompleted(newState);
-                // Toggle unicode circle
-                completionDot.setText(newState ? "●" : "○");
-                if (newState) {
-                    tvName.setPaintFlags(tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                } else {
-                    tvName.setPaintFlags(tvName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                }
-                if (completeListener != null) {
-                    completeListener.onItemComplete(date, newState);
-                }
-            });
-
-            // Item click listener
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (listener == null || position == RecyclerView.NO_POSITION) return;
-                if (dates == null || position >= dates.size()) return;
-                DateLocation date = dates.get(position);
-                if (date != null) {
-                    listener.onItemClick(date);
-                }
-            });
-
-            // Delete button listener
-            btnDelete.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (deleteListener == null || position == RecyclerView.NO_POSITION) return;
-                if (dates == null || position >= dates.size()) return;
-                DateLocation date = dates.get(position);
-                if (date != null) {
-                    deleteListener.onItemDelete(date);
-                }
-            });
-
-            // Review click listener
-            tvReview.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (reviewClickListener == null || position == RecyclerView.NO_POSITION) return;
-                if (dates == null || position >= dates.size()) return;
-                DateLocation date = dates.get(position);
-                if (date != null) {
-                    reviewClickListener.onReviewClick(date);
-                }
-            });
-        }
+    private int dpToPx(android.content.Context context, float dp) {
+        return (int) (dp * context.getResources().getDisplayMetrics().density);
     }
-    
-    // Helper to compare calendar days
+
     private boolean isSameDay(Calendar cal1, Calendar cal2) {
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+    }
+
+    class DateViewHolder extends RecyclerView.ViewHolder {
+        TextView tvDate, tvName, tvAddress, tvReviewSnippet, tvCost, tvFeelingBadge;
+        ImageView ivPhoto, ivDoAgain, btnDelete, photoPlaceholder;
+
+        public DateViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvDate = itemView.findViewById(R.id.tvDate);
+            tvName = itemView.findViewById(R.id.tvName);
+            tvAddress = itemView.findViewById(R.id.tvAddress);
+            tvReviewSnippet = itemView.findViewById(R.id.tvReviewSnippet);
+            tvCost = itemView.findViewById(R.id.tvCost);
+            tvFeelingBadge = itemView.findViewById(R.id.tvFeelingBadge);
+            ivPhoto = itemView.findViewById(R.id.ivPhoto);
+            ivDoAgain = itemView.findViewById(R.id.ivDoAgain);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
+            photoPlaceholder = itemView.findViewById(R.id.photoPlaceholder);
+
+            // Item click
+            itemView.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                if (listener == null || pos == RecyclerView.NO_POSITION || dates == null || pos >= dates.size()) return;
+                DateLocation date = dates.get(pos);
+                if (date != null) listener.onItemClick(date);
+            });
+
+            // Delete button
+            btnDelete.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                if (deleteListener == null || pos == RecyclerView.NO_POSITION || dates == null || pos >= dates.size()) return;
+                DateLocation date = dates.get(pos);
+                if (date != null) deleteListener.onItemDelete(date);
+            });
+        }
     }
 }

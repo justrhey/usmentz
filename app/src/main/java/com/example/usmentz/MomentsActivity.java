@@ -139,26 +139,6 @@ public class MomentsActivity extends AppCompatActivity {
 
         dateAdapter.setOnItemDeleteListener(this::deleteDateLocation);
 
-        dateAdapter.setOnItemCompleteListener((dateLocation, isCompleted) -> {
-            if (dateLocation != null && dateViewModel != null) {
-                dateViewModel.update(dateLocation);
-            }
-        });
-
-        dateAdapter.setOnRatingChangeListener((dateLocation, rating) -> {
-            if (dateLocation != null && dateViewModel != null) {
-                dateViewModel.update(dateLocation);
-            }
-        });
-
-        dateAdapter.setOnReviewClickListener(dateLocation -> {
-            if (dateLocation != null) {
-                Intent intent = new Intent(MomentsActivity.this, ReviewsActivity.class);
-                intent.putExtra("date_location", dateLocation);
-                startActivity(intent);
-            }
-        });
-
         // FAB to add new moment
         fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v -> showAddDialog());
@@ -183,29 +163,6 @@ public class MomentsActivity extends AppCompatActivity {
                 }
             }
         }).attachToRecyclerView(recyclerView);
-
-        ItemTouchHelper dragHelper = new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
-                    @Override
-                    public boolean onMove(@NonNull RecyclerView recyclerView,
-                                          @NonNull RecyclerView.ViewHolder viewHolder,
-                                          @NonNull RecyclerView.ViewHolder target) {
-                        int fromPosition = viewHolder.getAdapterPosition();
-                        int toPosition = target.getAdapterPosition();
-                        dateAdapter.onItemMove(fromPosition, toPosition);
-                        return true;
-                    }
-
-                    @Override
-                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {}
-
-                    @Override
-                    public boolean isLongPressDragEnabled() {
-                        return false;
-                    }
-                });
-
-        dragHelper.attachToRecyclerView(recyclerView);
 
         // FAB auto-hide on scroll
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
