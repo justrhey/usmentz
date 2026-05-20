@@ -68,7 +68,6 @@
             android:exported="false"
             android:theme="@style/Theme.Usmentz" />
 
-        <activity android:name=".MomentsActivity" android:exported="false" />
         <activity android:name=".CalendarActivity" android:exported="false" />
         <activity android:name=".FavoritesActivity" android:exported="false" />
 

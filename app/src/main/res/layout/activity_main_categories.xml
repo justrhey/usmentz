@@ -45,6 +45,14 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Suggestion Card - Guide layer -->
+    <include
+        layout="@layout/card_suggestion"
+        android:id="@+id/suggestionCardContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
+
     <!-- Moments Header - shows when in category -->
     <LinearLayout
         android:id="@+id/momentsHeader"
@@ -193,15 +201,12 @@
                     android:textColor="#9B5CFF"/>
             </LinearLayout>
 
-            <!-- Reviews -->
+            <!-- Reviews - hidden, reviews are now private diary entries -->
             <LinearLayout
                 android:id="@+id/navReviews"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone">
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"

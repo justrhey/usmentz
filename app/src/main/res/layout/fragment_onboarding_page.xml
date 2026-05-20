@@ -12,8 +12,8 @@
 
     <!-- Illustration area -->
     <FrameLayout
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_marginBottom="40dp">
 
         <View
@@ -22,13 +22,12 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_onboarding_illustration" />
 
-        <TextView
-            android:id="@+id/tvIllustrationIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/ivIllustration"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_gravity="center"
-            android:textSize="72sp"
-            android:gravity="center" />
+            android:contentDescription="Onboarding illustration" />
 
     </FrameLayout>
 
@@ -37,7 +36,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#1A1A1A"
+        android:textColor="#2D2640"
         android:textSize="26sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -48,7 +47,7 @@
         android:id="@+id/tvDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#757575"
+        android:textColor="#8B7FA8"
         android:textSize="15sp"
         android:lineSpacingExtra="4dp"
         android:gravity="center" />

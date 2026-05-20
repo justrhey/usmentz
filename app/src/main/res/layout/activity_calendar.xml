@@ -428,14 +428,12 @@
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Categories" android:textSize="8sp" android:textColor="#9E9E9E" android:layout_marginTop="2dp"/>
                 </LinearLayout>
 
+                <!-- Reviews - hidden, reviews are now private diary entries -->
                 <LinearLayout
                     android:id="@+id/navReviews"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true">
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone">
                     <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_star" app:tint="#9E9E9E"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Reviews" android:textSize="8sp" android:textColor="#9E9E9E" android:layout_marginTop="2dp"/>
                 </LinearLayout>

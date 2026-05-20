@@ -26,14 +26,14 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
 
-    // Feeling colors for badge backgrounds
+    // Feeling colors for badge backgrounds (all purple tones)
     private static final int FEELING_COLOR_DEFAULT = 0xFF9B5CFF;
-    private static final int FEELING_COLOR_COZY = 0xFFFF9800;
-    private static final int FEELING_COLOR_ROMANTIC = 0xFFE91E63;
-    private static final int FEELING_COLOR_FUN = 0xFF4CAF50;
-    private static final int FEELING_COLOR_ADVENTUROUS = 0xFF2196F3;
-    private static final int FEELING_COLOR_RELAXING = 0xFF00BCD4;
-    private static final int FEELING_COLOR_EXCITING = 0xFFFF5722;
+    private static final int FEELING_COLOR_COZY = 0xFFB388FF;
+    private static final int FEELING_COLOR_ROMANTIC = 0xFFCE93D8;
+    private static final int FEELING_COLOR_FUN = 0xFFAB95FF;
+    private static final int FEELING_COLOR_ADVENTUROUS = 0xFF8C7AE6;
+    private static final int FEELING_COLOR_RELAXING = 0xFFD1C4E9;
+    private static final int FEELING_COLOR_EXCITING = 0xFF7C4DFF;
 
     public interface OnItemClickListener {
         void onItemClick(DateLocation dateLocation);

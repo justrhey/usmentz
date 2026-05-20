@@ -30,7 +30,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private ImageView ivEmpty;
 
     // Floating navbar clickable areas
-    private LinearLayout navHome, navCalendar, navReviews, navFavorites;
+    private LinearLayout navHome, navCalendar, navReviews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +68,16 @@ public class FavoritesActivity extends AppCompatActivity {
         navHome       = findViewById(R.id.navHome);
         navCalendar   = findViewById(R.id.navCalendar);
         navReviews   = findViewById(R.id.navReviews);
-        navFavorites = findViewById(R.id.navFavorites);
 
         // Setup click listeners for navbar
         setupFloatingNavbar();
 
-        // Observe
+        // Observe - show moments marked as "do again"
         dateViewModel.getAllMoments().observe(this, moments -> {
             List<DateLocation> favorites = new ArrayList<>();
             if (moments != null) {
                 for (DateLocation m : moments) {
-                    if (m.getRating() >= 4.0f) favorites.add(m);
+                    if (m.isDoAgain()) favorites.add(m);
                 }
             }
             dateAdapter.setDates(favorites);
@@ -86,7 +85,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 recyclerView.setVisibility(View.GONE);
                 emptyState.setVisibility(View.VISIBLE);
                 if (tvEmptyTitle != null) tvEmptyTitle.setText("No favorites yet");
-                if (tvEmptySubtitle != null) tvEmptySubtitle.setText("Rate moments 4+ stars to see them here");
+                if (tvEmptySubtitle != null) tvEmptySubtitle.setText("Mark moments as \"do again\" to see them here");
             } else {
                 recyclerView.setVisibility(View.VISIBLE);
                 emptyState.setVisibility(View.GONE);
@@ -113,12 +112,5 @@ public class FavoritesActivity extends AppCompatActivity {
         }
 
         // navReviews removed - reviews are now private diary entries inside moments
-
-        // Favorites - stay on current activity
-        if (navFavorites != null) {
-            navFavorites.setOnClickListener(v -> {
-                // Already on FavoritesActivity
-            });
-        }
     }
 }

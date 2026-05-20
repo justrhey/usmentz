@@ -24,6 +24,8 @@ import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.helper.CategoryStateHelper;
 import com.example.usmentz.helper.EmptyStateHelper;
 import com.example.usmentz.helper.NavbarAutoHideHelper;
+import com.example.usmentz.helper.SuggestionHelper;
+import com.example.usmentz.helper.SuggestionHelper.Suggestion;
 import com.example.usmentz.helper.ViewSwitcherHelper;
 import com.example.usmentz.viewmodel.CategoryViewModel;
 import com.example.usmentz.viewmodel.DateViewModel;
@@ -58,11 +60,13 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView categoriesRecyclerView;
     private RecyclerView momentsRecyclerView;
 
-    private LinearLayout navHome, navCalendar, navReviews, navFavorites, navCategories;
+    private LinearLayout navHome, navCalendar, navReviews, navCategories;
     private LinearLayout navDates, navExpenses;
     private View floatingNavbarContainer;
     private View oldNavbarContainer;
     private View momentsHeader;
+    private View suggestionCardContainer;
+    private TextView tvSuggestionTitle, tvSuggestionText;
 
     private final int[] emptyStateDrawables = { R.drawable.nocat };
 
@@ -101,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         navHome       = findViewById(R.id.navHome);
         navCalendar   = findViewById(R.id.navCalendar);
         navReviews    = findViewById(R.id.navReviews);
-        navFavorites  = findViewById(R.id.navFavorites);
         navCategories = findViewById(R.id.navCategories);
         navDates      = findViewById(R.id.navDates);
         navExpenses   = findViewById(R.id.navExpenses);
@@ -109,6 +112,17 @@ public class MainActivity extends AppCompatActivity {
         oldNavbarContainer      = findViewById(R.id.oldNavbarContainer);
         momentsHeader           = findViewById(R.id.momentsHeader);
         TextView tvCategoryTitle = findViewById(R.id.tvCategoryTitle);
+
+        // Suggestion card views
+        suggestionCardContainer = findViewById(R.id.suggestionCardContainer);
+        if (suggestionCardContainer != null) {
+            tvSuggestionTitle = suggestionCardContainer.findViewById(R.id.tvSuggestionTitle);
+            tvSuggestionText = suggestionCardContainer.findViewById(R.id.tvSuggestionText);
+            View btnDismiss = suggestionCardContainer.findViewById(R.id.btnDismissSuggestion);
+            if (btnDismiss != null) {
+                btnDismiss.setOnClickListener(v -> suggestionCardContainer.setVisibility(View.GONE));
+            }
+        }
 
         if (toolbar != null) {
             tvToolbarTitle = toolbar.findViewById(R.id.tvToolbarTitle);
@@ -212,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
             if (!viewSwitcher.isInMomentsMode() || viewSwitcher.getCurrentCategory() == null) return;
             if (dateAdapter != null) dateAdapter.setDates(moments);
             updateMomentsView(moments);
+            updateSuggestion(moments);
         });
 
         categoryAdapter.setOnCategoryClickListener(viewSwitcher::enterMomentsMode);
@@ -256,7 +271,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupBottomNavigation() {
         setNavClick(navHome, HomeActivity.class);
         setNavClick(navCalendar, CalendarActivity.class);
-        setNavClick(navFavorites, FavoritesActivity.class);
 
         if (navCategories != null) {
             navCategories.setOnClickListener(v -> viewSwitcher.exitMomentsMode());
@@ -318,6 +332,17 @@ public class MainActivity extends AppCompatActivity {
         } else {
             emptyStateHelper.hide();
             momentsRecyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void updateSuggestion(List<DateLocation> moments) {
+        if (suggestionCardContainer == null || tvSuggestionTitle == null || tvSuggestionText == null) return;
+        
+        Suggestion suggestion = SuggestionHelper.generateSuggestion(moments);
+        if (suggestion != null) {
+            tvSuggestionTitle.setText(suggestion.title);
+            tvSuggestionText.setText(suggestion.description);
+            suggestionCardContainer.setVisibility(View.VISIBLE);
         }
     }
 

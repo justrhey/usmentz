@@ -447,6 +447,11 @@ public class FirestoreHelper {
         m.put("review", moment.getReview());
         m.put("photoPath", moment.getPhotoPath());
         m.put("position", moment.getPosition());
+        // New fields for scrapbook vision
+        m.put("feeling", moment.getFeeling());
+        m.put("doAgain", moment.isDoAgain());
+        m.put("cost", moment.getCost());
+        m.put("reviewNotes", moment.getReviewNotes());
         if (moment.getDate() != null) {
             m.put("date", moment.getDate().getTime());
         }
@@ -500,6 +505,12 @@ public class FirestoreHelper {
             if (dateTs != null) {
                 m.setDate(new Date(dateTs));
             }
+            // New fields for scrapbook vision
+            m.setFeeling(doc.getString("feeling"));
+            m.setDoAgain(doc.getBoolean("doAgain") != null ? doc.getBoolean("doAgain") : false);
+            Double costVal = doc.getDouble("cost");
+            m.setCost(costVal != null ? costVal.floatValue() : 0f);
+            m.setReviewNotes(doc.getString("reviewNotes"));
             return m;
         } catch (Exception e) {
             Log.e(TAG, "mapToMoment", e);

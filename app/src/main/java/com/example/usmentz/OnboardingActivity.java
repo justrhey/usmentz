@@ -2,24 +2,18 @@ package com.example.usmentz;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -37,31 +31,31 @@ public class OnboardingActivity extends AppCompatActivity {
         new OnboardingPage(
             "Remember what made your dates special",
             "Usmentz helps you capture the little details — the mood, the moments, the memories — so you never forget what made a date perfect.",
-            "\uD83D\uDC9D",
+            R.drawable.ic_onboarding_guide,
             0xFFF3E8FF
         ),
         new OnboardingPage(
             "Capture the full story",
             "Add a photo, describe what you did, note how it felt, and even what you spent. Every detail becomes part of your shared story.",
-            "\uD83D\uDCF8",
-            0xFFFFF3E0
+            R.drawable.ic_onboarding_capture,
+            0xFFE8D5F5
         ),
         new OnboardingPage(
             "Plan your next date, better than the last",
             "Look back at your scrapbook of moments. See patterns in what you both love. Let your past dates inspire your next one.",
-            "\u2728",
-            0xFFE8F5E9
+            R.drawable.ic_onboarding_reflect,
+            0xFFEDE7F6
         )
     };
 
     static class OnboardingPage {
-        String title, description, icon;
-        int bgColor;
+        String title, description;
+        int iconRes, bgColor;
 
-        OnboardingPage(String title, String description, String icon, int bgColor) {
+        OnboardingPage(String title, String description, int iconRes, int bgColor) {
             this.title = title;
             this.description = description;
-            this.icon = icon;
+            this.iconRes = iconRes;
             this.bgColor = bgColor;
         }
     }
@@ -76,14 +70,11 @@ public class OnboardingActivity extends AppCompatActivity {
         btnSkip = findViewById(R.id.btnSkip);
         dotIndicator = findViewById(R.id.dotIndicator);
 
-        // Setup ViewPager2
         viewPager.setAdapter(new OnboardingAdapter(this));
         viewPager.setOffscreenPageLimit(1);
 
-        // Setup dot indicators
         setupDots();
 
-        // Page change listener
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -96,7 +87,6 @@ public class OnboardingActivity extends AppCompatActivity {
             }
         });
 
-        // Next button
         btnNext.setOnClickListener(v -> {
             int current = viewPager.getCurrentItem();
             if (current < PAGE_COUNT - 1) {
@@ -106,7 +96,6 @@ public class OnboardingActivity extends AppCompatActivity {
             }
         });
 
-        // Skip button
         btnSkip.setOnClickListener(v -> completeOnboarding());
     }
 
@@ -117,7 +106,6 @@ public class OnboardingActivity extends AppCompatActivity {
             int size = dpToPx(i == 0 ? 10 : 8);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
             params.setMargins(dpToPx(4), 0, dpToPx(4), 0);
-            dot.setLayoutParams(params);
             dot.setBackgroundResource(i == 0 ? R.drawable.dot_active : R.drawable.dot_inactive);
             dotIndicator.addView(dot);
         }
@@ -155,7 +143,7 @@ public class OnboardingActivity extends AppCompatActivity {
         @Override
         public Fragment createFragment(int position) {
             OnboardingPage page = pages[position];
-            return OnboardingPageFragment.newInstance(page.title, page.description, page.icon, page.bgColor);
+            return OnboardingPageFragment.newInstance(page.title, page.description, page.iconRes, page.bgColor);
         }
 
         @Override

@@ -641,41 +641,8 @@ public class DetailActivity extends AppCompatActivity {
                 });
             }
 
-            // Add Expense / Funds / Savings buttons
-            View btnAddExpense = view.findViewById(R.id.btnAddExpense);
-            View btnAddFunds = view.findViewById(R.id.btnAddFunds);
-            View btnAddSavings = view.findViewById(R.id.btnAddSavings);
-
-            if (btnAddExpense != null) {
-                btnAddExpense.setOnClickListener(v -> {
-                    DateLocation m = getMomentRef();
-                    if (m != null) {
-                        AddExpenseOnlyDialog dialog = AddExpenseOnlyDialog.newInstance(m.getId(), () -> {});
-                        dialog.setViewModel(getExpenseVm());
-                        dialog.show(getParentFragmentManager(), "AddExpenseOnly");
-                    }
-                });
-            }
-            if (btnAddFunds != null) {
-                btnAddFunds.setOnClickListener(v -> {
-                    DateLocation m = getMomentRef();
-                    if (m != null) {
-                        AddFundsOnlyDialog dialog = AddFundsOnlyDialog.newInstance(m.getId(), () -> {});
-                        dialog.setViewModel(getExpenseVm());
-                        dialog.show(getParentFragmentManager(), "AddFundsOnly");
-                    }
-                });
-            }
-            if (btnAddSavings != null) {
-                btnAddSavings.setOnClickListener(v -> {
-                    DateLocation m = getMomentRef();
-                    if (m != null) {
-                        AddSavingsOnlyDialog dialog = AddSavingsOnlyDialog.newInstance(m.getId(), () -> {});
-                        dialog.setViewModel(getExpenseVm());
-                        dialog.show(getParentFragmentManager(), "AddSavingsOnly");
-                    }
-                });
-            }
+            // Expense tracking is now handled via AddMomentDialog cost field
+            // Standalone expense/funds/savings dialogs removed
 
             // Observe expenses
             ExpenseViewModel evm = getExpenseVm();
