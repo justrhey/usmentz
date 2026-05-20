@@ -13,29 +13,12 @@
     android:clickable="true"
     android:focusable="true">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <!-- Menu button - top right -->
-        <ImageView
-            android:id="@+id/btnCategoryMenu"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="top|end"
-            android:layout_margin="12dp"
-            android:src="@drawable/ic_menu"
-            android:padding="6dp"
-            android:background="@drawable/bg_circle_light"
-            app:tint="#757575"
-            android:visibility="visible" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp"
-            android:gravity="center">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center">
 
             <!-- Category Icon with colored circle background -->
             <FrameLayout
@@ -80,8 +63,6 @@
                 android:textColor="#9E9E9E"
                 android:layout_marginTop="6dp" />
 
-        </LinearLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

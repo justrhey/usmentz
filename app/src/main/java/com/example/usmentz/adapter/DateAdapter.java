@@ -209,44 +209,54 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
             // Completion toggle
             completionDot.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    DateLocation date = dates.get(position);
-                    boolean newState = !date.isCompleted();
-                    date.setCompleted(newState);
-                    // Toggle unicode circle
-                    completionDot.setText(newState ? "●" : "○");
-                    if (newState) {
-                        tvName.setPaintFlags(tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    } else {
-                        tvName.setPaintFlags(tvName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                    }
-                    if (completeListener != null) {
-                        completeListener.onItemComplete(date, newState);
-                    }
+                if (position == RecyclerView.NO_POSITION) return;
+                if (dates == null || position >= dates.size()) return;
+                DateLocation date = dates.get(position);
+                if (date == null) return;
+                boolean newState = !date.isCompleted();
+                date.setCompleted(newState);
+                // Toggle unicode circle
+                completionDot.setText(newState ? "●" : "○");
+                if (newState) {
+                    tvName.setPaintFlags(tvName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    tvName.setPaintFlags(tvName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                }
+                if (completeListener != null) {
+                    completeListener.onItemComplete(date, newState);
                 }
             });
 
             // Item click listener
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                if (listener != null && position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(dates.get(position));
+                if (listener == null || position == RecyclerView.NO_POSITION) return;
+                if (dates == null || position >= dates.size()) return;
+                DateLocation date = dates.get(position);
+                if (date != null) {
+                    listener.onItemClick(date);
                 }
             });
 
             // Delete button listener
             btnDelete.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                if (deleteListener != null && position != RecyclerView.NO_POSITION) {
-                    deleteListener.onItemDelete(dates.get(position));
+                if (deleteListener == null || position == RecyclerView.NO_POSITION) return;
+                if (dates == null || position >= dates.size()) return;
+                DateLocation date = dates.get(position);
+                if (date != null) {
+                    deleteListener.onItemDelete(date);
                 }
             });
 
             // Review click listener
             tvReview.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                if (reviewClickListener != null && position != RecyclerView.NO_POSITION) {
-                    reviewClickListener.onReviewClick(dates.get(position));
+                if (reviewClickListener == null || position == RecyclerView.NO_POSITION) return;
+                if (dates == null || position >= dates.size()) return;
+                DateLocation date = dates.get(position);
+                if (date != null) {
+                    reviewClickListener.onReviewClick(date);
                 }
             });
         }

@@ -34,12 +34,10 @@ import com.example.usmentz.adapter.DateAdapter;
 import com.example.usmentz.category.CategoryAdapter;
 import com.example.usmentz.category.Category;
 import com.example.usmentz.category.CategoryDialog;
-import com.example.usmentz.category.CategoryEditDialog;
 import com.example.usmentz.viewmodel.CategoryViewModel;
 import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -268,33 +266,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         categoryAdapter.setOnCategoryClickListener(this::enterMomentsMode);
-
-        categoryAdapter.setOnCategoryEditListener(category ->
-                CategoryEditDialog.show(this, category, updatedCategory -> {
-                    categoryViewModel.update(updatedCategory);
-                    Toast.makeText(this, "Category updated: " + updatedCategory.getName(), Toast.LENGTH_SHORT).show();
-                })
-        );
-
-        categoryAdapter.setOnCategoryDeleteListener(category -> {
-            if (category.getItemCount() > 0) {
-                new MaterialAlertDialogBuilder(this)
-                        .setTitle("Cannot Delete")
-                        .setMessage("This category has " + category.getItemCount() + " moments. Delete all moments first.")
-                        .setPositiveButton("OK", null).show();
-                return;
-            }
-            new MaterialAlertDialogBuilder(this)
-                    .setTitle("Delete Category")
-                    .setMessage("Are you sure you want to delete '" + category.getName() + "'?")
-                    .setPositiveButton("Delete", (d, w) -> {
-                        categoryViewModel.delete(category);
-                        Toast.makeText(this, "Category deleted", Toast.LENGTH_SHORT).show();
-                        if (currentCategory != null && currentCategory.getId() == category.getId())
-                            exitMomentsMode();
-                    })
-                    .setNegativeButton("Cancel", null).show();
-        });
 
         // FAB + navbar auto-hide on scroll for momentsRecyclerView
         if (momentsRecyclerView != null) {

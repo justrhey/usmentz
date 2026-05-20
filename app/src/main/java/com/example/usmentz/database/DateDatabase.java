@@ -5,6 +5,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.usmentz.category.Category;
 import com.example.usmentz.date.DateLocation;
@@ -15,16 +17,37 @@ import com.example.usmentz.dao.ExpenseDao;
 
 @Database(
         entities = {DateLocation.class, Category.class, Expense.class},
-        version = 18, // Incremented from 17 due to schema changes
+        version = 19,
         exportSchema = false
     )
 @TypeConverters({Converters.class})
 public abstract class DateDatabase extends RoomDatabase {
     public abstract DateLocationDao dateLocationDao();
     public abstract CategoryDao categoryDao();
-    public abstract ExpenseDao expenseDao(); // Make sure this exists
+    public abstract ExpenseDao expenseDao();
 
     private static volatile DateDatabase INSTANCE;
+
+    // Migration from 17 to 18: Add Expense.paymentMethod column
+    static final Migration MIGRATION_17_18 = new Migration(17, 18) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE expenses ADD COLUMN paymentMethod TEXT DEFAULT 'Cash'");
+        }
+    };
+
+    // Migration from 18 to 19: Add DateLocation.position column (if not exists)
+    static final Migration MIGRATION_18_19 = new Migration(18, 19) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            // position column may already exist, wrap in try-catch via ALTER TABLE
+            try {
+                database.execSQL("ALTER TABLE date_locations ADD COLUMN position INTEGER NOT NULL DEFAULT 0");
+            } catch (Exception e) {
+                // Column already exists, skip
+            }
+        }
+    };
 
     public static DateDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -32,6 +55,7 @@ public abstract class DateDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     DateDatabase.class, "usmentz_database")
+                            .addMigrations(MIGRATION_17_18, MIGRATION_18_19)
                             .fallbackToDestructiveMigration()
                             .build();
                 }
