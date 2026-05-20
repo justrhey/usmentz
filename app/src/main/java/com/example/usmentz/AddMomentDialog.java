@@ -1,9 +1,13 @@
 package com.example.usmentz;
 
 import android.app.Dialog;
-import android.graphics.Color;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,16 +16,19 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.usmentz.category.Category;
 import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.viewmodel.CategoryViewModel;
@@ -30,6 +37,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.List;
 
@@ -42,8 +50,30 @@ public class AddMomentDialog extends DialogFragment {
     private OnCategoryCreatedListener categoryListener;
     private ChipGroup chipGroupCategory;
 
+    // Photo
+    private Uri photoUri;
+    private ImageView ivPhotoPreview;
+    private Button btnAddPhoto;
+    private Button btnRemovePhoto;
+
     // Feeling options
     private static final String[] FEELINGS = {"Cozy", "Romantic", "Fun", "Adventurous", "Relaxing", "Exciting"};
+
+    // Photo pickers
+    private final ActivityResultLauncher<String> galleryLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    photoUri = uri;
+                    showPhotoPreview();
+                }
+            });
+
+    private final ActivityResultLauncher<Uri> cameraLauncher =
+            registerForActivityResult(new ActivityResultContracts.TakePicture(), success -> {
+                if (success && photoUri != null) {
+                    showPhotoPreview();
+                }
+            });
 
     public interface OnMomentAddedListener {
         void onMomentAdded(DateLocation moment);
@@ -80,7 +110,9 @@ public class AddMomentDialog extends DialogFragment {
         ChipGroup chipGroupFeeling = view.findViewById(R.id.chipGroupFeeling);
         TextView tvMoreDetails = view.findViewById(R.id.tvMoreDetails);
         LinearLayout detailsSection = view.findViewById(R.id.detailsSection);
-        Button btnAddPhoto = view.findViewById(R.id.btnAddPhoto);
+        btnAddPhoto = view.findViewById(R.id.btnAddPhoto);
+        btnRemovePhoto = view.findViewById(R.id.btnRemovePhoto);
+        ivPhotoPreview = view.findViewById(R.id.ivPhotoPreview);
         EditText etCost = view.findViewById(R.id.etCost);
         EditText etReviewNotes = view.findViewById(R.id.etReviewNotes);
         SwitchMaterial switchDoAgain = view.findViewById(R.id.switchDoAgain);
@@ -121,10 +153,18 @@ public class AddMomentDialog extends DialogFragment {
             }
         });
 
-        // Add photo (placeholder for now)
-        btnAddPhoto.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Photo picker coming soon", Toast.LENGTH_SHORT).show();
-        });
+        // Add photo - show picker dialog
+        btnAddPhoto.setOnClickListener(v -> showPhotoPickerDialog());
+
+        // Remove photo
+        if (btnRemovePhoto != null) {
+            btnRemovePhoto.setOnClickListener(v -> {
+                photoUri = null;
+                ivPhotoPreview.setVisibility(View.GONE);
+                btnRemovePhoto.setVisibility(View.GONE);
+                btnAddPhoto.setVisibility(View.VISIBLE);
+            });
+        }
 
         // Inline add category
         chipAddCategory.setOnClickListener(v -> {
@@ -159,6 +199,11 @@ public class AddMomentDialog extends DialogFragment {
                 }
             }
 
+            // Set photo path
+            if (photoUri != null) {
+                moment.setPhotoPath(photoUri.toString());
+            }
+
             // Set cost
             String costText = etCost.getText().toString().trim();
             if (!TextUtils.isEmpty(costText)) {
@@ -189,6 +234,49 @@ public class AddMomentDialog extends DialogFragment {
         });
 
         return dialog;
+    }
+
+    private void showPhotoPickerDialog() {
+        String[] options = {"Take Photo", "Choose from Gallery"};
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Add Photo")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        takePhoto();
+                    } else {
+                        pickFromGallery();
+                    }
+                })
+                .show();
+    }
+
+    private void takePhoto() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, "usmentz_" + System.currentTimeMillis() + ".jpg");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Usmentz");
+        photoUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        if (photoUri != null) {
+            cameraLauncher.launch(photoUri);
+        }
+    }
+
+    private void pickFromGallery() {
+        galleryLauncher.launch("image/*");
+    }
+
+    private void showPhotoPreview() {
+        if (ivPhotoPreview != null && photoUri != null) {
+            ivPhotoPreview.setVisibility(View.VISIBLE);
+            Glide.with(this)
+                    .load(photoUri)
+                    .centerCrop()
+                    .into(ivPhotoPreview);
+            btnAddPhoto.setVisibility(View.GONE);
+            if (btnRemovePhoto != null) {
+                btnRemovePhoto.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void setupFeelingChips(ChipGroup chipGroup) {
@@ -266,7 +354,6 @@ public class AddMomentDialog extends DialogFragment {
                 .inflate(R.layout.dialog_add_category_inline, null);
 
         EditText etCatName = inlineForm.findViewById(R.id.etCategoryName);
-        LinearLayout colorPicker = inlineForm.findViewById(R.id.colorPickerContainer);
         View[] colorDots = new View[6];
         colorDots[0] = inlineForm.findViewById(R.id.colorPurple);
         colorDots[1] = inlineForm.findViewById(R.id.colorRed);

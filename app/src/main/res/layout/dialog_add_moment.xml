@@ -146,17 +146,47 @@
         android:visibility="gone"
         android:layout_marginBottom="12dp">
 
-        <!-- Photo button -->
-        <Button
-            android:id="@+id/btnAddPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Add Photo"
-            android:textSize="12sp"
-            android:textColor="#9B5CFF"
-            android:backgroundTint="#F3E8FF"
-            app:cornerRadius="8dp"
+        <!-- Photo section -->
+        <ImageView
+            android:id="@+id/ivPhotoPreview"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg_scrapbook_placeholder"
+            android:visibility="gone"
             android:layout_marginBottom="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <Button
+                android:id="@+id/btnAddPhoto"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="Add Photo"
+                android:textSize="12sp"
+                android:textColor="#9B5CFF"
+                android:backgroundTint="#F3E8FF"
+                app:cornerRadius="8dp"
+                android:layout_marginEnd="4dp" />
+
+            <Button
+                android:id="@+id/btnRemovePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Remove"
+                android:textSize="12sp"
+                android:textColor="#E91E63"
+                android:backgroundTint="#FCE4EC"
+                app:cornerRadius="8dp"
+                android:visibility="gone"
+                android:layout_marginStart="4dp" />
+
+        </LinearLayout>
 
         <!-- Cost field -->
         <com.google.android.material.textfield.TextInputLayout

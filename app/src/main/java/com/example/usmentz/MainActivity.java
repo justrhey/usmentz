@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
             if (viewSwitcher.isInMomentsMode()) return;
             if (categories == null || categories.isEmpty()) {
                 categoriesRecyclerView.setVisibility(View.GONE);
-                emptyStateHelper.show("No categories yet", "Tap + to create your first category");
+                emptyStateHelper.show("Start your story together", "Create your first category to begin capturing moments");
                 findViewById(R.id.btnAddCategory).setVisibility(View.VISIBLE);
             } else {
                 categoriesRecyclerView.setVisibility(View.VISIBLE);
@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateMomentsView(List<DateLocation> moments) {
         if (moments == null || moments.isEmpty()) {
-            emptyStateHelper.show("No moments yet", "Tap + to add your first moment");
+            emptyStateHelper.show("No moments here yet", "Tap + to capture your first memory in this category");
             momentsRecyclerView.setVisibility(View.GONE);
         } else {
             emptyStateHelper.hide();

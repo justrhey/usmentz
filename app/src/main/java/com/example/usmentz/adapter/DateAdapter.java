@@ -1,6 +1,7 @@
 package com.example.usmentz.adapter;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.R;
 
@@ -130,11 +132,24 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
             holder.ivDoAgain.setVisibility(View.GONE);
         }
 
-        // Photo placeholder (no actual photo yet)
-        if (current.getPhotoPath() != null && !current.getPhotoPath().isEmpty()) {
+        // Photo - load with Glide if available
+        String photoPath = current.getPhotoPath();
+        if (photoPath != null && !photoPath.isEmpty()) {
             holder.ivPhoto.setVisibility(View.VISIBLE);
             holder.photoPlaceholder.setVisibility(View.GONE);
-            // TODO: Load actual photo with Glide/Picasso
+            try {
+                Uri photoUri = Uri.parse(photoPath);
+                Glide.with(holder.itemView.getContext())
+                        .load(photoUri)
+                        .centerCrop()
+                        .placeholder(R.drawable.bg_scrapbook_placeholder)
+                        .error(R.drawable.bg_scrapbook_placeholder)
+                        .into(holder.ivPhoto);
+            } catch (Exception e) {
+                // If URI parsing fails, show placeholder
+                holder.ivPhoto.setVisibility(View.GONE);
+                holder.photoPlaceholder.setVisibility(View.VISIBLE);
+            }
         } else {
             holder.ivPhoto.setVisibility(View.GONE);
             holder.photoPlaceholder.setVisibility(View.VISIBLE);

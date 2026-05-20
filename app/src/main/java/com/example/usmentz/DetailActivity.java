@@ -478,7 +478,8 @@ public class DetailActivity extends AppCompatActivity {
                         shareIntent.putExtra(Intent.EXTRA_TEXT,
                             m.getName() + "\n" +
                             m.getAddress() + "\n" +
-                            "Rated: " + m.getRating() + "/5");
+                            (m.getFeeling() != null && !m.getFeeling().isEmpty() ? "Feeling: " + m.getFeeling() : "") +
+                            (m.getReviewNotes() != null && !m.getReviewNotes().isEmpty() ? "\n" + m.getReviewNotes() : ""));
                         startActivity(Intent.createChooser(shareIntent, "Share via"));
                     }
                 });
@@ -583,7 +584,10 @@ public class DetailActivity extends AppCompatActivity {
                 ratingBar.setRating(momentRef.getRating());
             }
             if (tvRatingNumber != null) tvRatingNumber.setText(String.valueOf(momentRef.getRating()));
-            if (tvExperience != null) tvExperience.setText(String.valueOf((int) momentRef.getRating()));
+            if (tvExperience != null) {
+                String feeling = momentRef.getFeeling();
+                tvExperience.setText(feeling != null && !feeling.isEmpty() ? feeling : String.valueOf((int) momentRef.getRating()));
+            }
 
             // Show real calculated values (will be updated by LiveData observer)
             if (tvFees != null) tvFees.setText(formatCurrency(totalExpensesForMoment));
@@ -715,8 +719,8 @@ public class DetailActivity extends AppCompatActivity {
                 // Load existing data
                 DateLocation m = getMomentRef();
                 if (m != null) {
-                    if (etReview != null && !TextUtils.isEmpty(m.getReview())) {
-                        etReview.setText(m.getReview());
+                    if (etReview != null && !TextUtils.isEmpty(m.getReviewNotes())) {
+                        etReview.setText(m.getReviewNotes());
                     }
 
                     if (ratingBarReview != null) {
@@ -751,7 +755,7 @@ public class DetailActivity extends AppCompatActivity {
                         if (momentToSave == null) return;
 
                         if (etReview != null) {
-                            momentToSave.setReview(etReview.getText().toString().trim());
+                            momentToSave.setReviewNotes(etReview.getText().toString().trim());
                         }
                         momentToSave.setPhotoPath(getPhotoPath());
                         if (ratingBarReview != null) {
