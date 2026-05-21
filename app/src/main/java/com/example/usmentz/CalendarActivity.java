@@ -50,12 +50,16 @@ public class CalendarActivity extends AppCompatActivity {
 
     // Navigation
     private View btnPrevMonth, btnNextMonth, btnToday;
-    private View btnBack, btnOpenDrawer;
+    private View btnOpenDrawer;
     private FloatingActionButton fabAdd;
     private View navbarContainer;
 
     // Expanding pill navbar items
-    private View navItemHome, navItemCategories, navItemCalendar, navItemFavorites;
+    private View navItemHome, navItemCategories, navItemCalendar;
+    private View navHomeActive, navHomeInactive;
+    private View navCategoriesActive, navCategoriesInactive;
+    private View navCalendarActive, navCalendarInactive;
+    private int activeNavSlot = 2; // Calendar active by default
 
     private DrawerLayout drawerLayout;
     private NavigationView navDrawer;
@@ -67,13 +71,24 @@ public class CalendarActivity extends AppCompatActivity {
     private CalendarDay selectedDay = null;
 
     private final SimpleDateFormat monthYearFmt = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-    private final SimpleDateFormat monthYearCapsFmt = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
     private final SimpleDateFormat dayFmt = new SimpleDateFormat("MMM d", Locale.getDefault());
     private final SimpleDateFormat keyFmt = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     private List<DateLocation> allMoments = new ArrayList<>();
     private boolean dataLoaded = false;
     private int currentViewMode = 3; // Calendar = 3
+
+    // ── Auto-hide navbar ──────────────────────────
+    private final Handler hideHandler = new Handler(Looper.getMainLooper());
+    private Runnable hideRunnable;
+    private boolean navbarVisible = true;
+    private static final long HIDE_DELAY_MS = 5000;
+
+    private final View.OnTouchListener screenTouchListener = (v, event) -> {
+        showNavbar();
+        resetHideTimer();
+        return false;
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +102,24 @@ public class CalendarActivity extends AppCompatActivity {
         setupCalendar();
         setupClickListeners();
         loadData();
+        startHideTimer();
+
+        // Intercept all touches on the main content to show navbar
+        View root = findViewById(android.R.id.content);
+        root.setOnTouchListener(screenTouchListener);
+
+        // Handle back press to close drawer
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (drawerLayout != null && drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
     }
 
     private void initViews() {
@@ -98,7 +131,6 @@ public class CalendarActivity extends AppCompatActivity {
         btnPrevMonth = findViewById(R.id.btnPrevMonth);
         btnNextMonth = findViewById(R.id.btnNextMonth);
         btnToday = findViewById(R.id.btnToday);
-        btnBack = findViewById(R.id.btnBack);
         btnOpenDrawer = findViewById(R.id.btnOpenDrawer);
         fabAdd = findViewById(R.id.fabAdd);
         navbarContainer = findViewById(R.id.navbarContainer);
@@ -106,7 +138,13 @@ public class CalendarActivity extends AppCompatActivity {
         navItemHome = findViewById(R.id.navItemHome);
         navItemCategories = findViewById(R.id.navItemCategories);
         navItemCalendar = findViewById(R.id.navItemCalendar);
-        navItemFavorites = findViewById(R.id.navItemFavorites);
+        navHomeActive = findViewById(R.id.navHomeActive);
+        navHomeInactive = findViewById(R.id.navHomeInactive);
+        navCategoriesActive = findViewById(R.id.navCategoriesActive);
+        navCategoriesInactive = findViewById(R.id.navCategoriesInactive);
+        navCalendarActive = findViewById(R.id.navCalendarActive);
+        navCalendarInactive = findViewById(R.id.navCalendarInactive);
+        setActiveNavSlot(2); // Calendar active by default
     }
 
     private void setupDrawer() {
@@ -119,6 +157,15 @@ public class CalendarActivity extends AppCompatActivity {
                     drawerLayout.openDrawer(GravityCompat.START);
                 }
             });
+        }
+
+        // Close drawer header button
+        View headerView = navDrawer != null ? navDrawer.getHeaderView(0) : null;
+        if (headerView != null) {
+            View btnCloseDrawer = headerView.findViewById(R.id.btnCloseDrawer);
+            if (btnCloseDrawer != null) {
+                btnCloseDrawer.setOnClickListener(v -> drawerLayout.closeDrawer(GravityCompat.START));
+            }
         }
 
         if (navDrawer != null) {
@@ -170,36 +217,42 @@ public class CalendarActivity extends AppCompatActivity {
         btnPrevMonth.setOnClickListener(v -> {
             currentMonth.add(Calendar.MONTH, -1);
             selectedDay = null;
+            hideDayMoments();
             updateCalendarDisplay();
+            resetHideTimer();
         });
 
         btnNextMonth.setOnClickListener(v -> {
             currentMonth.add(Calendar.MONTH, 1);
             selectedDay = null;
+            hideDayMoments();
             updateCalendarDisplay();
+            resetHideTimer();
         });
 
         ((Button) btnToday).setOnClickListener(v -> {
             currentMonth.setTimeInMillis(System.currentTimeMillis());
             selectedDay = null;
+            hideDayMoments();
             updateCalendarDisplay();
+            resetHideTimer();
         });
 
-        btnBack.setOnClickListener(v -> finish());
-
-        fabAdd.setOnClickListener(v -> showAddMomentDialog());
+        fabAdd.setOnClickListener(v -> {
+            showAddMomentDialog();
+            resetHideTimer();
+        });
 
         // Navbar items
         navItemHome.setOnClickListener(v -> {
+            setActiveNavSlot(0);
             startActivity(new Intent(this, HomeActivity.class));
         });
         navItemCategories.setOnClickListener(v -> {
+            setActiveNavSlot(1);
             startActivity(new Intent(this, MainActivity.class));
         });
-        navItemCalendar.setOnClickListener(v -> {}); // Already on calendar
-        navItemFavorites.setOnClickListener(v -> {
-            startActivity(new Intent(this, FavoritesActivity.class));
-        });
+        navItemCalendar.setOnClickListener(v -> setActiveNavSlot(2));
     }
 
     private void switchViewMode(int mode) {
@@ -210,6 +263,13 @@ public class CalendarActivity extends AppCompatActivity {
                 navDrawer.setCheckedItem(ids[mode]);
             }
         }
+    }
+
+    private void hideDayMoments() {
+        tvListHeader.setText("Moments");
+        momentsAdapter.setDates(new ArrayList<>());
+        tvNoMoments.setVisibility(View.VISIBLE);
+        rvMoments.setVisibility(View.GONE);
     }
 
     private void showAddMomentDialog() {
@@ -230,9 +290,7 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void updateCalendarDisplay() {
-        // Header: "JULY 2026" uppercase
-        String headerText = monthYearCapsFmt.format(currentMonth.getTime()).toUpperCase(Locale.getDefault());
-        tvMonthYear.setText(headerText);
+        tvMonthYear.setText(monthYearFmt.format(currentMonth.getTime()));
 
         if (dataLoaded) {
             buildGrid();
@@ -324,16 +382,70 @@ public class CalendarActivity extends AppCompatActivity {
         }
     }
 
+    // ── Auto-hide navbar ───────────────────────────
+
+    private void startHideTimer() {
+        hideRunnable = () -> {
+            navbarVisible = false;
+            if (navbarContainer != null) {
+                navbarContainer.animate()
+                        .alpha(0f)
+                        .setDuration(300)
+                        .withEndAction(() -> navbarContainer.setVisibility(View.GONE))
+                        .start();
+            }
+            if (fabAdd != null) {
+                fabAdd.animate()
+                        .alpha(0f)
+                        .setDuration(300)
+                        .withEndAction(() -> fabAdd.setVisibility(View.GONE))
+                        .start();
+            }
+        };
+        hideHandler.postDelayed(hideRunnable, HIDE_DELAY_MS);
+    }
+
+    private void resetHideTimer() {
+        if (hideRunnable != null) hideHandler.removeCallbacks(hideRunnable);
+        startHideTimer();
+    }
+
+    private void showNavbar() {
+        if (!navbarVisible) {
+            navbarVisible = true;
+            if (navbarContainer != null) {
+                navbarContainer.setVisibility(View.VISIBLE);
+                navbarContainer.animate().alpha(1f).setDuration(200).start();
+            }
+            if (fabAdd != null) {
+                fabAdd.setVisibility(View.VISIBLE);
+                fabAdd.animate().alpha(1f).setDuration(200).start();
+            }
+        }
+    }
+
+    private void setActiveNavSlot(int slotIndex) {
+        activeNavSlot = slotIndex;
+        navHomeActive.setVisibility(slotIndex == 0 ? View.VISIBLE : View.GONE);
+        navHomeInactive.setVisibility(slotIndex == 0 ? View.GONE : View.VISIBLE);
+        navCategoriesActive.setVisibility(slotIndex == 1 ? View.VISIBLE : View.GONE);
+        navCategoriesInactive.setVisibility(slotIndex == 1 ? View.GONE : View.VISIBLE);
+        navCalendarActive.setVisibility(slotIndex == 2 ? View.VISIBLE : View.GONE);
+        navCalendarInactive.setVisibility(slotIndex == 2 ? View.GONE : View.VISIBLE);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         if (dataLoaded) {
             updateCalendarDisplay();
         }
+        resetHideTimer();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        hideHandler.removeCallbacks(hideRunnable);
     }
 }
