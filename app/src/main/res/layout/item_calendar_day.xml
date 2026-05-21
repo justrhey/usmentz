@@ -13,7 +13,7 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:text="15"
-        android:textColor="#2D2640"
+        android:textColor="@color/text_primary"
         android:textSize="14sp"
         android:fontFamily="sans-serif-medium" />
 

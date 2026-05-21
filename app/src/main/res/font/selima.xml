@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  NOTE: To use the Selima font, place 'selima_regular.ttf' in this folder 
+  and update the android:font attribute below to @font/selima_regular.
+  Currently using system sans-serif as fallback.
+-->
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+</font-family>

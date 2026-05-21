@@ -4,21 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/black_pure">
 
     <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/black_pure"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="#FFFFFF"
+            android:background="@color/black_pure"
             android:paddingStart="8dp"
             app:navigationIcon="@drawable/ic_back"
             app:navigationIconTint="#9B5CFF"
@@ -33,7 +33,7 @@
                 <View
                     android:layout_width="3dp"
                     android:layout_height="26dp"
-                    android:background="#9B5CFF"
+                    android:background="@color/purple_primary"
                     android:layout_marginEnd="12dp" />
 
                 <LinearLayout
@@ -46,7 +46,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Favorites"
-                        android:textColor="#212121"
+                        android:textColor="@color/text_primary"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -55,7 +55,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="saved moments"
-                        android:textColor="#9E9E9E"
+                        android:textColor="@color/text_secondary"
                         android:textSize="10sp" />
 
                 </LinearLayout>
@@ -64,7 +64,7 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/gray_dark" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -84,208 +84,39 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="#FFFFFF"
+        android:background="@color/black_pure"
         android:visibility="gone">
 
         <ImageView android:layout_width="120dp" android:layout_height="120dp" android:src="@drawable/nocat22" android:alpha="0.5"/>
-        <TextView android:id="@+id/emptyStateText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No favorites yet" android:textSize="22sp" android:textStyle="bold" android:textColor="#212121" android:layout_marginTop="28dp"/>
-        <TextView android:id="@+id/emptyStateSubtext" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tap heart on a moment" android:textSize="14sp" android:textColor="#9E9E9E" android:layout_marginTop="10dp"/>
+        <TextView android:id="@+id/emptyStateText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="No favorites yet" android:textSize="22sp" android:textStyle="bold" android:textColor="@color/text_primary" android:layout_marginTop="28dp"/>
+        <TextView android:id="@+id/emptyStateSubtext" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tap heart on a moment" android:textSize="14sp" android:textColor="@color/text_secondary" android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 
     <!-- ═══════════════════════════════════════════
-         EXPANDING PILL NAVBAR (Active/Inactive Pattern)
+         UNIVERSAL CAPSULE NAVBAR
     ═══════════════════════════════════════════ -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/navbarContainer"
-        android:layout_width="wrap_content"
+    <include 
+        android:id="@+id/capsuleNavbar"
+        layout="@layout/bottom_nav_capsule"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="28dp"
-        app:cardBackgroundColor="#F2FFFFFF"
-        app:cardCornerRadius="32dp"
-        app:cardElevation="16dp"
-        app:strokeWidth="0dp">
+        android:layout_gravity="bottom" />
 
-        <LinearLayout
-            android:id="@+id/navbarContent"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
-
-            <!-- ═══ SLOT 1: Home ═══ -->
-            <LinearLayout
-                android:id="@+id/navItemHome"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:minWidth="56dp"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
-
-                <LinearLayout
-                    android:id="@+id/navHomeActive"
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_nav_active_pill"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="24dp"
-                    android:visibility="gone">
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/ic_home"
-                        app:tint="#9B5CFF" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Home"
-                        android:textSize="14sp"
-                        android:textColor="#9B5CFF"
-                        android:fontFamily="sans-serif-medium"
-                        android:includeFontPadding="false"
-                        android:letterSpacing="0.04"
-                        android:layout_marginStart="12dp" />
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/navHomeInactive"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/ic_home"
-                    app:tint="#8B7FA8" />
-
-            </LinearLayout>
-
-            <!-- Spacer between slots -->
-            <View
-                android:layout_width="12dp"
-                android:layout_height="0dp" />
-
-            <!-- ═══ SLOT 2: Categories ═══ -->
-            <LinearLayout
-                android:id="@+id/navItemCategories"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:minWidth="56dp"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
-
-                <LinearLayout
-                    android:id="@+id/navCategoriesActive"
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_nav_active_pill"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="24dp"
-                    android:visibility="gone">
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/ic_category"
-                        app:tint="#9B5CFF" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Categories"
-                        android:textSize="14sp"
-                        android:textColor="#9B5CFF"
-                        android:fontFamily="sans-serif-medium"
-                        android:includeFontPadding="false"
-                        android:letterSpacing="0.04"
-                        android:layout_marginStart="12dp" />
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/navCategoriesInactive"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/ic_category"
-                    app:tint="#8B7FA8" />
-
-            </LinearLayout>
-
-            <!-- Spacer between slots -->
-            <View
-                android:layout_width="12dp"
-                android:layout_height="0dp" />
-
-            <!-- ═══ SLOT 3: Calendar ═══ -->
-            <LinearLayout
-                android:id="@+id/navItemCalendar"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:minWidth="56dp"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
-
-                <LinearLayout
-                    android:id="@+id/navCalendarActive"
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_nav_active_pill"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="24dp"
-                    android:visibility="gone">
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/ic_calendar"
-                        app:tint="#9B5CFF" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Calendar"
-                        android:textSize="14sp"
-                        android:textColor="#9B5CFF"
-                        android:fontFamily="sans-serif-medium"
-                        android:includeFontPadding="false"
-                        android:letterSpacing="0.04"
-                        android:layout_marginStart="12dp" />
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/navCalendarInactive"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/ic_calendar"
-                    app:tint="#8B7FA8" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
+    <!-- ═══════════════════════════════════════════
+         FAB (Add Moment)
+    ═══════════════════════════════════════════ -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="100dp"
         android:src="@drawable/ic_add"
         android:contentDescription="Add"
-        app:backgroundTint="#9B5CFF"
-        app:tint="#FFFFFF"
+        app:backgroundTint="@color/purple_primary"
+        app:tint="@color/black_pure"
         app:fabSize="normal"
         app:elevation="12dp"
         app:pressedTranslationZ="8dp"/>

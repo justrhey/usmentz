@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="@color/black_pure">
 
     <!-- Top Navigation Row - Flat, no background, no back button -->
     <LinearLayout
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Transactions"
-            android:textColor="#212121"
+            android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold"/>
 
@@ -30,7 +30,7 @@
             android:layout_height="24dp"
             android:src="@drawable/ic_sort"
             android:contentDescription="Sort"
-            app:tint="#757575"/>
+            app:tint="@color/text_secondary"/>
 
     </LinearLayout>
 
@@ -220,7 +220,7 @@
             android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:text="Expense"
-            android:textColor="#9E9E9E"
+            android:textColor="@color/text_secondary"
             android:textSize="12sp"
             android:gravity="center"
             android:layout_marginEnd="24dp"/>
@@ -229,7 +229,7 @@
             android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:text="Funds"
-            android:textColor="#9E9E9E"
+            android:textColor="@color/text_secondary"
             android:textSize="12sp"
             android:gravity="center"
             android:layout_marginEnd="24dp"/>
@@ -238,8 +238,7 @@
             android:layout_width="56dp"
             android:layout_height="wrap_content"
             android:text="Savings"
-            android:textColor="#9E9E9E"
-            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
             android:gravity="center"/>
 
     </LinearLayout>
@@ -258,7 +257,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="All Transactions"
-            android:textColor="#212121"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold"/>
 
@@ -267,7 +266,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="This Month"
-            android:textColor="#9E9E9E"
+            android:textColor="@color/text_secondary"
             android:textSize="12sp"/>
 
     </LinearLayout>
@@ -286,7 +285,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="No transactions yet"
-        android:textColor="#9E9E9E"
+        android:textColor="@color/text_secondary"
         android:textSize="14sp"
         android:gravity="center"
         android:padding="32dp"

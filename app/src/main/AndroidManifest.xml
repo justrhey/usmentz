@@ -6,8 +6,31 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- Camera permission for Photobooth -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+    <!-- Storage permissions for saving photos -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <!-- Location permission for location-based moments -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- Microphone permission for voice notes -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <!-- Vibration for haptic feedback -->
     <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Notification permission (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -73,6 +96,7 @@
 
         <activity android:name=".CalendarActivity" android:exported="false" />
         <activity android:name=".FavoritesActivity" android:exported="false" />
+        <activity android:name=".PhotoboothActivity" android:exported="false" android:theme="@style/Theme.Usmentz.NoActionBar" />
 
         <activity
             android:name=".DetailActivity"

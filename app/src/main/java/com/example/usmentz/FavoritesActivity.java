@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,9 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.usmentz.adapter.DateAdapter;
 import com.example.usmentz.date.DateLocation;
-import com.example.usmentz.helper.NavbarScrollHelper;
+import com.example.usmentz.helper.CapsuleNavbarHelper;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +30,14 @@ public class FavoritesActivity extends AppCompatActivity {
     private View emptyState;
     private TextView tvEmptyTitle, tvEmptySubtitle;
     private ImageView ivEmpty;
+    private FloatingActionButton fabAdd;
 
-    // Expanding pill navbar
-    private View navbarContainer;
-    private View navItemHome, navItemCategories, navItemCalendar;
-    private View navHomeActive, navHomeInactive;
-    private View navCategoriesActive, navCategoriesInactive;
-    private View navCalendarActive, navCalendarInactive;
-    private int activeNavSlot = 1; // Categories active by default (came from categories)
-
-    // Scroll-based navbar animation
-    private NavbarScrollHelper navbarScrollHelper;
+    // Navigation - Capsule Navbar
+    private LinearLayout navContainer;
+    private LinearLayout navItemHome, navItemCategories, navItemCalendar, navItemFavorites, navItemSettings;
+    private ImageView navIconHome, navIconCategories, navIconCalendar, navIconFavorites, navIconSettings;
+    private TextView navLabelHome, navLabelCategories, navLabelCalendar, navLabelFavorites, navLabelSettings;
+    private int activeNavSlot = 3; // Favorites active by default
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,26 +71,33 @@ public class FavoritesActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Expanding pill navbar
-        navbarContainer = findViewById(R.id.navbarContainer);
-        navItemHome = findViewById(R.id.navItemHome);
-        navItemCategories = findViewById(R.id.navItemCategories);
-        navItemCalendar = findViewById(R.id.navItemCalendar);
-        navHomeActive = findViewById(R.id.navHomeActive);
-        navHomeInactive = findViewById(R.id.navHomeInactive);
-        navCategoriesActive = findViewById(R.id.navCategoriesActive);
-        navCategoriesInactive = findViewById(R.id.navCategoriesInactive);
-        navCalendarActive = findViewById(R.id.navCalendarActive);
-        navCalendarInactive = findViewById(R.id.navCalendarInactive);
-        setActiveNavSlot(1); // Categories active by default
+        // FAB
+        fabAdd = findViewById(R.id.fabAdd);
+        fabAdd.setOnClickListener(v -> {
+            // Navigate to Home to add, or show a dialog if preferred
+            startActivity(new Intent(this, HomeActivity.class));
+            finish();
+        });
 
-        // Scroll-based navbar/FAB slide animation
-        View fabAdd = findViewById(R.id.fabAdd);
-        navbarScrollHelper = new NavbarScrollHelper(navbarContainer, fabAdd);
-        navbarScrollHelper.attachToRecyclerView(recyclerView);
-
-        // Setup click listeners for navbar
-        setupNavigation();
+        // Capsule Navbar
+        com.google.android.material.card.MaterialCardView capsuleCard = findViewById(R.id.capsuleNavbar);
+        navContainer = capsuleCard.findViewById(R.id.navContainer);
+        navItemHome = navContainer.findViewById(R.id.navItemHome);
+        navItemCategories = navContainer.findViewById(R.id.navItemCategories);
+        navItemCalendar = navContainer.findViewById(R.id.navItemCalendar);
+        navItemFavorites = navContainer.findViewById(R.id.navItemFavorites);
+        navItemSettings = navContainer.findViewById(R.id.navItemSettings);
+        navIconHome = navContainer.findViewById(R.id.navIconHome);
+        navIconCategories = navContainer.findViewById(R.id.navIconCategories);
+        navIconCalendar = navContainer.findViewById(R.id.navIconCalendar);
+        navIconFavorites = navContainer.findViewById(R.id.navIconFavorites);
+        navIconSettings = navContainer.findViewById(R.id.navIconSettings);
+        navLabelHome = navContainer.findViewById(R.id.navLabelHome);
+        navLabelCategories = navContainer.findViewById(R.id.navLabelCategories);
+        navLabelCalendar = navContainer.findViewById(R.id.navLabelCalendar);
+        navLabelFavorites = navContainer.findViewById(R.id.navLabelFavorites);
+        navLabelSettings = navContainer.findViewById(R.id.navLabelSettings);
+        setActiveNavSlot(3); // Favorites active by default
 
         // Observe - show moments marked as "do again"
         dateViewModel.getAllMoments().observe(this, moments -> {
@@ -114,39 +120,17 @@ public class FavoritesActivity extends AppCompatActivity {
         });
     }
 
-    private void setupNavigation() {
-        navItemHome.setOnClickListener(v -> {
-            setActiveNavSlot(0);
-            startActivity(new Intent(this, HomeActivity.class));
-            finish();
-        });
-
-        navItemCategories.setOnClickListener(v -> {
-            setActiveNavSlot(1);
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        });
-
-        navItemCalendar.setOnClickListener(v -> {
-            setActiveNavSlot(2);
-            startActivity(new Intent(this, CalendarActivity.class));
-            finish();
-        });
-    }
-
     private void setActiveNavSlot(int slotIndex) {
         activeNavSlot = slotIndex;
-        navHomeActive.setVisibility(slotIndex == 0 ? View.VISIBLE : View.GONE);
-        navHomeInactive.setVisibility(slotIndex == 0 ? View.GONE : View.VISIBLE);
-        navCategoriesActive.setVisibility(slotIndex == 1 ? View.VISIBLE : View.GONE);
-        navCategoriesInactive.setVisibility(slotIndex == 1 ? View.GONE : View.VISIBLE);
-        navCalendarActive.setVisibility(slotIndex == 2 ? View.VISIBLE : View.GONE);
-        navCalendarInactive.setVisibility(slotIndex == 2 ? View.GONE : View.VISIBLE);
+        CapsuleNavbarHelper.updateState(navContainer,
+            new LinearLayout[]{navItemHome, navItemCategories, navItemCalendar, navItemFavorites, navItemSettings},
+            new ImageView[]{navIconHome, navIconCategories, navIconCalendar, navIconFavorites, navIconSettings},
+            new TextView[]{navLabelHome, navLabelCategories, navLabelCalendar, navLabelFavorites, navLabelSettings},
+            slotIndex, this, true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (navbarScrollHelper != null) navbarScrollHelper.forceShow();
     }
 }

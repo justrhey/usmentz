@@ -18,7 +18,7 @@
             android:id="@+id/topLine"
             android:layout_width="2dp"
             android:layout_height="20dp"
-            android:background="#E0E0E0"/>
+            android:background="@color/black_border"/>
 
         <!-- Timeline Dot -->
         <View
@@ -33,7 +33,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:minHeight="20dp"
-            android:background="#E0E0E0"/>
+            android:background="@color/black_border"/>
 
     </LinearLayout>
 
@@ -45,8 +45,8 @@
         android:layout_marginBottom="8dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:strokeColor="#F0EEF9"
+        app:cardBackgroundColor="@color/black_card"
+        app:strokeColor="@color/purple_border"
         app:strokeWidth="1dp">
 
         <LinearLayout
@@ -70,7 +70,7 @@
                     android:src="@drawable/ic_categories"
                     android:background="@drawable/bg_circle_purple_light"
                     android:padding="8dp"
-                    app:tint="#9B5CFF"/>
+                    app:tint="@color/purple_primary"/>
 
                 <!-- Name and Date Column -->
                 <LinearLayout
@@ -85,7 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Moment Name"
-                        android:textColor="#1A1A1A"
+                        android:textColor="@color/text_primary"
                         android:textSize="14sp"
                         android:textStyle="bold"/>
 
@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="May 9"
-                        android:textColor="#9E9E9E"
+                        android:textColor="@color/text_secondary"
                         android:textSize="11sp"
                         android:layout_marginTop="1dp"/>
 
@@ -119,8 +119,8 @@
                     android:numStars="5"
                     android:rating="0"
                     android:stepSize="0.5"
-                    android:progressTint="#FFC107"
-                    android:secondaryProgressTint="#E0E0E0"
+                    android:progressTint="@color/amber_accent"
+                    android:secondaryProgressTint="@color/black_border"
                     android:isIndicator="true"
                     style="@style/Widget.AppCompat.RatingBar.Small"/>
 
@@ -129,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.0"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:layout_marginStart="6dp"/>
@@ -142,7 +142,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Review text here..."
-                android:textColor="#1A1A1A"
+                android:textColor="@color/text_primary"
                 android:textSize="13sp"
                 android:lineSpacingMultiplier="1.3"
                 android:paddingStart="14dp"
@@ -156,7 +156,7 @@
                 android:layout_height="180dp"
                 android:scaleType="centerCrop"
                 android:visibility="gone"
-                android:background="#F0F0F0"/>
+                android:background="@color/black_elevated"/>
 
         </LinearLayout>
 

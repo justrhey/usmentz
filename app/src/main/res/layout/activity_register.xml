@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F7FF">
+    android:background="@color/black_pure">
 
     <!-- Top Area: Back + Header -->
     <LinearLayout
@@ -32,7 +32,7 @@
                 android:src="@drawable/ic_arrow_back"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
-                app:tint="#212121"/>
+                app:tint="@color/text_primary"/>
 
             <View
                 android:layout_width="0dp"
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Create Account"
-            android:textColor="#1A1A1A"
+            android:textColor="@color/text_primary"
             android:textSize="28sp"
             android:textStyle="bold"
             android:layout_marginBottom="4dp"/>
@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Start your journey with us"
-            android:textColor="#757575"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"/>
 
     </LinearLayout>
@@ -89,14 +89,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Full Name"
-                android:textColor="#757575"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="6dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxStrokeColor="#9B5CFF"
+                app:boxStrokeColor="@color/purple_primary"
                 app:boxStrokeWidth="1dp"
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
@@ -109,7 +109,7 @@
                     android:id="@+id/etName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#1A1A1A"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:inputType="textPersonName"
                     android:singleLine="true"/>
@@ -121,14 +121,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Email Address"
-                android:textColor="#757575"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="6dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxStrokeColor="#9B5CFF"
+                app:boxStrokeColor="@color/purple_primary"
                 app:boxStrokeWidth="1dp"
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
@@ -141,7 +141,7 @@
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#1A1A1A"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"/>
@@ -153,7 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Password"
-                android:textColor="#757575"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="6dp"/>
 
@@ -161,7 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:endIconMode="password_toggle"
-                app:boxStrokeColor="#9B5CFF"
+                app:boxStrokeColor="@color/purple_primary"
                 app:boxStrokeWidth="1dp"
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
@@ -174,7 +174,7 @@
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#1A1A1A"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:inputType="textPassword"
                     android:singleLine="true"/>
@@ -186,7 +186,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Confirm Password"
-                android:textColor="#757575"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="6dp"/>
 
@@ -194,7 +194,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:endIconMode="password_toggle"
-                app:boxStrokeColor="#9B5CFF"
+                app:boxStrokeColor="@color/purple_primary"
                 app:boxStrokeWidth="1dp"
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
@@ -207,7 +207,7 @@
                     android:id="@+id/etConfirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#1A1A1A"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:inputType="textPassword"
                     android:singleLine="true"/>
@@ -219,7 +219,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="By creating an account, you agree to our Terms of Service and Privacy Policy"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_hint"
                 android:textSize="11sp"
                 android:gravity="center"
                 android:layout_marginBottom="12dp"/>
@@ -230,10 +230,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="Create Account"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/black_pure"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:backgroundTint="#9B5CFF"
+                android:backgroundTint="@color/purple_primary"
                 app:cornerRadius="25dp"
                 android:layout_marginBottom="16dp"/>
 
@@ -249,7 +249,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Already have an account? "
-                    android:textColor="#757575"
+                    android:textColor="@color/text_secondary"
                     android:textSize="13sp"/>
 
                 <TextView
@@ -257,7 +257,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Log In"
-                    android:textColor="#9B5CFF"
+                    android:textColor="@color/purple_primary"
                     android:textSize="13sp"
                     android:textStyle="bold"/>
 
@@ -271,9 +271,9 @@
                 android:gravity="center"
                 android:layout_marginBottom="14dp">
 
-                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" android:background="#E0E0E0"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="or" android:textColor="#9E9E9E" android:textSize="12sp" android:paddingHorizontal="12dp"/>
-                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" android:background="#E0E0E0"/>
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" android:background="@color/gray_dark"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="or" android:textColor="@color/text_hint" android:textSize="12sp" android:paddingHorizontal="12dp"/>
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" android:background="@color/gray_dark"/>
 
             </LinearLayout>
 
@@ -283,13 +283,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="Continue with Google"
-                android:textColor="#1A1A1A"
+                android:textColor="@color/text_primary"
                 android:textSize="14sp"
                 app:icon="@drawable/ic_google"
                 app:iconGravity="textStart"
                 app:iconPadding="8dp"
-                app:backgroundTint="#FFFFFF"
-                app:strokeColor="#E0E0E0"
+                app:backgroundTint="@color/black_elevated"
+                app:strokeColor="@color/gray_dark"
                 app:strokeWidth="1dp"
                 app:cornerRadius="25dp"/>
 
@@ -298,7 +298,7 @@
                 android:id="@+id/tvError"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#F44336"
+                android:textColor="@color/accent_red"
                 android:textSize="13sp"
                 android:gravity="center"
                 android:visibility="gone"
@@ -314,7 +314,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:indeterminateTint="#9B5CFF"
+        android:indeterminateTint="@color/purple_primary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

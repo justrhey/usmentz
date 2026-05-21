@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="@color/black_elevated">
 
     <!-- ═══════════════════════════════════════════
          PHOTO BOOTH AREA
@@ -92,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Choose a frame"
-            android:textColor="#2D2640"
+            android:textColor="@color/text_primary"
             android:textSize="14sp"
             android:fontFamily="sans-serif-medium"
             android:layout_marginBottom="10dp" />
@@ -145,7 +145,6 @@
                     android:id="@+id/borderVintage"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
-                    android:layout_marginEnd="8dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?attr/selectableItemBackgroundBorderless">
@@ -154,54 +153,6 @@
                         android:layout_height="48dp"
                         android:layout_gravity="center"
                         android:background="@drawable/border_vintage" />
-                </FrameLayout>
-
-                <!-- Heart -->
-                <FrameLayout
-                    android:id="@+id/borderHeart"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginEnd="8dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless">
-                    <View
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/border_heart" />
-                </FrameLayout>
-
-                <!-- Film -->
-                <FrameLayout
-                    android:id="@+id/borderFilm"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginEnd="8dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless">
-                    <View
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/border_film" />
-                </FrameLayout>
-
-                <!-- Minimal -->
-                <FrameLayout
-                    android:id="@+id/borderMinimal"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginEnd="8dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless">
-                    <View
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/border_minimal" />
                 </FrameLayout>
 
             </LinearLayout>
@@ -230,7 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add Moment"
-                android:textColor="#2D2640"
+                android:textColor="@color/text_primary"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
@@ -248,7 +199,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name this moment"
-                app:hintTextColor="#9E9E9E"
+                app:hintTextColor="@color/text_hint"
                 app:boxStrokeColor="#9B5CFF"
                 app:boxStrokeWidth="1dp"
                 app:boxCornerRadiusTopStart="12dp"
@@ -262,7 +213,7 @@
                     android:id="@+id/etName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#212121"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:inputType="textCapSentences"
                     android:singleLine="true" />
@@ -274,7 +225,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="How did it feel?"
-                android:textColor="#2D2640"
+                android:textColor="@color/text_primary"
                 android:textSize="13sp"
                 android:fontFamily="sans-serif-medium"
                 android:layout_marginBottom="8dp" />
@@ -292,7 +243,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Cost (optional)"
-                app:hintTextColor="#9E9E9E"
+                app:hintTextColor="@color/text_hint"
                 app:boxStrokeColor="#9B5CFF"
                 app:boxStrokeWidth="1dp"
                 app:boxCornerRadiusTopStart="12dp"
@@ -306,7 +257,7 @@
                     android:id="@+id/etCost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#212121"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:inputType="numberDecimal"
                     android:singleLine="true" />
@@ -318,7 +269,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="A quick note..."
-                app:hintTextColor="#9E9E9E"
+                app:hintTextColor="@color/text_hint"
                 app:boxStrokeColor="#9B5CFF"
                 app:boxStrokeWidth="1dp"
                 app:boxCornerRadiusTopStart="12dp"
@@ -332,7 +283,7 @@
                     android:id="@+id/etReviewNotes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#212121"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:inputType="textMultiLine"
                     android:minLines="2" />
@@ -352,9 +303,9 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:text="Cancel"
-                    android:textColor="#757575"
+                    android:textColor="@color/text_secondary"
                     android:textSize="14sp"
-                    android:backgroundTint="#F5F5F5"
+                    android:backgroundTint="@color/black_elevated"
                     android:layout_marginEnd="8dp"
                     app:cornerRadius="12dp" />
 
@@ -364,10 +315,10 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:text="Save Memory"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/text_on_purple"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:backgroundTint="#9B5CFF"
+                    android:backgroundTint="@color/purple_primary"
                     app:cornerRadius="12dp" />
 
             </LinearLayout>

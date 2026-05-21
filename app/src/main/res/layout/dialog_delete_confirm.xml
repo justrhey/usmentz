@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#FFFFFF"
+    android:background="@color/black_elevated"
     android:padding="24dp"
     android:gravity="center">
 
@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete this moment?"
-        android:textColor="#212121"
+        android:textColor="@color/text_primary"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="16dp" />
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="This action cannot be undone."
-        android:textColor="#9E9E9E"
+        android:textColor="@color/text_secondary"
         android:textSize="14sp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="24dp" />
@@ -43,9 +43,9 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="Cancel"
-            android:textColor="#757575"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
-            android:backgroundTint="#F5F5F5"
+            android:backgroundTint="@color/black_elevated"
             android:layout_marginEnd="8dp"
             app:cornerRadius="12dp" />
 
@@ -55,10 +55,10 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="Delete"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black_pure"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:backgroundTint="#F44336"
+            android:backgroundTint="@color/accent_red"
             app:cornerRadius="12dp" />
 
     </LinearLayout>

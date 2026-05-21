@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="@color/black_pure">
 
     <!-- Minimalist Toolbar - No back button -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#FFFFFF"
-        app:titleTextColor="#212121" />
+        android:background="@color/black_pure"
+        app:titleTextColor="@color/text_primary" />
 
     <!-- Segmented Control Tab Bar - Horizontal Content Switcher -->
     <LinearLayout
@@ -41,7 +41,7 @@
                 android:text="Details"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#212121"/>
+                android:textColor="@color/text_primary"/>
         </LinearLayout>
 
         <!-- Expenses Tab -->
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:text="Expenses"
                 android:textSize="14sp"
-                android:textColor="#9E9E9E"/>
+                android:textColor="@color/text_hint"/>
         </LinearLayout>
 
         <!-- Review Tab -->
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:text="Review"
                 android:textSize="14sp"
-                android:textColor="#9E9E9E"/>
+                android:textColor="@color/text_hint"/>
         </LinearLayout>
 
     </LinearLayout>

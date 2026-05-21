@@ -5,9 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,13 +18,13 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.example.usmentz.databinding.ActivityLoginBinding;
+import com.example.usmentz.databinding.DialogForgotPasswordBinding;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -35,10 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private static final String PREFS_NAME = "UsmentzPrefs";
 
-    private TextInputEditText etEmail, etPassword;
-    private MaterialButton btnLogin, btnGoogle;
-    private TextView tvSignUp, tvForgotPassword, tvError;
-    private ProgressBar progressBar;
+    private ActivityLoginBinding binding;
     private BottomSheetBehavior<View> bottomSheetBehavior;
 
     private FirebaseAuth mAuth;
@@ -48,31 +42,19 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        initViews();
         setupBottomSheet();
         setupGoogleSignIn();
         setupClickListeners();
     }
 
-    private void initViews() {
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        btnGoogle = findViewById(R.id.btnGoogle);
-        tvSignUp = findViewById(R.id.tvSignUp);
-        tvForgotPassword = findViewById(R.id.tvForgotPassword);
-        tvError = findViewById(R.id.tvError);
-        progressBar = findViewById(R.id.progressBar);
-    }
-
-private void setupBottomSheet() {
-        View slideCard = findViewById(R.id.slideCard);
-        bottomSheetBehavior = BottomSheetBehavior.from(slideCard);
+    private void setupBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.slideCard);
 
         // Peek at header area only (180dp) - shows the drag handle and "Welcome Back"
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -113,16 +95,16 @@ private void setupBottomSheet() {
         }
 
         // Email Login
-        btnLogin.setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+        binding.btnLogin.setOnClickListener(v -> {
+            String email = binding.etEmail.getText().toString().trim();
+            String password = binding.etPassword.getText().toString().trim();
 
             if (email.isEmpty()) {
-                etEmail.setError("Email is required");
+                binding.etEmail.setError("Email is required");
                 return;
             }
             if (password.isEmpty()) {
-                etPassword.setError("Password is required");
+                binding.etPassword.setError("Password is required");
                 return;
             }
 
@@ -130,37 +112,32 @@ private void setupBottomSheet() {
         });
 
         // Google Sign In
-        btnGoogle.setOnClickListener(v -> signInWithGoogle());
+        binding.btnGoogle.setOnClickListener(v -> signInWithGoogle());
 
         // Sign Up link
-        tvSignUp.setOnClickListener(v -> {
+        binding.tvSignUp.setOnClickListener(v -> {
             startActivity(new Intent(this, RegisterActivity.class));
         });
 
         // Forgot password
-        tvForgotPassword.setOnClickListener(v -> {
+        binding.tvForgotPassword.setOnClickListener(v -> {
             showForgotPasswordDialog();
         });
     }
 
     private void showForgotPasswordDialog() {
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_forgot_password, null);
-
-        com.google.android.material.textfield.TextInputLayout tilEmail = dialogView.findViewById(R.id.tilEmail);
-        com.google.android.material.textfield.TextInputEditText etEmail = dialogView.findViewById(R.id.etEmail);
-        MaterialButton btnCancel = dialogView.findViewById(R.id.btnCancel);
-        MaterialButton btnSubmit = dialogView.findViewById(R.id.btnSubmit);
+        DialogForgotPasswordBinding dialogBinding = DialogForgotPasswordBinding.inflate(getLayoutInflater());
 
         androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setView(dialogView)
+                .setView(dialogBinding.getRoot())
                 .create();
 
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        dialogBinding.btnCancel.setOnClickListener(v -> dialog.dismiss());
 
-        btnSubmit.setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
+        dialogBinding.btnSubmit.setOnClickListener(v -> {
+            String email = dialogBinding.etEmail.getText().toString().trim();
             if (email.isEmpty()) {
-                tilEmail.setError("Required");
+                dialogBinding.tilEmail.setError("Required");
                 return;
             }
             dialog.dismiss();
@@ -281,22 +258,22 @@ private void setupBottomSheet() {
 
     private void showLoading(boolean show) {
         if (show) {
-            progressBar.setVisibility(View.VISIBLE);
-            btnLogin.setEnabled(false);
-            btnGoogle.setEnabled(false);
+            binding.progressBar.setVisibility(View.VISIBLE);
+            binding.btnLogin.setEnabled(false);
+            binding.btnGoogle.setEnabled(false);
         } else {
-            progressBar.setVisibility(View.GONE);
-            btnLogin.setEnabled(true);
-            btnGoogle.setEnabled(true);
+            binding.progressBar.setVisibility(View.GONE);
+            binding.btnLogin.setEnabled(true);
+            binding.btnGoogle.setEnabled(true);
         }
     }
 
     private void showError(String message) {
-        tvError.setText(message);
-        tvError.setVisibility(View.VISIBLE);
+        binding.tvError.setText(message);
+        binding.tvError.setVisibility(View.VISIBLE);
     }
 
     private void hideError() {
-        tvError.setVisibility(View.GONE);
+        binding.tvError.setVisibility(View.GONE);
     }
 }

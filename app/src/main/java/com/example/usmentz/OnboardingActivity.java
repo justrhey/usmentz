@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,16 +11,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+import com.example.usmentz.databinding.ActivityOnboardingBinding;
 
 public class OnboardingActivity extends AppCompatActivity {
 
     private static final String PREF_NAME = "UsmentzPrefs";
     private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
 
-    private ViewPager2 viewPager;
-    private Button btnNext;
-    private TextView btnSkip;
-    private LinearLayout dotIndicator;
+    private ActivityOnboardingBinding binding;
 
     private static final int PAGE_COUNT = 3;
 
@@ -63,59 +58,55 @@ public class OnboardingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_onboarding);
+        binding = ActivityOnboardingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        viewPager = findViewById(R.id.viewPager);
-        btnNext = findViewById(R.id.btnNext);
-        btnSkip = findViewById(R.id.btnSkip);
-        dotIndicator = findViewById(R.id.dotIndicator);
-
-        viewPager.setAdapter(new OnboardingAdapter(this));
-        viewPager.setOffscreenPageLimit(1);
+        binding.viewPager.setAdapter(new OnboardingAdapter(this));
+        binding.viewPager.setOffscreenPageLimit(1);
 
         setupDots();
 
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 updateDots(position);
                 if (position == PAGE_COUNT - 1) {
-                    btnNext.setText("Get Started");
+                    binding.btnNext.setText("Get Started");
                 } else {
-                    btnNext.setText("Next");
+                    binding.btnNext.setText("Next");
                 }
             }
         });
 
-        btnNext.setOnClickListener(v -> {
-            int current = viewPager.getCurrentItem();
+        binding.btnNext.setOnClickListener(v -> {
+            int current = binding.viewPager.getCurrentItem();
             if (current < PAGE_COUNT - 1) {
-                viewPager.setCurrentItem(current + 1, true);
+                binding.viewPager.setCurrentItem(current + 1, true);
             } else {
                 completeOnboarding();
             }
         });
 
-        btnSkip.setOnClickListener(v -> completeOnboarding());
+        binding.btnSkip.setOnClickListener(v -> completeOnboarding());
     }
 
     private void setupDots() {
-        dotIndicator.removeAllViews();
+        binding.dotIndicator.removeAllViews();
         for (int i = 0; i < PAGE_COUNT; i++) {
             View dot = new View(this);
             int size = dpToPx(i == 0 ? 10 : 8);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+            android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(size, size);
             params.setMargins(dpToPx(4), 0, dpToPx(4), 0);
             dot.setBackgroundResource(i == 0 ? R.drawable.dot_active : R.drawable.dot_inactive);
-            dotIndicator.addView(dot);
+            binding.dotIndicator.addView(dot);
         }
     }
 
     private void updateDots(int selectedPosition) {
-        for (int i = 0; i < dotIndicator.getChildCount(); i++) {
-            View dot = dotIndicator.getChildAt(i);
+        for (int i = 0; i < binding.dotIndicator.getChildCount(); i++) {
+            View dot = binding.dotIndicator.getChildAt(i);
             int size = dpToPx(i == selectedPosition ? 10 : 8);
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) dot.getLayoutParams();
+            android.widget.LinearLayout.LayoutParams params = (android.widget.LinearLayout.LayoutParams) dot.getLayoutParams();
             params.width = size;
             params.height = size;
             dot.setLayoutParams(params);

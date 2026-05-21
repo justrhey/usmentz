@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#FFFFFF"
+    android:background="@color/black_elevated"
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
     android:paddingTop="28dp"
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Savings"
-            android:textColor="#212121"
+            android:textColor="@color/text_primary"
             android:textSize="22sp"
             android:textStyle="bold"
             android:layout_marginStart="12dp"/>
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Goal"
-        android:textColor="#9E9E9E"
+        android:textColor="@color/text_secondary"
         android:textSize="12sp"
         android:textStyle="bold"
         android:layout_marginBottom="10dp"/>
@@ -115,7 +115,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Description"
-        app:hintTextColor="#9E9E9E"
+        app:hintTextColor="@color/text_hint"
         app:boxStrokeColor="#9B5CFF"
         app:boxStrokeWidth="1dp"
         app:boxCornerRadiusTopStart="12dp"
@@ -129,7 +129,7 @@
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#212121"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:inputType="textCapSentences"
             android:singleLine="true"/>
@@ -142,8 +142,8 @@
         android:layout_height="wrap_content"
         android:hint="Amount to Save"
         app:prefixText="₱"
-        app:prefixTextColor="#212121"
-        app:hintTextColor="#9E9E9E"
+        app:prefixTextColor="@color/text_primary"
+        app:hintTextColor="@color/text_hint"
         app:boxStrokeColor="#9B5CFF"
         app:boxStrokeWidth="1dp"
         app:boxCornerRadiusTopStart="12dp"
@@ -157,7 +157,7 @@
             android:id="@+id/etAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#212121"
+            android:textColor="@color/text_primary"
             android:textSize="20sp"
             android:inputType="numberDecimal"
             android:singleLine="true"/>
@@ -176,9 +176,9 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="Cancel"
-            android:textColor="#757575"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
-            android:backgroundTint="#F5F5F5"
+            android:backgroundTint="@color/black_elevated"
             android:layout_marginEnd="8dp"
             app:cornerRadius="12dp"/>
 
@@ -188,10 +188,10 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="Save Now"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black_pure"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:backgroundTint="#00BFA5"
+            android:backgroundTint="@color/teal_accent"
             app:cornerRadius="12dp"/>
 
     </LinearLayout>

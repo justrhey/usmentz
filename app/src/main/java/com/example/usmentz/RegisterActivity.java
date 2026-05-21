@@ -5,10 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,13 +17,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.example.usmentz.databinding.ActivityRegisterBinding;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -35,11 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private static final String PREFS_NAME = "UsmentzPrefs";
 
-    private TextInputEditText etName, etEmail, etPassword, etConfirmPassword;
-    private Button btnCreateAccount;
-    private MaterialButton btnGoogle;
-    private TextView tvLogin, tvError;
-    private ProgressBar progressBar;
+    private ActivityRegisterBinding binding;
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -48,26 +39,14 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        binding = ActivityRegisterBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        initViews();
         setupGoogleSignIn();
         setupClickListeners();
-    }
-
-    private void initViews() {
-        etName = findViewById(R.id.etName);
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        etConfirmPassword = findViewById(R.id.etConfirmPassword);
-        btnCreateAccount = findViewById(R.id.btnCreateAccount);
-        btnGoogle = findViewById(R.id.btnGoogle);
-        tvLogin = findViewById(R.id.tvLogin);
-        tvError = findViewById(R.id.tvError);
-        progressBar = findViewById(R.id.progressBar);
     }
 
     private void setupGoogleSignIn() {
@@ -81,36 +60,33 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         // Back button
-        ImageButton btnBack = findViewById(R.id.btnBack);
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> finish());
-        }
+        binding.btnBack.setOnClickListener(v -> finish());
 
         // Create Account
-        btnCreateAccount.setOnClickListener(v -> {
-            String name = etName.getText().toString().trim();
-            String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
-            String confirmPassword = etConfirmPassword.getText().toString().trim();
+        binding.btnCreateAccount.setOnClickListener(v -> {
+            String name = binding.etName.getText().toString().trim();
+            String email = binding.etEmail.getText().toString().trim();
+            String password = binding.etPassword.getText().toString().trim();
+            String confirmPassword = binding.etConfirmPassword.getText().toString().trim();
 
             if (name.isEmpty()) {
-                etName.setError("Name is required");
+                binding.etName.setError("Name is required");
                 return;
             }
             if (email.isEmpty()) {
-                etEmail.setError("Email is required");
+                binding.etEmail.setError("Email is required");
                 return;
             }
             if (password.isEmpty()) {
-                etPassword.setError("Password is required");
+                binding.etPassword.setError("Password is required");
                 return;
             }
             if (password.length() < 6) {
-                etPassword.setError("Password must be at least 6 characters");
+                binding.etPassword.setError("Password must be at least 6 characters");
                 return;
             }
             if (!password.equals(confirmPassword)) {
-                etConfirmPassword.setError("Passwords do not match");
+                binding.etConfirmPassword.setError("Passwords do not match");
                 return;
             }
 
@@ -118,10 +94,10 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         // Google Sign Up
-        btnGoogle.setOnClickListener(v -> signInWithGoogle());
+        binding.btnGoogle.setOnClickListener(v -> signInWithGoogle());
 
         // Login link
-        tvLogin.setOnClickListener(v -> {
+        binding.tvLogin.setOnClickListener(v -> {
             startActivity(new Intent(this, LoginActivity.class));
         });
     }
@@ -232,22 +208,22 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void showLoading(boolean show) {
         if (show) {
-            progressBar.setVisibility(View.VISIBLE);
-            btnCreateAccount.setEnabled(false);
-            btnGoogle.setEnabled(false);
+            binding.progressBar.setVisibility(View.VISIBLE);
+            binding.btnCreateAccount.setEnabled(false);
+            binding.btnGoogle.setEnabled(false);
         } else {
-            progressBar.setVisibility(View.GONE);
-            btnCreateAccount.setEnabled(true);
-            btnGoogle.setEnabled(true);
+            binding.progressBar.setVisibility(View.GONE);
+            binding.btnCreateAccount.setEnabled(true);
+            binding.btnGoogle.setEnabled(true);
         }
     }
 
     private void showError(String message) {
-        tvError.setText(message);
-        tvError.setVisibility(View.VISIBLE);
+        binding.tvError.setText(message);
+        binding.tvError.setVisibility(View.VISIBLE);
     }
 
     private void hideError() {
-        tvError.setVisibility(View.GONE);
+        binding.tvError.setVisibility(View.GONE);
     }
 }

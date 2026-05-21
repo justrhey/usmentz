@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    app:cardBackgroundColor="#FFFFFF"
+    app:cardBackgroundColor="@color/black_card"
     app:cardCornerRadius="8dp"
     app:cardElevation="0dp"
     app:strokeWidth="0dp">
@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sunset dinner"
-                android:textColor="#2D2640"
+                android:textColor="@color/text_primary"
                 android:textSize="15sp"
                 android:fontFamily="sans-serif-medium" />
 
@@ -49,14 +49,14 @@
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:src="@drawable/ic_calendar"
-                    app:tint="#8B7FA8" />
+                    app:tint="@color/text_hint" />
 
                 <TextView
                     android:id="@+id/tvMomentDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Jul 15"
-                    android:textColor="#8B7FA8"
+                    android:textColor="@color/text_hint"
                     android:textSize="12sp"
                     android:layout_marginStart="6dp" />
 
@@ -66,7 +66,7 @@
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:src="@drawable/ic_location"
-                    app:tint="#8B7FA8"
+                    app:tint="@color/text_hint"
                     android:layout_marginStart="12dp" />
 
                 <TextView
@@ -74,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pier 5"
-                    android:textColor="#8B7FA8"
+                    android:textColor="@color/text_hint"
                     android:textSize="12sp"
                     android:layout_marginStart="6dp" />
 
@@ -89,7 +89,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_more_vert"
-                    app:tint="#BDBDBD"
+                    app:tint="@color/text_secondary"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:padding="2dp" />
@@ -98,12 +98,12 @@
 
         </LinearLayout>
 
-        <!-- Thick accent line at bottom -->
+        <!-- Thin accent line at bottom -->
         <View
             android:id="@+id/accentLine"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#9B5CFF" />
+            android:layout_height="1dp"
+            android:background="@color/purple_primary" />
 
     </LinearLayout>
 

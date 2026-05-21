@@ -7,12 +7,12 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.example.usmentz.databinding.ActivitySplashBinding;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -22,6 +22,7 @@ public class SplashActivity extends AppCompatActivity {
     private static final String KEY_ONBOARDING_COMPLETE = "onboarding_complete";
     
     private SharedPreferences sharedPreferences;
+    private ActivitySplashBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +33,13 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
-        setContentView(R.layout.activity_splash);
+        binding = ActivitySplashBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        Button btnGetStarted = findViewById(R.id.btnGetStarted);
-        Button btnLogin = findViewById(R.id.btnLogin);
-
         // Get Started -> Go to Onboarding (skip if already completed)
-        btnGetStarted.setOnClickListener(v -> {
+        binding.btnGetStarted.setOnClickListener(v -> {
             boolean onboardingDone = sharedPreferences.getBoolean(KEY_ONBOARDING_COMPLETE, false);
             if (onboardingDone) {
                 startActivity(new Intent(this, RegisterActivity.class));
@@ -50,7 +49,7 @@ public class SplashActivity extends AppCompatActivity {
         });
 
         // Already have account -> Go to Login
-        btnLogin.setOnClickListener(v -> {
+        binding.btnLogin.setOnClickListener(v -> {
             startActivity(new Intent(this, LoginActivity.class));
         });
 

@@ -1,87 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Light Theme - White background, White cards, Purple accents -->
+    <!-- Dark Theme - Pure Black Background, Dark Cards, Purple Glow Accents -->
     
     <!-- Backgrounds -->
-    <color name="white_pure">#FFFFFF</color>
-    <color name="off_white">#F5F5F5</color>
-    <color name="light_gray">#EEEEEE</color>
-    <color name="soft_gray">#E0E0E0</color>
-    <color name="medium_gray">#BDBDBD</color>
+    <color name="black_pure">#000000</color>
+    <color name="black_surface">#0A0A0A</color>
+    <color name="black_card">#141414</color>
+    <color name="black_elevated">#1E1E1E</color>
+    <color name="black_dialog">#242424</color>
+    <color name="black_border">#2A2A2A</color>
+    <color name="gray_dark">#333333</color>
+    <color name="gray_medium">#555555</color>
     
-    <!-- Dark text -->
-    <color name="dark_primary">#212121</color>
-    <color name="dark_secondary">#616161</color>
-    <color name="dark_tertiary">#9E9E9E</color>
+    <!-- Text on Dark -->
+    <color name="text_primary">#F5F5F5</color>
+    <color name="text_secondary">#A3A3A3</color>
+    <color name="text_hint">#737373</color>
+    <color name="text_disabled">#555555</color>
+    <color name="text_on_purple">#FFFFFF</color>
     
-    <!-- Purple Accent -->
-    <color name="purple_primary">#9B5CFF</color>
-    <color name="purple_secondary">#7C4DFF</color>
-    <color name="purple_light">#B388FF</color>
-    <color name="purple_primary_light">#B388FF</color>
-    <color name="purple_dark">#6A4DCC</color>
-    <color name="purple_surface">#F3E5F5</color>
-    <color name="purple_card">#FFFFFF</color>
-    <color name="purple_background">#FFFFFF</color>
-    <color name="purple_border">#E0E0E0</color>
+    <!-- Purple Glow Palette -->
+    <color name="purple_primary">#A855F7</color>
+    <color name="purple_glow">#C084FC</color>
+    <color name="purple_secondary">#7C3AED</color>
+    <color name="purple_dark">#4C1D95</color>
+    <color name="purple_muted">#4C1D95</color>
+    <color name="purple_surface">#1A0A2E</color>
+    <color name="purple_card">#1E0F35</color>
+    <color name="purple_background">#0A0A0A</color>
+    <color name="purple_border">#2D1B4E</color>
+    <color name="purple_primary_light">#C084FC</color>
     
-    <!-- Teal Accent -->
+    <!-- Teal Accent (success states) -->
     <color name="teal_accent">#00BFA5</color>
-    <color name="teal_dim">#E0F7F3</color>
+    <color name="teal_dim">#004D40</color>
     <color name="teal_dark">#00897B</color>
     
-    <!-- Other Accents -->
+    <!-- Rose Accent (favorites, hearts) -->
     <color name="rose_accent">#FF5F8A</color>
+    
+    <!-- Amber Accent (warnings, ratings) -->
     <color name="amber_accent">#FFB020</color>
     
-    <!-- Floating Navbar -->
-    <color name="navbar_surface">#FFFFFF</color>
-    <color name="navbar_surface_translucent">#F2FFFFFF</color>
-    <color name="navbar_icon_active">#9B5CFF</color>
-    <color name="navbar_icon_inactive">#9E9E9E</color>
-    <color name="navbar_border">#E0E0E0</color>
-    <color name="navbar_shadow">#1A000000</color>
-    
-    <!-- Legacy -->
-    <color name="black_pure">#000000</color>
-    <color name="dark_surface">#FFFFFF</color>
-    <color name="dark_card">#FFFFFF</color>
-    <color name="dark_elevated">#FFFFFF</color>
-    <color name="dark_border">#E0E0E0</color>
-    <color name="dark_background">#FFFFFF</color>
-    <color name="black_card">#FFFFFF</color>
-    <color name="black_light">#F5F5F5</color>
-
-    <!-- Material Theme -->
-    <color name="md_theme_dark_background">#FFFFFF</color>
-    <color name="md_theme_dark_surface">#FFFFFF</color>
-    <color name="md_theme_dark_primary">#9B5CFF</color>
-    <color name="md_theme_dark_secondary">#00BFA5</color>
-    <color name="md_theme_dark_tertiary">#FFB020</color>
-    <color name="md_theme_dark_onPrimary">#FFFFFF</color>
-    <color name="md_theme_dark_onSecondary">#FFFFFF</color>
-    <color name="md_theme_dark_onSurface">#212121</color>
-    <color name="md_theme_dark_onSurfaceVariant">#616161</color>
-    <color name="md_theme_dark_outline">#BDBDBD</color>
-
-    <!-- Accent aliases -->
-    <color name="purple_accent">#9B5CFF</color>
-    <color name="accent_green">#9B5CFF</color>
-    <color name="accent_red">#FF5252</color>
-    <color name="accent_yellow">#FFD966</color>
-
-    <!-- TEXT -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#616161</color>
-    <color name="text_hint">#9E9E9E</color>
-    <color name="text_disabled">#BDBDBD</color>
-    <color name="white_dim">#9E9E9E</color>
-    <color name="text_on_purple">#212121</color>
-    <color name="text_on_purple_secondary">#616161</color>
-    <color name="text_on_purple_hint">#9E9E9E</color>
-
-    <!-- BASICS -->
+    <!-- Legacy / Aliases -->
+    <color name="white_pure">#FFFFFF</color>
+    <color name="off_white">#F5F5F5</color>
+    <color name="light_gray">#333333</color>
+    <color name="soft_gray">#2A2A2A</color>
+    <color name="medium_gray">#555555</color>
+    <color name="dark_primary">#F5F5F5</color>
+    <color name="dark_secondary">#A3A3A3</color>
+    <color name="dark_tertiary">#737373</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
+    <color name="white_dim">#737373</color>
+    <color name="text_on_purple_secondary">#A3A3A3</color>
+    <color name="text_on_purple_hint">#737373</color>
+    
+    <!-- Surface aliases for Material theme -->
+    <color name="dark_surface">#0A0A0A</color>
+    <color name="dark_card">#141414</color>
+    <color name="dark_elevated">#1E1E1E</color>
+    <color name="dark_border">#2A2A2A</color>
+    <color name="dark_background">#000000</color>
+    <color name="black_light">#141414</color>
+    
+    <!-- Floating Navbar -->
+    <color name="navbar_surface">#1E1E1E</color>
+    <color name="navbar_surface_translucent">#F21E1E1E</color>
+    <color name="navbar_icon_active">#A855F7</color>
+    <color name="navbar_icon_inactive">#737373</color>
+    <color name="navbar_border">#2A2A2A</color>
+    <color name="navbar_shadow">#80000000</color>
+    
+    <!-- Material Theme Dark -->
+    <color name="md_theme_dark_background">#000000</color>
+    <color name="md_theme_dark_surface">#0A0A0A</color>
+    <color name="md_theme_dark_primary">#A855F7</color>
+    <color name="md_theme_dark_secondary">#00BFA5</color>
+    <color name="md_theme_dark_tertiary">#FFB020</color>
+    <color name="md_theme_dark_onPrimary">#000000</color>
+    <color name="md_theme_dark_onSecondary">#000000</color>
+    <color name="md_theme_dark_onSurface">#F5F5F5</color>
+    <color name="md_theme_dark_onSurfaceVariant">#A3A3A3</color>
+    <color name="md_theme_dark_outline">#555555</color>
+    
+    <!-- Accent aliases -->
+    <color name="purple_accent">#A855F7</color>
+    <color name="accent_green">#00BFA5</color>
+    <color name="accent_red">#FF5252</color>
+    <color name="accent_yellow">#FFD966</color>
+    
+    <!-- Feeling colors (adjusted for dark backgrounds) -->
+    <color name="feeling_cozy">#B388FF</color>
+    <color name="feeling_romantic">#CE93D8</color>
+    <color name="feeling_fun">#AB95FF</color>
+    <color name="feeling_adventurous">#8C7AE6</color>
+    <color name="feeling_relaxing">#D1C4E9</color>
+    <color name="feeling_exciting">#7C4DFF</color>
+    <color name="feeling_default">#A855F7</color>
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#FFFFFF"
+    android:background="@color/black_elevated"
     android:padding="16dp">
 
     <!-- Search Input -->
@@ -12,22 +12,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Search moments..."
-        app:hintTextColor="#9E9E9E"
-        app:boxStrokeColor="#9B5CFF"
+        app:hintTextColor="@color/text_hint"
+        app:boxStrokeColor="@color/purple_primary"
         app:boxStrokeWidth="1dp"
         app:boxCornerRadiusTopStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusBottomEnd="12dp"
         app:startIconDrawable="@drawable/ic_search"
-        app:startIconTint="#9E9E9E"
+        app:startIconTint="@color/text_hint"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#212121"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:inputType="text"
             android:singleLine="true" />
@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="No moments found"
-        android:textColor="#9E9E9E"
+        android:textColor="@color/text_secondary"
         android:textSize="14sp"
         android:gravity="center"
         android:padding="32dp"

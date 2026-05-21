@@ -5,8 +5,6 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.R;
+import com.example.usmentz.databinding.ItemDateBinding;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,14 +65,14 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
     @NonNull
     @Override
     public DateViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_date, parent, false);
-        return new DateViewHolder(itemView);
+        ItemDateBinding binding = ItemDateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new DateViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DateViewHolder holder, int position) {
         DateLocation current = dates.get(position);
+        ItemDateBinding b = holder.binding;
 
         // Date label
         if (current.getDate() != null) {
@@ -81,81 +80,81 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
             dateCal.setTime(current.getDate());
 
             if (isSameDay(dateCal, todayCal)) {
-                holder.tvDate.setText("Today");
+                b.tvDate.setText("Today");
             } else if (isSameDay(dateCal, yesterdayCal)) {
-                holder.tvDate.setText("Yesterday");
+                b.tvDate.setText("Yesterday");
             } else {
-                holder.tvDate.setText(dateFormat.format(current.getDate()));
+                b.tvDate.setText(dateFormat.format(current.getDate()));
             }
         } else {
-            holder.tvDate.setText("");
+            b.tvDate.setText("");
         }
 
         // Place name + address
-        holder.tvName.setText(current.getName());
-        holder.tvAddress.setText(current.getAddress());
+        b.tvName.setText(current.getName());
+        b.tvAddress.setText(current.getAddress());
 
         // Feeling badge
         String feeling = current.getFeeling();
         if (feeling != null && !feeling.isEmpty()) {
-            holder.tvFeelingBadge.setText(feeling);
-            holder.tvFeelingBadge.setVisibility(View.VISIBLE);
+            b.tvFeelingBadge.setText(feeling);
+            b.tvFeelingBadge.setVisibility(View.VISIBLE);
             int bgColor = getFeelingColor(feeling);
             android.graphics.drawable.GradientDrawable bg = new android.graphics.drawable.GradientDrawable();
             bg.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
-            bg.setCornerRadius(dpToPx(holder.itemView.getContext(), 20));
+            bg.setCornerRadius(dpToPx(b.getRoot().getContext(), 20));
             bg.setColor(bgColor);
-            holder.tvFeelingBadge.setBackground(bg);
+            b.tvFeelingBadge.setBackground(bg);
         } else {
-            holder.tvFeelingBadge.setVisibility(View.GONE);
+            b.tvFeelingBadge.setVisibility(View.GONE);
         }
 
         // Review snippet
         String review = current.getReviewNotes();
         if (review != null && !review.isEmpty()) {
-            holder.tvReviewSnippet.setText(review);
-            holder.tvReviewSnippet.setVisibility(View.VISIBLE);
+            b.tvReviewSnippet.setText(review);
+            b.tvReviewSnippet.setVisibility(View.VISIBLE);
         } else {
-            holder.tvReviewSnippet.setVisibility(View.GONE);
+            b.tvReviewSnippet.setVisibility(View.GONE);
         }
 
         // Cost
         float cost = current.getCost();
         if (cost > 0) {
-            holder.tvCost.setText(String.format(Locale.getDefault(), "₱%.0f", cost));
-            holder.tvCost.setVisibility(View.VISIBLE);
+            b.tvCost.setText(String.format(Locale.getDefault(), "₱%.0f", cost));
+            b.tvCost.setVisibility(View.VISIBLE);
         } else {
-            holder.tvCost.setVisibility(View.GONE);
+            b.tvCost.setVisibility(View.GONE);
         }
 
         // Do-again heart
         if (current.isDoAgain()) {
-            holder.ivDoAgain.setVisibility(View.VISIBLE);
+            b.ivDoAgain.setVisibility(View.VISIBLE);
         } else {
-            holder.ivDoAgain.setVisibility(View.GONE);
+            b.ivDoAgain.setVisibility(View.GONE);
         }
 
         // Photo - load with Glide if available
         String photoPath = current.getPhotoPath();
         if (photoPath != null && !photoPath.isEmpty()) {
-            holder.ivPhoto.setVisibility(View.VISIBLE);
-            holder.photoPlaceholder.setVisibility(View.GONE);
+            b.ivPhoto.setVisibility(View.VISIBLE);
+            b.photoPlaceholder.setVisibility(View.GONE);
             try {
                 Uri photoUri = Uri.parse(photoPath);
-                Glide.with(holder.itemView.getContext())
+                Glide.with(b.getRoot().getContext())
                         .load(photoUri)
                         .centerCrop()
                         .placeholder(R.drawable.bg_scrapbook_placeholder)
                         .error(R.drawable.bg_scrapbook_placeholder)
-                        .into(holder.ivPhoto);
+                        .into(b.ivPhoto);
             } catch (Exception e) {
                 // If URI parsing fails, show placeholder
-                holder.ivPhoto.setVisibility(View.GONE);
-                holder.photoPlaceholder.setVisibility(View.VISIBLE);
+                b.ivPhoto.setVisibility(View.GONE);
+                b.photoPlaceholder.setVisibility(View.VISIBLE);
             }
         } else {
-            holder.ivPhoto.setVisibility(View.GONE);
-            holder.photoPlaceholder.setVisibility(View.VISIBLE);
+            b.ivPhoto.setVisibility(View.GONE);
+            b.photoPlaceholder.setVisibility(View.VISIBLE);
         }
     }
 
@@ -190,37 +189,34 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.DateViewHolder
     }
 
     class DateViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDate, tvName, tvAddress, tvReviewSnippet, tvCost, tvFeelingBadge;
-        ImageView ivPhoto, ivDoAgain, btnDelete, photoPlaceholder;
+        final ItemDateBinding binding;
 
-        public DateViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvDate = itemView.findViewById(R.id.tvDate);
-            tvName = itemView.findViewById(R.id.tvName);
-            tvAddress = itemView.findViewById(R.id.tvAddress);
-            tvReviewSnippet = itemView.findViewById(R.id.tvReviewSnippet);
-            tvCost = itemView.findViewById(R.id.tvCost);
-            tvFeelingBadge = itemView.findViewById(R.id.tvFeelingBadge);
-            ivPhoto = itemView.findViewById(R.id.ivPhoto);
-            ivDoAgain = itemView.findViewById(R.id.ivDoAgain);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
-            photoPlaceholder = itemView.findViewById(R.id.photoPlaceholder);
+        public DateViewHolder(@NonNull ItemDateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
             // Item click
-            itemView.setOnClickListener(v -> {
+            binding.getRoot().setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 if (listener == null || pos == RecyclerView.NO_POSITION || dates == null || pos >= dates.size()) return;
                 DateLocation date = dates.get(pos);
                 if (date != null) listener.onItemClick(date);
             });
 
-            // Delete button
-            btnDelete.setOnClickListener(v -> {
-                int pos = getAdapterPosition();
-                if (deleteListener == null || pos == RecyclerView.NO_POSITION || dates == null || pos >= dates.size()) return;
-                DateLocation date = dates.get(pos);
-                if (date != null) deleteListener.onItemDelete(date);
-            });
+            // Delete button (defensive: btnDelete might be View instead of ImageView in binding)
+            try {
+                View deleteBtn = binding.getRoot().findViewById(com.example.usmentz.R.id.btnDelete);
+                if (deleteBtn != null) {
+                    deleteBtn.setOnClickListener(v -> {
+                        int pos = getAdapterPosition();
+                        if (deleteListener == null || pos == RecyclerView.NO_POSITION || dates == null || pos >= dates.size()) return;
+                        DateLocation date = dates.get(pos);
+                        if (date != null) deleteListener.onItemDelete(date);
+                    });
+                }
+            } catch (Exception e) {
+                // Silently ignore if btnDelete binding fails
+            }
         }
     }
 }

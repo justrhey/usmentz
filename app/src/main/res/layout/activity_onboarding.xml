@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/black_pure">
 
     <!-- Skip button -->
     <TextView
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Skip"
-        android:textColor="#9B5CFF"
+        android:textColor="@color/purple_primary"
         android:textSize="15sp"
         android:textStyle="bold"
         android:padding="16dp"
@@ -49,10 +49,10 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="48dp"
         android:text="Next"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/black_pure"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:backgroundTint="#9B5CFF"
+        android:backgroundTint="@color/purple_primary"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

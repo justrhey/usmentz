@@ -8,6 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +23,10 @@ import com.example.usmentz.category.Category;
 import com.example.usmentz.category.CategoryAdapter;
 import com.example.usmentz.category.CategoryDialog;
 import com.example.usmentz.date.DateLocation;
+import com.example.usmentz.helper.CapsuleNavbarHelper;
+import com.example.usmentz.helper.CapsuleNavbarHelper;
 import com.example.usmentz.helper.CategoryStateHelper;
-import com.example.usmentz.helper.NavbarScrollHelper;
+import com.example.usmentz.helper.SwipeBackHelper;
 import com.example.usmentz.helper.SuggestionHelper;
 import com.example.usmentz.helper.SuggestionHelper.Suggestion;
 import com.example.usmentz.viewmodel.CategoryViewModel;
@@ -67,24 +70,17 @@ public class MainActivity extends AppCompatActivity {
     private View suggestionCardContainer;
     private TextView tvSuggestionTitle, tvSuggestionText;
 
-    // Navigation - slot containers
-    private View navbarContainer;
-    private View navItemHome, navItemCategories, navItemCalendar;
-    // Active states (nested pills)
-    private View navHomeActive, navCategoriesActive, navCalendarActive;
-    private ImageView navCategoriesActiveIcon;
-    private TextView navCategoriesActiveLabel;
-    // Inactive states (icons only)
-    private View navHomeInactive, navCategoriesInactive, navCalendarInactive;
+    // Navigation - Capsule Navbar
+    private LinearLayout navContainer;
+    private LinearLayout navItemHome, navItemCategories, navItemCalendar, navItemFavorites, navItemSettings;
+    private ImageView navIconHome, navIconCategories, navIconCalendar, navIconFavorites, navIconSettings;
+    private TextView navLabelHome, navLabelCategories, navLabelCalendar, navLabelFavorites, navLabelSettings;
 
-    // Track active nav slot (0=Home, 1=Categories, 2=Calendar)
+    // Track active nav slot (0=Home, 1=Categories, 2=Calendar, 3=Favorites, 4=Settings)
     private int activeNavSlot = 1; // Default: Categories active
 
     // FAB
     private FloatingActionButton fabAdd;
-
-    // Scroll-based navbar animation
-    private NavbarScrollHelper navbarScrollHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setBackgroundDrawableResource(android.R.color.white);
 
         try {
+            // Initialize iOS-style swipe back
+            new SwipeBackHelper(this);
+
             initViews();
             initHelpers();
             setupViewModels();
@@ -135,23 +134,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        // Navbar - slot containers
-        navbarContainer = findViewById(R.id.navbarContainer);
-        navItemHome = findViewById(R.id.navItemHome);
-        navItemCategories = findViewById(R.id.navItemCategories);
-        navItemCalendar = findViewById(R.id.navItemCalendar);
-
-        // Active states (nested pills)
-        navHomeActive = findViewById(R.id.navHomeActive);
-        navCategoriesActive = findViewById(R.id.navCategoriesActive);
-        navCalendarActive = findViewById(R.id.navCalendarActive);
-        navCategoriesActiveIcon = findViewById(R.id.navCategoriesActiveIcon);
-        navCategoriesActiveLabel = findViewById(R.id.navCategoriesActiveLabel);
-
-        // Inactive states (icons only)
-        navHomeInactive = findViewById(R.id.navHomeInactive);
-        navCategoriesInactive = findViewById(R.id.navCategoriesInactive);
-        navCalendarInactive = findViewById(R.id.navCalendarInactive);
+        // Capsule Navbar
+        com.google.android.material.card.MaterialCardView capsuleCard = findViewById(R.id.capsuleNavbar);
+        navContainer = capsuleCard.findViewById(R.id.navContainer);
+        navItemHome = navContainer.findViewById(R.id.navItemHome);
+        navItemCategories = navContainer.findViewById(R.id.navItemCategories);
+        navItemCalendar = navContainer.findViewById(R.id.navItemCalendar);
+        navItemFavorites = navContainer.findViewById(R.id.navItemFavorites);
+        navItemSettings = navContainer.findViewById(R.id.navItemSettings);
+        navIconHome = navContainer.findViewById(R.id.navIconHome);
+        navIconCategories = navContainer.findViewById(R.id.navIconCategories);
+        navIconCalendar = navContainer.findViewById(R.id.navIconCalendar);
+        navIconFavorites = navContainer.findViewById(R.id.navIconFavorites);
+        navIconSettings = navContainer.findViewById(R.id.navIconSettings);
+        navLabelHome = navContainer.findViewById(R.id.navLabelHome);
+        navLabelCategories = navContainer.findViewById(R.id.navLabelCategories);
+        navLabelCalendar = navContainer.findViewById(R.id.navLabelCalendar);
+        navLabelFavorites = navContainer.findViewById(R.id.navLabelFavorites);
+        navLabelSettings = navContainer.findViewById(R.id.navLabelSettings);
 
         // Default visibility
         categoriesRecyclerView.setVisibility(View.VISIBLE);
@@ -224,11 +224,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Moments item delete → undo snackbar
         dateAdapter.setOnItemDeleteListener(this::deleteDateLocation);
-
-        // Scroll-based navbar/FAB slide animation
-        navbarScrollHelper = new NavbarScrollHelper(navbarContainer, fabAdd);
-        navbarScrollHelper.attachToRecyclerView(momentsRecyclerView);
-        navbarScrollHelper.attachToRecyclerView(categoriesRecyclerView);
     }
 
     private void updateCategoriesView(List<Category> categories) {
@@ -287,73 +282,19 @@ public class MainActivity extends AppCompatActivity {
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> exitMomentsMode());
         }
-
-        // Navbar
-        setupNavigation();
-    }
-
-    private void setupNavigation() {
-        // Home slot
-        navItemHome.setOnClickListener(v -> {
-            setActiveNavSlot(0);
-            Intent intent = new Intent(this, HomeActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
-        // Calendar slot
-        navItemCalendar.setOnClickListener(v -> {
-            setActiveNavSlot(2);
-            Intent intent = new Intent(this, CalendarActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        });
-
-        // Categories / Back slot
-        navItemCategories.setOnClickListener(v -> {
-            if (isInMomentsMode) {
-                exitMomentsMode();
-            } else {
-                setActiveNavSlot(1);
-                categoriesRecyclerView.smoothScrollToPosition(0);
-            }
-        });
     }
 
     /**
-     * Sets which nav slot is active (expanded pill with icon+text).
-     * All other slots show only their icon.
-     * @param slotIndex 0=Home, 1=Categories, 2=Calendar
+     * Sets which nav slot is active using the universal CapsuleNavbarHelper.
+     * @param slotIndex 0=Home, 1=Categories, 2=Calendar, 3=Favorites, 4=Settings
      */
     private void setActiveNavSlot(int slotIndex) {
         activeNavSlot = slotIndex;
-
-        // Home slot
-        if (slotIndex == 0) {
-            navHomeActive.setVisibility(View.VISIBLE);
-            navHomeInactive.setVisibility(View.GONE);
-        } else {
-            navHomeActive.setVisibility(View.GONE);
-            navHomeInactive.setVisibility(View.VISIBLE);
-        }
-
-        // Categories slot
-        if (slotIndex == 1) {
-            navCategoriesActive.setVisibility(View.VISIBLE);
-            navCategoriesInactive.setVisibility(View.GONE);
-        } else {
-            navCategoriesActive.setVisibility(View.GONE);
-            navCategoriesInactive.setVisibility(View.VISIBLE);
-        }
-
-        // Calendar slot
-        if (slotIndex == 2) {
-            navCalendarActive.setVisibility(View.VISIBLE);
-            navCalendarInactive.setVisibility(View.GONE);
-        } else {
-            navCalendarActive.setVisibility(View.GONE);
-            navCalendarInactive.setVisibility(View.VISIBLE);
-        }
+        CapsuleNavbarHelper.updateState(navContainer,
+            new LinearLayout[]{navItemHome, navItemCategories, navItemCalendar, navItemFavorites, navItemSettings},
+            new ImageView[]{navIconHome, navIconCategories, navIconCalendar, navIconFavorites, navIconSettings},
+            new TextView[]{navLabelHome, navLabelCategories, navLabelCalendar, navLabelFavorites, navLabelSettings},
+            slotIndex, this, true);
     }
 
     private void enterMomentsMode(Category category) {
@@ -372,18 +313,6 @@ public class MainActivity extends AppCompatActivity {
         momentsHeader.setVisibility(View.VISIBLE);
         momentsHeader.setAlpha(0f);
         momentsHeader.animate().alpha(1f).setDuration(200).start();
-
-        // Update navbar: change Categories slot to Back
-        if (navCategoriesActiveIcon != null) {
-            navCategoriesActiveIcon.setImageResource(R.drawable.ic_back);
-        }
-        if (navCategoriesActiveLabel != null) {
-            navCategoriesActiveLabel.setText("Back");
-        }
-        // Also update inactive icon
-        if (navCategoriesInactive != null) {
-            ((ImageView) navCategoriesInactive).setImageResource(R.drawable.ic_back);
-        }
 
         // Set category title
         if (tvCategoryTitle != null) {
@@ -412,18 +341,6 @@ public class MainActivity extends AppCompatActivity {
         categoriesHeader.setVisibility(View.VISIBLE);
         categoriesHeader.setAlpha(0f);
         categoriesHeader.animate().alpha(1f).setDuration(200).start();
-
-        // Restore navbar: change Back to Categories
-        if (navCategoriesActiveIcon != null) {
-            navCategoriesActiveIcon.setImageResource(R.drawable.ic_category);
-        }
-        if (navCategoriesActiveLabel != null) {
-            navCategoriesActiveLabel.setText("Categories");
-        }
-        // Also update inactive icon
-        if (navCategoriesInactive != null) {
-            ((ImageView) navCategoriesInactive).setImageResource(R.drawable.ic_category);
-        }
 
         // Switch ViewModel back to all moments
         dateViewModel.setCurrentCategory(-1);
@@ -457,19 +374,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void deleteDateLocation(DateLocation d) {
         if (d == null || dateViewModel == null) return;
-        try {
-            View anchor = momentsRecyclerView != null ? momentsRecyclerView : findViewById(android.R.id.content);
-            Snackbar snackbar = Snackbar.make(anchor, "Moment deleted", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", v -> dateViewModel.insert(d));
-            snackbar.addCallback(new Snackbar.Callback() {
-                @Override public void onDismissed(Snackbar bar, int event) {
-                    if (event != DISMISS_EVENT_ACTION) dateViewModel.delete(d);
-                }
-            });
-            snackbar.show();
-        } catch (Exception e) {
-            Log.e(TAG, "Error deleting moment", e);
-        }
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Delete Moment")
+                .setMessage("Are you sure you want to delete \"" + d.getName() + "\"? This cannot be undone.")
+                .setPositiveButton("Delete", (dialog, which) -> dateViewModel.delete(d))
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     private void restoreLastCategory() {
@@ -508,12 +418,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (navbarScrollHelper != null) navbarScrollHelper.forceShow();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (navbarScrollHelper != null) navbarScrollHelper.cleanup();
     }
 }

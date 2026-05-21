@@ -7,7 +7,7 @@
     android:layout_marginEnd="10dp"
     app:cardCornerRadius="18dp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="#FFFFFF"
+    app:cardBackgroundColor="@color/black_card"
     app:strokeWidth="0dp"
     app:rippleColor="#209B5CFF"
     android:clickable="true"
@@ -18,7 +18,7 @@
         android:id="@+id/topStrip"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="#9B5CFF" />
+            android:background="@color/purple_primary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +54,7 @@
             android:id="@+id/tvCategoryName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#2D2640"
+            android:textColor="@color/text_primary"
             android:textSize="13sp"
             android:textStyle="bold"
             android:maxLines="1"
@@ -66,7 +66,7 @@
             android:id="@+id/tvItemCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#8B7FA8"
+            android:textColor="@color/text_hint"
             android:textSize="11sp" />
 
     </LinearLayout>

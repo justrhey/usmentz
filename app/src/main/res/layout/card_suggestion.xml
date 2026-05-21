@@ -7,9 +7,9 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="#F3E8FF"
+    app:cardBackgroundColor="@color/purple_surface"
     app:strokeWidth="1dp"
-    app:strokeColor="#E8D5F5">
+    app:strokeColor="@color/purple_border">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="#7C3AED"
+                android:textColor="@color/purple_glow"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -46,7 +46,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
-                app:tint="#7C3AED"
+                app:tint="@color/purple_glow"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="2dp" />
 
@@ -57,7 +57,7 @@
             android:id="@+id/tvSuggestionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#5B4A8A"
+            android:textColor="@color/text_secondary"
             android:textSize="13sp"
             android:lineSpacingExtra="2dp" />
 

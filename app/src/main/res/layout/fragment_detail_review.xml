@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F7FF"
+    android:background="@color/black_pure"
     android:fillViewport="true">
 
     <LinearLayout
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="RATING"
-            android:textColor="#9B5CFF"
+            android:textColor="@color/purple_primary"
             android:textSize="11sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
@@ -30,8 +30,8 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:strokeColor="#F0EEF9"
+            app:cardBackgroundColor="@color/black_card"
+            app:strokeColor="@color/purple_border"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tap to rate"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     android:layout_marginTop="8dp"/>
 
@@ -82,8 +82,8 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:strokeColor="#F0EEF9"
+            app:cardBackgroundColor="@color/black_card"
+            app:strokeColor="@color/purple_border"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -104,7 +104,7 @@
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         android:visibility="gone"
-                        android:background="#F5F5F5"/>
+                        android:background="@color/black_elevated"/>
 
                     <!-- No Photo Placeholder -->
                     <LinearLayout
@@ -119,13 +119,13 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:src="@drawable/ic_photo"
-                            app:tint="#BDBDBD"/>
+                            app:tint="@color/text_hint"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="No photo added"
-                            android:textColor="#BDBDBD"
+                            android:textColor="@color/text_hint"
                             android:textSize="12sp"
                             android:layout_marginTop="8dp"/>
 
@@ -138,10 +138,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="46dp"
                     android:text="Upload Photo"
-                    android:textColor="#9B5CFF"
+                    android:textColor="@color/purple_primary"
                     android:textSize="13sp"
                     android:textAllCaps="false"
-                    android:backgroundTint="#F3EDFF"/>
+                    android:backgroundTint="@color/purple_surface"/>
 
             </LinearLayout>
 
@@ -152,7 +152,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="YOUR REVIEW"
-            android:textColor="#9B5CFF"
+            android:textColor="@color/purple_primary"
             android:textSize="11sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
@@ -164,8 +164,8 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:strokeColor="#F0EEF9"
+            app:cardBackgroundColor="@color/black_card"
+            app:strokeColor="@color/purple_border"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -179,19 +179,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:hint="Write your review..."
-                    android:textColor="#1A1A1A"
-                    android:textColorHint="#BDBDBD"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
                     android:textSize="14sp"
                     android:background="@null"
                     android:gravity="top|start"
                     android:inputType="textMultiLine"
-                    android:padding="12dp"
-                    android:backgroundTint="#F8F7FF"/>
+                    android:backgroundTint="@color/black_pure"/>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#F0EEF9"
+                    android:background="@color/purple_border"
                     android:layout_marginTop="8dp"/>
 
                 <Button
@@ -199,10 +198,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:text="Save Review"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/black_pure"
                     android:textSize="14sp"
                     android:textAllCaps="false"
-                    android:backgroundTint="#9B5CFF"
+                    android:backgroundTint="@color/purple_primary"
                     android:layout_marginTop="12dp"
                     app:cornerRadius="12dp"/>
 

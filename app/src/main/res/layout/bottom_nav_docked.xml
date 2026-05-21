@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  5-Column Docked FAB Navbar
+  - Fixed bottom anchor with rounded top corners
+  - 5 equal columns using weightSum
+  - Center FAB breaks top boundary
+  - ConstraintLayout for perfect centering
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dockedNavbarContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- Main Navbar Bar -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/navBarCard"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/navbar_surface_translucent"
+        app:strokeWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+
+            <!-- Column 1: Home -->
+            <LinearLayout
+                android:id="@+id/navItemHome"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:animateLayoutChanges="true">
+
+                <ImageView
+                    android:id="@+id/navIconHome"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_home"
+                    app:tint="@color/navbar_icon_active" />
+
+                <TextView
+                    android:id="@+id/navLabelHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textSize="11sp"
+                    android:textColor="@color/purple_primary"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+            <!-- Column 2: Categories -->
+            <LinearLayout
+                android:id="@+id/navItemCategories"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:animateLayoutChanges="true">
+
+                <ImageView
+                    android:id="@+id/navIconCategories"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_category"
+                    app:tint="@color/navbar_icon_inactive" />
+
+                <TextView
+                    android:id="@+id/navLabelCategories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Categories"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+            <!-- Column 3: Spacer for Center FAB -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <!-- Column 4: Calendar -->
+            <LinearLayout
+                android:id="@+id/navItemCalendar"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:animateLayoutChanges="true">
+
+                <ImageView
+                    android:id="@+id/navIconCalendar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="@color/navbar_icon_inactive" />
+
+                <TextView
+                    android:id="@+id/navLabelCalendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+            <!-- Column 5: Favorites -->
+            <LinearLayout
+                android:id="@+id/navItemFavorites"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:animateLayoutChanges="true">
+
+                <ImageView
+                    android:id="@+id/navIconFavorites"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_heart_filled"
+                    app:tint="@color/navbar_icon_inactive" />
+
+                <TextView
+                    android:id="@+id/navLabelFavorites"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Favorites"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Center Prominent FAB (Breaks Top Boundary) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabCenterAdd"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/ic_add"
+        android:contentDescription="Add Moment"
+        app:backgroundTint="@color/purple_primary"
+        app:tint="@color/black_pure"
+        app:fabSize="normal"
+        app:elevation="12dp"
+        app:pressedTranslationZ="8dp"
+        app:borderWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/navBarCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

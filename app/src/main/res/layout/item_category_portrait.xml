@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    app:cardBackgroundColor="#FFFFFF"
+    app:cardBackgroundColor="@color/black_card"
     app:cardCornerRadius="20dp"
     app:cardElevation="3dp"
     app:strokeWidth="0dp"
@@ -51,7 +51,7 @@
             android:text="Category"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="#2D2640"
+            android:textColor="@color/text_primary"
             android:maxLines="1"
             android:ellipsize="end" />
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:text="0 moments"
             android:textSize="12sp"
-            android:textColor="#8B7FA8"
+            android:textColor="@color/text_hint"
             android:layout_marginTop="4dp" />
 
     </LinearLayout>

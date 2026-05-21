@@ -3,6 +3,7 @@ package com.example.usmentz;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -167,11 +168,8 @@ public class AddMomentDialog extends DialogFragment {
     }
 
     private void setupBorderPicker(View root) {
-        int[] borderIds = {
-                R.id.borderClean, R.id.borderPolaroid, R.id.borderVintage,
-                R.id.borderHeart, R.id.borderFilm, R.id.borderMinimal
-        };
-        final String[] borderNames = {"clean", "polaroid", "vintage", "heart", "film", "minimal"};
+        int[] borderIds = {R.id.borderClean, R.id.borderPolaroid, R.id.borderVintage};
+        final String[] borderNames = {"clean", "polaroid", "vintage"};
 
         for (int i = 0; i < borderIds.length; i++) {
             final int idx = i;
@@ -213,9 +211,6 @@ public class AddMomentDialog extends DialogFragment {
         if (borderId == R.id.borderClean) return R.drawable.border_clean;
         if (borderId == R.id.borderPolaroid) return R.drawable.border_polaroid;
         if (borderId == R.id.borderVintage) return R.drawable.border_vintage;
-        if (borderId == R.id.borderHeart) return R.drawable.border_heart;
-        if (borderId == R.id.borderFilm) return R.drawable.border_film;
-        if (borderId == R.id.borderMinimal) return R.drawable.border_minimal;
         return R.drawable.border_clean;
     }
 
@@ -247,9 +242,6 @@ public class AddMomentDialog extends DialogFragment {
         switch (selectedBorder) {
             case "polaroid": bgRes = R.drawable.border_polaroid; break;
             case "vintage": bgRes = R.drawable.border_vintage; break;
-            case "heart": bgRes = R.drawable.border_heart; break;
-            case "film": bgRes = R.drawable.border_film; break;
-            case "minimal": bgRes = R.drawable.border_minimal; break;
         }
         ivPhotoPreview.setBackgroundResource(bgRes);
     }
@@ -281,8 +273,9 @@ public class AddMomentDialog extends DialogFragment {
         // Set photo path
         if (photoUri != null) {
             moment.setPhotoPath(photoUri.toString());
-            moment.setBorderStyle(selectedBorder);
         }
+        // Always set border style (default "clean" even without photo)
+        moment.setBorderStyle(selectedBorder != null ? selectedBorder : "clean");
 
         // Set cost
         String costText = etCost.getText().toString().trim();
@@ -334,15 +327,21 @@ public class AddMomentDialog extends DialogFragment {
                 .show();
     }
 
+    // Photobooth Launcher
+    private final ActivityResultLauncher<Intent> photoboothLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == android.app.Activity.RESULT_OK && result.getData() != null) {
+                    String uriString = result.getData().getStringExtra("photo_uri");
+                    if (uriString != null) {
+                        photoUri = Uri.parse(uriString);
+                        showPhotoPreview();
+                    }
+                }
+            });
+
     private void takePhoto() {
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, "usmentz_" + System.currentTimeMillis() + ".jpg");
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Usmentz");
-        photoUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        if (photoUri != null) {
-            cameraLauncher.launch(photoUri);
-        }
+        Intent intent = new Intent(requireContext(), PhotoboothActivity.class);
+        photoboothLauncher.launch(intent);
     }
 
     private void pickFromGallery() {

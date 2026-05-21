@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign In"
-        android:textColor="#1A1A1A"
+        android:textColor="@color/text_primary"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"/>
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter your credentials"
-        android:textColor="#757575"
+        android:textColor="@color/text_secondary"
         android:textSize="14sp"
         android:layout_marginBottom="24dp"/>
 
@@ -42,7 +42,7 @@
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#1A1A1A"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:inputType="textEmailAddress"
             android:singleLine="true"/>
@@ -68,7 +68,7 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#1A1A1A"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:inputType="textPassword"
             android:singleLine="true"/>
@@ -86,8 +86,8 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="Cancel"
-            android:textColor="#757575"
-            app:backgroundTint="#F5F5F5"
+            android:textColor="@color/text_secondary"
+            app:backgroundTint="@color/black_elevated"
             app:cornerRadius="24dp"
             android:layout_marginEnd="8dp"/>
 
@@ -97,9 +97,9 @@
             android:layout_height="50dp"
             android:layout_weight="1"
             android:text="Sign In"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/text_on_purple"
             android:textStyle="bold"
-            app:backgroundTint="#9B5CFF"
+            app:backgroundTint="@color/purple_primary"
             app:cornerRadius="24dp"/>
 
     </LinearLayout>

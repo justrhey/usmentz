@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F7FF"
+    android:background="@color/black_pure"
     android:fillViewport="true">
 
     <LinearLayout
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Moment Detail"
-                android:textColor="#1A1A1A"
+                android:textColor="@color/text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginStart="10dp"/>
@@ -41,7 +41,7 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="#F5F5F5"
+            app:cardBackgroundColor="@color/black_elevated"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -74,7 +74,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Moment Name"
-                        android:textColor="#1A1A1A"
+                        android:textColor="@color/text_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:maxLines="1"
@@ -85,7 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Date"
-                        android:textColor="#9E9E9E"
+                        android:textColor="@color/text_secondary"
                         android:textSize="13sp"
                         android:layout_marginTop="4dp"/>
 
@@ -117,8 +117,8 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:strokeColor="#F0EEF9"
+            app:cardBackgroundColor="@color/black_card"
+            app:strokeColor="@color/purple_border"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -141,7 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="4.8"
-                        android:textColor="#1A1A1A"
+                        android:textColor="@color/text_primary"
                         android:textSize="22sp"
                         android:textStyle="bold"/>
 
@@ -149,7 +149,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Rating"
-                        android:textColor="#9E9E9E"
+                        android:textColor="@color/text_secondary"
                         android:textSize="11sp"
                         android:layout_marginTop="2dp"/>
 
@@ -158,7 +158,7 @@
                 <View
                     android:layout_width="1dp"
                     android:layout_height="40dp"
-                    android:background="#EEEEEE"/>
+                    android:background="@color/black_border"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -174,7 +174,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="12"
-                        android:textColor="#1A1A1A"
+                        android:textColor="@color/text_primary"
                         android:textSize="22sp"
                         android:textStyle="bold"/>
 
@@ -182,7 +182,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Experience"
-                        android:textColor="#9E9E9E"
+                        android:textColor="@color/text_secondary"
                         android:textSize="11sp"
                         android:layout_marginTop="2dp"/>
 
@@ -206,8 +206,8 @@
                 android:layout_marginEnd="6dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:strokeColor="#F0EEF9"
+                app:cardBackgroundColor="@color/black_card"
+                app:strokeColor="@color/purple_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -221,7 +221,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Expenses"
-                        android:textColor="#9E9E9E"
+                        android:textColor="@color/text_secondary"
                         android:textSize="11sp"/>
 
                     <TextView
@@ -229,7 +229,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="₱0"
-                        android:textColor="#E74C3C"
+                        android:textColor="@color/accent_red"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp"/>
@@ -245,8 +245,8 @@
                 android:layout_marginStart="6dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:strokeColor="#F0EEF9"
+                app:cardBackgroundColor="@color/black_card"
+                app:strokeColor="@color/purple_border"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -260,7 +260,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Funds"
-                        android:textColor="#9E9E9E"
+                        android:textColor="@color/text_secondary"
                         android:textSize="11sp"/>
 
                     <TextView
@@ -268,7 +268,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="₱0"
-                        android:textColor="#27AE60"
+                        android:textColor="@color/teal_accent"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_marginTop="4dp"/>
@@ -301,14 +301,14 @@
                     android:background="@drawable/bg_icon_purple"
                     android:src="@drawable/ic_favorite"
                     android:padding="14dp"
-                    app:tint="#9B5CFF"
+                    app:tint="@color/purple_primary"
                     android:contentDescription="Favorite"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Favorite"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/text_secondary"
                     android:textSize="10sp"
                     android:layout_marginTop="6dp"/>
 
@@ -328,14 +328,14 @@
                     android:background="@drawable/bg_icon_purple"
                     android:src="@drawable/ic_share"
                     android:padding="14dp"
-                    app:tint="#9B5CFF"
+                    app:tint="@color/purple_primary"
                     android:contentDescription="Share"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Share"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/text_secondary"
                     android:textSize="10sp"
                     android:layout_marginTop="6dp"/>
 
@@ -354,14 +354,14 @@
                     android:background="@drawable/bg_icon_purple"
                     android:src="@drawable/ic_edit"
                     android:padding="14dp"
-                    app:tint="#9B5CFF"
+                    app:tint="@color/purple_primary"
                     android:contentDescription="Edit"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Edit"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/text_secondary"
                     android:textSize="10sp"
                     android:layout_marginTop="6dp"/>
 
@@ -374,7 +374,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="LOCATION"
-            android:textColor="#9B5CFF"
+            android:textColor="@color/purple_primary"
             android:textSize="11sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
@@ -391,7 +391,7 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp"
-            app:strokeColor="#F0EEF9"
+            app:strokeColor="@color/purple_border"
             app:strokeWidth="1dp">
 
             <!-- This FrameLayout is the container for SupportMapFragment.
@@ -426,7 +426,7 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:src="@drawable/ic_location"
-                app:tint="#7C3AED"
+                app:tint="@color/purple_secondary"
                 android:layout_marginEnd="6dp"
                 android:contentDescription="Location pin"/>
 
@@ -435,7 +435,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Address"
-                android:textColor="#7C3AED"
+                android:textColor="@color/purple_secondary"
                 android:textSize="12sp"
                 android:textStyle="bold"/>
 
@@ -446,7 +446,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="DESCRIPTION"
-            android:textColor="#9B5CFF"
+            android:textColor="@color/purple_primary"
             android:textSize="11sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
@@ -458,8 +458,8 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="#FFFFFF"
-            app:strokeColor="#F0EEF9"
+            app:cardBackgroundColor="@color/black_card"
+            app:strokeColor="@color/purple_border"
             app:strokeWidth="1dp">
 
             <TextView
@@ -467,7 +467,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="No description available."
-                android:textColor="#424242"
+                android:textColor="@color/text_secondary"
                 android:textSize="13sp"
                 android:lineSpacingMultiplier="1.6"
                 android:padding="16dp"/>

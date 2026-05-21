@@ -11,7 +11,7 @@
         android:text="Rate this moment"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#6C3483"
+        android:textColor="@color/purple_primary"
         android:layout_marginBottom="8dp" />
 
     <RatingBar
@@ -28,6 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Write your review..."
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
         android:textSize="14sp"
         android:padding="12dp"
         android:background="@drawable/bg_glossy_input"
@@ -38,8 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Photo"
-        android:textColor="#FFFFFF"
-        android:background="#6C3483"
+        android:textColor="@color/black_pure"
+        android:backgroundTint="@color/purple_primary"
         android:layout_marginTop="16dp" />
 
     <ImageView

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
@@ -18,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.usmentz.adapter.CalendarAdapter;
 import com.example.usmentz.adapter.DateAdapter;
 import com.example.usmentz.date.DateLocation;
-import com.example.usmentz.helper.NavbarScrollHelper;
+import com.example.usmentz.helper.CapsuleNavbarHelper;
 import com.example.usmentz.model.CalendarDay;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -47,21 +49,17 @@ public class CalendarActivity extends AppCompatActivity {
     private TextView tvListHeader;
     private TextView tvNoMoments;
 
-    // Navigation
+    // Navigation buttons
     private View btnPrevMonth, btnNextMonth, btnToday;
     private View btnOpenDrawer;
     private FloatingActionButton fabAdd;
-    private View navbarContainer;
 
-    // Expanding pill navbar items
-    private View navItemHome, navItemCategories, navItemCalendar;
-    private View navHomeActive, navHomeInactive;
-    private View navCategoriesActive, navCategoriesInactive;
-    private View navCalendarActive, navCalendarInactive;
+    // Navigation - Capsule Navbar
+    private LinearLayout navContainer;
+    private LinearLayout navItemHome, navItemCategories, navItemCalendar, navItemFavorites, navItemSettings;
+    private ImageView navIconHome, navIconCategories, navIconCalendar, navIconFavorites, navIconSettings;
+    private TextView navLabelHome, navLabelCategories, navLabelCalendar, navLabelFavorites, navLabelSettings;
     private int activeNavSlot = 2; // Calendar active by default
-
-    // Scroll-based navbar animation
-    private NavbarScrollHelper navbarScrollHelper;
 
     private DrawerLayout drawerLayout;
     private NavigationView navDrawer;
@@ -93,11 +91,6 @@ public class CalendarActivity extends AppCompatActivity {
         setupClickListeners();
         loadData();
 
-        // Scroll-based navbar/FAB slide animation
-        navbarScrollHelper = new NavbarScrollHelper(navbarContainer, fabAdd);
-        navbarScrollHelper.attachToRecyclerView(rvCalendar);
-        navbarScrollHelper.attachToRecyclerView(rvMoments);
-
         // Handle back press to close drawer
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -123,17 +116,26 @@ public class CalendarActivity extends AppCompatActivity {
         btnToday = findViewById(R.id.btnToday);
         btnOpenDrawer = findViewById(R.id.btnOpenDrawer);
         fabAdd = findViewById(R.id.fabAdd);
-        navbarContainer = findViewById(R.id.navbarContainer);
 
-        navItemHome = findViewById(R.id.navItemHome);
-        navItemCategories = findViewById(R.id.navItemCategories);
-        navItemCalendar = findViewById(R.id.navItemCalendar);
-        navHomeActive = findViewById(R.id.navHomeActive);
-        navHomeInactive = findViewById(R.id.navHomeInactive);
-        navCategoriesActive = findViewById(R.id.navCategoriesActive);
-        navCategoriesInactive = findViewById(R.id.navCategoriesInactive);
-        navCalendarActive = findViewById(R.id.navCalendarActive);
-        navCalendarInactive = findViewById(R.id.navCalendarInactive);
+        // Capsule Navbar
+        com.google.android.material.card.MaterialCardView capsuleCard = findViewById(R.id.capsuleNavbar);
+        navContainer = capsuleCard.findViewById(R.id.navContainer);
+        navItemHome = navContainer.findViewById(R.id.navItemHome);
+        navItemCategories = navContainer.findViewById(R.id.navItemCategories);
+        navItemCalendar = navContainer.findViewById(R.id.navItemCalendar);
+        navItemFavorites = navContainer.findViewById(R.id.navItemFavorites);
+        navItemSettings = navContainer.findViewById(R.id.navItemSettings);
+        navIconHome = navContainer.findViewById(R.id.navIconHome);
+        navIconCategories = navContainer.findViewById(R.id.navIconCategories);
+        navIconCalendar = navContainer.findViewById(R.id.navIconCalendar);
+        navIconFavorites = navContainer.findViewById(R.id.navIconFavorites);
+        navIconSettings = navContainer.findViewById(R.id.navIconSettings);
+        navLabelHome = navContainer.findViewById(R.id.navLabelHome);
+        navLabelCategories = navContainer.findViewById(R.id.navLabelCategories);
+        navLabelCalendar = navContainer.findViewById(R.id.navLabelCalendar);
+        navLabelFavorites = navContainer.findViewById(R.id.navLabelFavorites);
+        navLabelSettings = navContainer.findViewById(R.id.navLabelSettings);
+
         setActiveNavSlot(2); // Calendar active by default
     }
 
@@ -219,16 +221,6 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
         fabAdd.setOnClickListener(v -> showAddMomentDialog());
-
-        navItemHome.setOnClickListener(v -> {
-            setActiveNavSlot(0);
-            startActivity(new Intent(this, HomeActivity.class));
-        });
-        navItemCategories.setOnClickListener(v -> {
-            setActiveNavSlot(1);
-            startActivity(new Intent(this, MainActivity.class));
-        });
-        navItemCalendar.setOnClickListener(v -> setActiveNavSlot(2));
     }
 
     private void switchViewMode(int mode) {
@@ -242,6 +234,7 @@ public class CalendarActivity extends AppCompatActivity {
     private void hideDayMoments() {
         tvListHeader.setText("Moments");
         momentsAdapter.setDates(new ArrayList<>());
+        tvNoMoments.setText("No moments this month");
         tvNoMoments.setVisibility(View.VISIBLE);
         rvMoments.setVisibility(View.GONE);
     }
@@ -326,30 +319,33 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         momentsAdapter.setDates(dayMoments);
-        tvNoMoments.setVisibility(dayMoments.isEmpty() ? View.VISIBLE : View.GONE);
-        rvMoments.setVisibility(dayMoments.isEmpty() ? View.GONE : View.VISIBLE);
+        if (dayMoments.isEmpty()) {
+            tvNoMoments.setText("No moments on " + dayFmt.format(day.getDate().getTime()));
+            tvNoMoments.setVisibility(View.VISIBLE);
+            rvMoments.setVisibility(View.GONE);
+        } else {
+            tvNoMoments.setVisibility(View.GONE);
+            rvMoments.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (dataLoaded) updateCalendarDisplay();
-        if (navbarScrollHelper != null) navbarScrollHelper.forceShow();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (navbarScrollHelper != null) navbarScrollHelper.cleanup();
     }
 
     private void setActiveNavSlot(int slotIndex) {
         activeNavSlot = slotIndex;
-        navHomeActive.setVisibility(slotIndex == 0 ? View.VISIBLE : View.GONE);
-        navHomeInactive.setVisibility(slotIndex == 0 ? View.GONE : View.VISIBLE);
-        navCategoriesActive.setVisibility(slotIndex == 1 ? View.VISIBLE : View.GONE);
-        navCategoriesInactive.setVisibility(slotIndex == 1 ? View.GONE : View.VISIBLE);
-        navCalendarActive.setVisibility(slotIndex == 2 ? View.VISIBLE : View.GONE);
-        navCalendarInactive.setVisibility(slotIndex == 2 ? View.GONE : View.VISIBLE);
+        CapsuleNavbarHelper.updateState(navContainer,
+            new LinearLayout[]{navItemHome, navItemCategories, navItemCalendar, navItemFavorites, navItemSettings},
+            new ImageView[]{navIconHome, navIconCategories, navIconCalendar, navIconFavorites, navIconSettings},
+            new TextView[]{navLabelHome, navLabelCategories, navLabelCalendar, navLabelFavorites, navLabelSettings},
+            slotIndex, this, true);
     }
 }
