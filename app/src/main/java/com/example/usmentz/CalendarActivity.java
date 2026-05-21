@@ -2,8 +2,6 @@ package com.example.usmentz;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.usmentz.adapter.CalendarAdapter;
 import com.example.usmentz.adapter.DateAdapter;
 import com.example.usmentz.date.DateLocation;
+import com.example.usmentz.helper.NavbarScrollHelper;
 import com.example.usmentz.model.CalendarDay;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -61,6 +60,9 @@ public class CalendarActivity extends AppCompatActivity {
     private View navCalendarActive, navCalendarInactive;
     private int activeNavSlot = 2; // Calendar active by default
 
+    // Scroll-based navbar animation
+    private NavbarScrollHelper navbarScrollHelper;
+
     private DrawerLayout drawerLayout;
     private NavigationView navDrawer;
 
@@ -78,18 +80,6 @@ public class CalendarActivity extends AppCompatActivity {
     private boolean dataLoaded = false;
     private int currentViewMode = 3; // Calendar = 3
 
-    // ── Auto-hide navbar ──────────────────────────
-    private final Handler hideHandler = new Handler(Looper.getMainLooper());
-    private Runnable hideRunnable;
-    private boolean navbarVisible = true;
-    private static final long HIDE_DELAY_MS = 5000;
-
-    private final View.OnTouchListener screenTouchListener = (v, event) -> {
-        showNavbar();
-        resetHideTimer();
-        return false;
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,11 +92,11 @@ public class CalendarActivity extends AppCompatActivity {
         setupCalendar();
         setupClickListeners();
         loadData();
-        startHideTimer();
 
-        // Intercept all touches on the main content to show navbar
-        View root = findViewById(android.R.id.content);
-        root.setOnTouchListener(screenTouchListener);
+        // Scroll-based navbar/FAB slide animation
+        navbarScrollHelper = new NavbarScrollHelper(navbarContainer, fabAdd);
+        navbarScrollHelper.attachToRecyclerView(rvCalendar);
+        navbarScrollHelper.attachToRecyclerView(rvMoments);
 
         // Handle back press to close drawer
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -159,7 +149,6 @@ public class CalendarActivity extends AppCompatActivity {
             });
         }
 
-        // Close drawer header button
         View headerView = navDrawer != null ? navDrawer.getHeaderView(0) : null;
         if (headerView != null) {
             View btnCloseDrawer = headerView.findViewById(R.id.btnCloseDrawer);
@@ -171,15 +160,10 @@ public class CalendarActivity extends AppCompatActivity {
         if (navDrawer != null) {
             navDrawer.setNavigationItemSelectedListener(item -> {
                 int id = item.getItemId();
-                if (id == R.id.nav_list) {
-                    switchViewMode(0);
-                } else if (id == R.id.nav_grid) {
-                    switchViewMode(1);
-                } else if (id == R.id.nav_board) {
-                    switchViewMode(2);
-                } else if (id == R.id.nav_calendar) {
-                    switchViewMode(3);
-                }
+                if (id == R.id.nav_list) switchViewMode(0);
+                else if (id == R.id.nav_grid) switchViewMode(1);
+                else if (id == R.id.nav_board) switchViewMode(2);
+                else if (id == R.id.nav_calendar) switchViewMode(3);
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             });
@@ -202,7 +186,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         calendarAdapter.setOnDayClickListener(day -> {
             if (day.getDay() == 0) return;
-
             if (selectedDay != null) selectedDay.setSelected(false);
             day.setSelected(true);
             selectedDay = day;
@@ -219,7 +202,6 @@ public class CalendarActivity extends AppCompatActivity {
             selectedDay = null;
             hideDayMoments();
             updateCalendarDisplay();
-            resetHideTimer();
         });
 
         btnNextMonth.setOnClickListener(v -> {
@@ -227,7 +209,6 @@ public class CalendarActivity extends AppCompatActivity {
             selectedDay = null;
             hideDayMoments();
             updateCalendarDisplay();
-            resetHideTimer();
         });
 
         ((Button) btnToday).setOnClickListener(v -> {
@@ -235,15 +216,10 @@ public class CalendarActivity extends AppCompatActivity {
             selectedDay = null;
             hideDayMoments();
             updateCalendarDisplay();
-            resetHideTimer();
         });
 
-        fabAdd.setOnClickListener(v -> {
-            showAddMomentDialog();
-            resetHideTimer();
-        });
+        fabAdd.setOnClickListener(v -> showAddMomentDialog());
 
-        // Navbar items
         navItemHome.setOnClickListener(v -> {
             setActiveNavSlot(0);
             startActivity(new Intent(this, HomeActivity.class));
@@ -259,9 +235,7 @@ public class CalendarActivity extends AppCompatActivity {
         currentViewMode = mode;
         if (navDrawer != null) {
             int[] ids = {R.id.nav_list, R.id.nav_grid, R.id.nav_board, R.id.nav_calendar};
-            if (mode >= 0 && mode < ids.length) {
-                navDrawer.setCheckedItem(ids[mode]);
-            }
+            if (mode >= 0 && mode < ids.length) navDrawer.setCheckedItem(ids[mode]);
         }
     }
 
@@ -273,9 +247,7 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void showAddMomentDialog() {
-        AddMomentDialog dialog = AddMomentDialog.newInstance(moment -> {
-            loadData();
-        });
+        AddMomentDialog dialog = AddMomentDialog.newInstance(moment -> loadData());
         dialog.show(getSupportFragmentManager(), "AddMomentDialog");
     }
 
@@ -291,17 +263,11 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void updateCalendarDisplay() {
         tvMonthYear.setText(monthYearFmt.format(currentMonth.getTime()));
+        if (dataLoaded) buildGrid();
 
-        if (dataLoaded) {
-            buildGrid();
-        }
-
-        // Sync nav drawer
         if (navDrawer != null) {
             int[] ids = {R.id.nav_list, R.id.nav_grid, R.id.nav_board, R.id.nav_calendar};
-            if (currentViewMode >= 0 && currentViewMode < ids.length) {
-                navDrawer.setCheckedItem(ids[currentViewMode]);
-            }
+            if (currentViewMode >= 0 && currentViewMode < ids.length) navDrawer.setCheckedItem(ids[currentViewMode]);
         }
     }
 
@@ -311,11 +277,9 @@ public class CalendarActivity extends AppCompatActivity {
 
         int firstDow = cal.get(Calendar.DAY_OF_WEEK);
         int leadingDays = (firstDow == Calendar.SUNDAY) ? 0 : firstDow - 1;
-
         int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         String todayStr = keyFmt.format(Calendar.getInstance().getTime());
 
-        // Group moments by date key
         Map<String, List<String>> momentGroupMap = new HashMap<>();
         for (DateLocation moment : allMoments) {
             if (moment.getDate() != null) {
@@ -325,10 +289,7 @@ public class CalendarActivity extends AppCompatActivity {
         }
 
         List<CalendarDay> days = new ArrayList<>();
-
-        for (int i = 0; i < leadingDays; i++) {
-            days.add(new CalendarDay(0, null));
-        }
+        for (int i = 0; i < leadingDays; i++) days.add(new CalendarDay(0, null));
 
         for (int d = 1; d <= daysInMonth; d++) {
             Calendar dayCal = (Calendar) currentMonth.clone();
@@ -336,12 +297,8 @@ public class CalendarActivity extends AppCompatActivity {
             String key = keyFmt.format(dayCal.getTime());
 
             CalendarDay cd = new CalendarDay(d, dayCal);
-
             List<String> labels = momentGroupMap.get(key);
-            if (labels != null && !labels.isEmpty()) {
-                cd.setMomentLabels(labels);
-            }
-
+            if (labels != null && !labels.isEmpty()) cd.setMomentLabels(labels);
             cd.setToday(key.equals(todayStr));
 
             if (selectedDay != null && selectedDay.getDay() == d &&
@@ -351,7 +308,6 @@ public class CalendarActivity extends AppCompatActivity {
                 cd.setSelected(true);
                 selectedDay = cd;
             }
-
             days.add(cd);
         }
 
@@ -366,62 +322,25 @@ public class CalendarActivity extends AppCompatActivity {
 
         List<DateLocation> dayMoments = new ArrayList<>();
         for (DateLocation m : allMoments) {
-            if (m.getDate() != null && keyFmt.format(m.getDate()).equals(dayKey)) {
-                dayMoments.add(m);
-            }
+            if (m.getDate() != null && keyFmt.format(m.getDate()).equals(dayKey)) dayMoments.add(m);
         }
 
         momentsAdapter.setDates(dayMoments);
-
-        if (dayMoments.isEmpty()) {
-            tvNoMoments.setVisibility(View.VISIBLE);
-            rvMoments.setVisibility(View.GONE);
-        } else {
-            tvNoMoments.setVisibility(View.GONE);
-            rvMoments.setVisibility(View.VISIBLE);
-        }
+        tvNoMoments.setVisibility(dayMoments.isEmpty() ? View.VISIBLE : View.GONE);
+        rvMoments.setVisibility(dayMoments.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
-    // ── Auto-hide navbar ───────────────────────────
-
-    private void startHideTimer() {
-        hideRunnable = () -> {
-            navbarVisible = false;
-            if (navbarContainer != null) {
-                navbarContainer.animate()
-                        .alpha(0f)
-                        .setDuration(300)
-                        .withEndAction(() -> navbarContainer.setVisibility(View.GONE))
-                        .start();
-            }
-            if (fabAdd != null) {
-                fabAdd.animate()
-                        .alpha(0f)
-                        .setDuration(300)
-                        .withEndAction(() -> fabAdd.setVisibility(View.GONE))
-                        .start();
-            }
-        };
-        hideHandler.postDelayed(hideRunnable, HIDE_DELAY_MS);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (dataLoaded) updateCalendarDisplay();
+        if (navbarScrollHelper != null) navbarScrollHelper.forceShow();
     }
 
-    private void resetHideTimer() {
-        if (hideRunnable != null) hideHandler.removeCallbacks(hideRunnable);
-        startHideTimer();
-    }
-
-    private void showNavbar() {
-        if (!navbarVisible) {
-            navbarVisible = true;
-            if (navbarContainer != null) {
-                navbarContainer.setVisibility(View.VISIBLE);
-                navbarContainer.animate().alpha(1f).setDuration(200).start();
-            }
-            if (fabAdd != null) {
-                fabAdd.setVisibility(View.VISIBLE);
-                fabAdd.animate().alpha(1f).setDuration(200).start();
-            }
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (navbarScrollHelper != null) navbarScrollHelper.cleanup();
     }
 
     private void setActiveNavSlot(int slotIndex) {
@@ -432,20 +351,5 @@ public class CalendarActivity extends AppCompatActivity {
         navCategoriesInactive.setVisibility(slotIndex == 1 ? View.GONE : View.VISIBLE);
         navCalendarActive.setVisibility(slotIndex == 2 ? View.VISIBLE : View.GONE);
         navCalendarInactive.setVisibility(slotIndex == 2 ? View.GONE : View.VISIBLE);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (dataLoaded) {
-            updateCalendarDisplay();
-        }
-        resetHideTimer();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        hideHandler.removeCallbacks(hideRunnable);
     }
 }

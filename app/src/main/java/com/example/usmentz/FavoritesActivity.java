@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.usmentz.adapter.DateAdapter;
 import com.example.usmentz.date.DateLocation;
+import com.example.usmentz.helper.NavbarScrollHelper;
 import com.example.usmentz.viewmodel.DateViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -29,11 +30,15 @@ public class FavoritesActivity extends AppCompatActivity {
     private ImageView ivEmpty;
 
     // Expanding pill navbar
+    private View navbarContainer;
     private View navItemHome, navItemCategories, navItemCalendar;
     private View navHomeActive, navHomeInactive;
     private View navCategoriesActive, navCategoriesInactive;
     private View navCalendarActive, navCalendarInactive;
     private int activeNavSlot = 1; // Categories active by default (came from categories)
+
+    // Scroll-based navbar animation
+    private NavbarScrollHelper navbarScrollHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,7 @@ public class FavoritesActivity extends AppCompatActivity {
         });
 
         // Expanding pill navbar
+        navbarContainer = findViewById(R.id.navbarContainer);
         navItemHome = findViewById(R.id.navItemHome);
         navItemCategories = findViewById(R.id.navItemCategories);
         navItemCalendar = findViewById(R.id.navItemCalendar);
@@ -78,6 +84,11 @@ public class FavoritesActivity extends AppCompatActivity {
         navCalendarActive = findViewById(R.id.navCalendarActive);
         navCalendarInactive = findViewById(R.id.navCalendarInactive);
         setActiveNavSlot(1); // Categories active by default
+
+        // Scroll-based navbar/FAB slide animation
+        View fabAdd = findViewById(R.id.fabAdd);
+        navbarScrollHelper = new NavbarScrollHelper(navbarContainer, fabAdd);
+        navbarScrollHelper.attachToRecyclerView(recyclerView);
 
         // Setup click listeners for navbar
         setupNavigation();
@@ -131,5 +142,11 @@ public class FavoritesActivity extends AppCompatActivity {
         navCategoriesInactive.setVisibility(slotIndex == 1 ? View.GONE : View.VISIBLE);
         navCalendarActive.setVisibility(slotIndex == 2 ? View.VISIBLE : View.GONE);
         navCalendarInactive.setVisibility(slotIndex == 2 ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (navbarScrollHelper != null) navbarScrollHelper.forceShow();
     }
 }

@@ -23,6 +23,7 @@ import com.example.usmentz.category.CategoryAdapter;
 import com.example.usmentz.category.CategoryDialog;
 import com.example.usmentz.date.DateLocation;
 import com.example.usmentz.helper.CategoryStateHelper;
+import com.example.usmentz.helper.NavbarScrollHelper;
 import com.example.usmentz.helper.SuggestionHelper;
 import com.example.usmentz.helper.SuggestionHelper.Suggestion;
 import com.example.usmentz.viewmodel.CategoryViewModel;
@@ -81,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
     // FAB
     private FloatingActionButton fabAdd;
+
+    // Scroll-based navbar animation
+    private NavbarScrollHelper navbarScrollHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,19 +225,10 @@ public class MainActivity extends AppCompatActivity {
         // Moments item delete → undo snackbar
         dateAdapter.setOnItemDeleteListener(this::deleteDateLocation);
 
-        // FAB auto-hide on scroll
-        momentsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 && fabAdd.getVisibility() == View.VISIBLE) {
-                    fabAdd.animate().alpha(0f).setDuration(200)
-                            .withEndAction(() -> fabAdd.setVisibility(View.GONE)).start();
-                } else if (dy < 0 && fabAdd.getVisibility() == View.GONE) {
-                    fabAdd.setVisibility(View.VISIBLE);
-                    fabAdd.animate().alpha(1f).setDuration(200).start();
-                }
-            }
-        });
+        // Scroll-based navbar/FAB slide animation
+        navbarScrollHelper = new NavbarScrollHelper(navbarContainer, fabAdd);
+        navbarScrollHelper.attachToRecyclerView(momentsRecyclerView);
+        navbarScrollHelper.attachToRecyclerView(categoriesRecyclerView);
     }
 
     private void updateCategoriesView(List<Category> categories) {
@@ -513,10 +508,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (navbarScrollHelper != null) navbarScrollHelper.forceShow();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        if (navbarScrollHelper != null) navbarScrollHelper.cleanup();
     }
 }

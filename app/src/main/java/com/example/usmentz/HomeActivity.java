@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.usmentz.adapter.CategoryHomeAdapter;
 import com.example.usmentz.adapter.DateAdapter;
 import com.example.usmentz.date.DateLocation;
+import com.example.usmentz.helper.NavbarScrollHelper;
 import com.example.usmentz.helper.SuggestionHelper;
 import com.example.usmentz.helper.SuggestionHelper.Suggestion;
 import com.example.usmentz.viewmodel.CategoryViewModel;
@@ -48,14 +49,15 @@ public class HomeActivity extends AppCompatActivity {
     private TextView tvSuggestionTitle, tvSuggestionText;
 
     // Expanding pill navbar
+    private View navbarContainer;
     private View navItemHome, navItemCategories, navItemCalendar;
     private View navHomeActive, navHomeInactive;
     private View navCategoriesActive, navCategoriesInactive;
     private View navCalendarActive, navCalendarInactive;
     private int activeNavSlot = 0; // Home is active by default
 
-    // FAB scroll state
-    private boolean isFabVisible = true;
+    // Scroll-based navbar animation
+    private NavbarScrollHelper navbarScrollHelper;
 
     // Adapters
     private DateAdapter recentAdapter;
@@ -96,6 +98,7 @@ public class HomeActivity extends AppCompatActivity {
         btnProfile = findViewById(R.id.btnProfile);
 
         // Expanding pill navbar
+        navbarContainer = findViewById(R.id.navbarContainer);
         navItemHome = findViewById(R.id.navItemHome);
         navItemCategories = findViewById(R.id.navItemCategories);
         navItemCalendar = findViewById(R.id.navItemCalendar);
@@ -172,21 +175,9 @@ public class HomeActivity extends AppCompatActivity {
             dateViewModel.delete(dateLocation);
         });
 
-        // FAB auto-hide on scroll
-        rvRecentActivity.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0 && isFabVisible) {
-                    isFabVisible = false;
-                    fabAdd.animate().alpha(0f).setDuration(200)
-                            .withEndAction(() -> fabAdd.setVisibility(View.GONE)).start();
-                } else if (dy < 0 && !isFabVisible) {
-                    isFabVisible = true;
-                    fabAdd.setVisibility(View.VISIBLE);
-                    fabAdd.animate().alpha(1f).setDuration(200).start();
-                }
-            }
-        });
+        // Scroll-based navbar/FAB slide animation
+        navbarScrollHelper = new NavbarScrollHelper(navbarContainer, fabAdd);
+        navbarScrollHelper.attachToRecyclerView(rvRecentActivity);
     }
 
     private void setupClickListeners() {
@@ -264,6 +255,7 @@ public class HomeActivity extends AppCompatActivity {
             timeHandler.removeCallbacks(timeRunnable);
         }
         startLiveTime();
+        if (navbarScrollHelper != null) navbarScrollHelper.forceShow();
     }
 
     @Override
